@@ -1,0 +1,29 @@
+--- Csound5.03.0/SConstruct.enable-fluidsynth	2006-08-11 09:23:01.000000000 -0400
++++ Csound5.03.0/SConstruct	2006-08-30 13:48:19.000000000 -0400
+@@ -212,6 +212,9 @@
+ opts.Add('buildOSXGUI',
+     'On OSX, set to 1 to build the basic GUI frontend',
+     '0')
++opts.Add('useFluidsynth',
++    'Set to 1 if you want OSC support',
++    '0')
+ 
+ # Define the common part of the build environment.
+ # This section also sets up customized options for third-party libraries, which
+@@ -405,6 +408,7 @@
+ pdhfound = configure.CheckHeader("m_pd.h", language = "C")
+ tclhfound = configure.CheckHeader("tcl.h", language = "C")
+ luaFound = configure.CheckHeader("lua.h", language = "C")
++fluidsynthFound = configure.CheckHeader("fluidsynth.h", language = "C")
+ swigFound = 'swig' in commonEnvironment['TOOLS']
+ print 'Checking for SWIG... %s' % (['no', 'yes'][int(swigFound)])
+ pythonFound = configure.CheckHeader("Python.h", language = "C")
+@@ -1187,7 +1191,7 @@
+ 
+ # FLUIDSYNTH OPCODES
+ 
+-if not configure.CheckHeader("fluidsynth.h", language = "C"):
++if not (commonEnvironment['useFluidsynth'] == '1' and fluidsynthFound):
+     print "CONFIGURATION DECISION: Not building fluid opcodes."
+ else:
+     print "CONFIGURATION DECISION: Building fluid opcodes."

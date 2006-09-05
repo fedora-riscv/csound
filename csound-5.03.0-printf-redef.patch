@@ -1,0 +1,12 @@
+--- Csound5.03.0/H/csoundCore.h.redef	2006-08-29 14:29:59.000000000 -0400
++++ Csound5.03.0/H/csoundCore.h	2006-08-29 14:30:34.000000000 -0400
+@@ -116,7 +116,9 @@
+ 
+ #define WARNMSG 04
+ #define IGN(X)  (void) X
++#if 0
+ #define printf  use_csoundMessage_instead_of_printf
++#endif
+ 
+   typedef struct {
+     int     odebug;
