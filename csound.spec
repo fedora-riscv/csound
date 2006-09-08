@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       2%{?dist}
+Release:       3%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -39,6 +39,7 @@ Source1: Csound5.03_manual.tgz
 Patch0: csound-5.03.0-uninitialized.patch
 Patch1: csound-5.03.0-printf-redef.patch
 Patch2: csound-5.03.0-enable-fluidsynth.patch
+Patch3: csound-5.03.0-no-gstabs.patch
 
 
 %description
@@ -163,6 +164,7 @@ Tutorial documentation and sample files for Csound.
 %patch0 -p1 -b .uninitialized
 %patch1 -p1 -b .printf-redef
 %patch2 -p1 -b .enable-fluidsynth
+%patch3 -p1 -b .no-gstabs
 tar xf %{SOURCE1}
 
 %build
@@ -362,6 +364,9 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Fri Sep  8 2006 Dan Williams <dcbw@redhat.com> 5.03.0-3
+- csound-5.03.0-no-gstabs.patch added; produce dwarf2 like everyone else
+
 * Fri Aug 24 2006 Dan Williams <dcbw@redhat.com> 5.03.0-2
 - Kill printf redefinition
 - Remove zero-length ifthen.csd

@@ -1,0 +1,11 @@
+--- Csound5.03.0/SConstruct.gstabs	2006-09-08 10:44:49.000000000 -0400
++++ Csound5.03.0/SConstruct	2006-09-08 10:49:21.000000000 -0400
+@@ -269,7 +269,7 @@
+   if getPlatform() == 'darwin':
+     commonEnvironment.Prepend(CCFLAGS = ['-g', '-O2'])
+   else:
+-    commonEnvironment.Prepend(CCFLAGS = ['-g', '-gstabs', '-O2'])
++    commonEnvironment.Prepend(CCFLAGS = ['-g', '-O2'])
+ else:
+   commonEnvironment.Prepend(CCFLAGS = ['-O2'])
+ if commonEnvironment['useGprof'] == '1':
