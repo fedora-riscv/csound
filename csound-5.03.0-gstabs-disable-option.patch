@@ -1,0 +1,24 @@
+--- Csound5.03.0/SConstruct.gstabs-disable-option	2006-10-23 15:36:38.000000000 -0400
++++ Csound5.03.0/SConstruct	2006-10-23 15:39:28.000000000 -0400
+@@ -161,6 +161,9 @@
+ opts.Add('noDebug',
+     'Build without debugging information.',
+     '0')
++opts.Add('disableGStabs',
++    'Set to 1 if you want to turn off GStabs debug info support, which may break some architectures',
++    '0')
+ opts.Add('gcc3opt',
+     'Enable gcc 3.3.x or later optimizations for the specified CPU architecture (e.g. pentium3); implies noDebug.',
+     '0')
+@@ -289,7 +292,10 @@
+     commonEnvironment.Prepend(CCFLAGS = ['-g', '-O2'])
+   else:
+     if not withMSVC():
+-      commonEnvironment.Prepend(CCFLAGS = ['-g', '-gstabs', '-O2'])
++      debug_opts = ['-g', '-O2']
++      if commonEnvironment['disableGStabs'] == '0':
++        debug_opts.append('-gstabs')
++      commonEnvironment.Prepend(CCFLAGS = debug_opts)
+ else:
+   commonEnvironment.Prepend(CCFLAGS = ['-O2'])
+ if commonEnvironment['useGprof'] == '1':
