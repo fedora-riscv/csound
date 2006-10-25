@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       4%{?dist}
+Release:       5%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -40,6 +40,7 @@ Patch0: csound-5.03.0-enable-fluidsynth.patch
 Patch1: csound-5.03.0-gstabs-disable-option.patch
 Patch2: csound-5.03.0-no-usr-local.patch
 Patch3: csound-5.03.0-disable-atsa.patch
+Patch4: csound-5.03.0-remote-fixes.patch
 
 
 %description
@@ -165,6 +166,7 @@ Tutorial documentation and sample files for Csound.
 %patch1 -p1 -b .gstabs-disable-option
 %patch2 -p1 -b .no-usr-local
 %patch3 -p1 -b .disable-atsa
+%patch4 -p1 -b .remote-fixes
 
 tar xf %{SOURCE1}
 
@@ -376,6 +378,9 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Wed Oct 25 2006 Dan Williams <dcbw@redhat.com> 5.03.0-5
+- Fix the remote plugin's local IP address read code, add more error checking
+
 * Mon Oct 23 2006 Dan Williams <dcbw@redhat.com> 5.03.0-4
 - Drop csound-5.03.0-uninitialized.patch, upstream
 - Drop csound-5.03.0-printf-redef.patch, upstream
