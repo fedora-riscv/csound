@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       5%{?dist}
+Release:       7%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -28,7 +28,7 @@ BuildRequires: java-gcj-compat-devel
 BuildRequires: tk-devel tcl-devel
 BuildRequires: tetex tetex-latex libxslt
 
-Source0:     http://superb-east.dl.sourceforge.net/sourceforge/csound/Csound5.03_src-cvs20061023.tar.bz2
+Source0: http://superb-east.dl.sourceforge.net/sourceforge/csound/Csound5.03_src-cvs20061027.tar.bz2
 
 # NOTE:
 # Manual sources aren't distributed, but may be extracted from CVS via...
@@ -110,6 +110,15 @@ Requires: fltk xdg-utils
 %description gui
 Contains a FLTK-based GUI for Csound
 
+%package fltk
+Summary: FLTK plugins for Csound
+Group: Applications/Multimedia
+Requires: %{name} = %{version}-%{release}
+Requires: fltk
+
+%description fltk
+Contains FLTK plugins for csound
+
 %package jack
 Summary: Jack Audio plugins for Csound
 Group: Applications/Multimedia
@@ -144,6 +153,15 @@ Requires: %{name} = %{version}-%{release}
 
 %description osc
 Open Sound Control (OSC) plugin for Csound
+
+%package virtual-keyboard
+Summary: Virtual MIDI keyboard plugin for Csound
+Group: Applications/Multimedia
+Requires: %{name} = %{version}-%{release}
+Requires: fltk
+
+%description virtual-keyboard
+A virtual MIDI keyboard plugin for Csound
 
 %package manual
 Summary: Csound manual
@@ -346,6 +364,9 @@ fi
 %files gui
 %defattr(-,root,root,0755)
 %{_bindir}/csound5gui
+
+%files fltk
+%defattr(-,root,root,0755)
 %{_libdir}/%{name}/plugins/libwidgets.so
 
 %files jack
@@ -364,6 +385,10 @@ fi
 %defattr(-,root,root,0755)
 %{_libdir}/%{name}/plugins/libosc.so
 
+%files virtual-keyboard
+%defattr(-,root,root,0755)
+%{_libdir}/%{name}/plugins/libvirtual.so
+
 %files manual
 %defattr(-,root,root,0755)
 %doc manual/copying.txt manual/credits.txt manual/bugs.txt manual/readme.txt manual/news.txt
@@ -378,6 +403,11 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Fri Oct 27 2006 Dan Williams <dcbw@redhat.com> 5.03.0-6
+- Update to a cvs snapshot for the remote plugin and a few other fixes
+- Split csound FLTK plugin out from -gui package since it's unrelated to the GUI bits
+- Put the virtual MIDI keyboard into its own package
+
 * Wed Oct 25 2006 Dan Williams <dcbw@redhat.com> 5.03.0-5
 - Fix the remote plugin's local IP address read code, add more error checking
 

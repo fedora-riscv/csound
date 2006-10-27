@@ -1,6 +1,6 @@
---- Csound5.03.0/OOps/remote.c.remote-debug	2006-10-23 08:18:21.000000000 -0400
-+++ Csound5.03.0/OOps/remote.c	2006-10-25 12:08:20.000000000 -0400
-@@ -36,15 +36,18 @@
+--- Csound5.03.0/OOps/remote.c.remote-fixes	2006-10-27 16:00:10.000000000 -0400
++++ Csound5.03.0/OOps/remote.c	2006-10-27 16:32:02.000000000 -0400
+@@ -38,6 +38,9 @@
  
  #define ST(x)   (((REMOTE_GLOBALS*) ((CSOUND*)csound)->remoteGlobals)->x)
  
@@ -10,7 +10,8 @@
  void remoteRESET(CSOUND *csound)
  {
      csound->remoteGlobals = NULL;
- }
+@@ -46,9 +49,9 @@
+ #ifdef HAVE_SOCKETS
  
   /* get the IPaddress of this machine */
 -static void getIpAddress(char *ipaddr, char *ifname)
@@ -21,11 +22,11 @@
  #ifdef WIN32
      /* VL 12/10/06: something needs to go here */
      /* gethostbyname is the real answer; code below id unsafe */
-@@ -57,25 +60,26 @@
- memset(&sin, 0, sizeof (struct sockaddr_in));
- memmove(&sin.sin_addr, he->h_addr_list[0], he->h_length);
- strcpy(ipaddr, inet_ntoa (sin.sin_addr));
-+ret = 0;
+@@ -61,25 +64,26 @@
+     memset(&sin, 0, sizeof (struct sockaddr_in));
+     memmove(&sin.sin_addr, he->h_addr_list[0], he->h_length);
+     strcpy(ipaddr, inet_ntoa (sin.sin_addr));
++    ret = 0;
  
  #else
      struct ifreq ifr;
@@ -54,7 +55,7 @@
  }
  
  char remoteID(CSOUND *csound)
-@@ -84,31 +88,83 @@
+@@ -88,31 +92,83 @@
      return ST(ipadrs)[len-1];
  }
  
@@ -116,8 +117,8 @@
 +      goto error;
 +    }
 +
-+	/* get IP adrs of this machine */
-+	/* FIXME: don't hardcode eth0 */
++    /* get IP adrs of this machine */
++    /* FIXME: don't hardcode eth0 */
 +    if (getIpAddress(ST(ipadrs), "eth0") < 0) {
 +      csound->Message(csound, Str("unable to get local ip address."));
 +      goto error;
@@ -144,7 +145,7 @@
        SOCK *sop = ST(socksout), *sop_end = sop + MAXREMOTES;
        for ( ; sop < sop_end; sop++)
          if ((fd = sop->rfd) > 0)
-@@ -285,7 +341,12 @@
+@@ -289,7 +345,12 @@
  {   /*      INSTR 0 opcode  */
      short nargs = p->INOCOUNT;
  
@@ -158,7 +159,7 @@
      if (nargs < 3) {
        csound->InitError(csound, Str("missing instr nos"));
        return 0;
-@@ -327,7 +388,12 @@
+@@ -331,7 +392,12 @@
  {   /*      INSTR 0 opcode  */
      short nargs = p->INOCOUNT;
  
@@ -172,7 +173,7 @@
      if (nargs < 2) {
        csound->InitError(csound, Str("missing instr nos"));
        return NOTOK;
-@@ -357,7 +423,12 @@
+@@ -361,7 +427,12 @@
  {                                            /* INSTR 0 opcode  */
      short nargs = p->INOCOUNT;
  
@@ -186,7 +187,7 @@
      if (nargs < 3) {
        csound->InitError(csound, Str("missing channel nos"));
        return NOTOK;
-@@ -396,7 +467,12 @@
+@@ -400,7 +471,12 @@
  {                                         /*       INSTR 0 opcode  */
      short nargs = p->INOCOUNT;
      
