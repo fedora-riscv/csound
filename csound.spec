@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       3%{?dist}
+Release:       7%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -28,7 +28,7 @@ BuildRequires: java-gcj-compat-devel
 BuildRequires: tk-devel tcl-devel
 BuildRequires: tetex tetex-latex libxslt
 
-Source0:     http://superb-east.dl.sourceforge.net/sourceforge/csound/Csound5.03_src.tgz
+Source0: http://superb-east.dl.sourceforge.net/sourceforge/csound/Csound5.03_src-cvs20061027.tar.bz2
 
 # NOTE:
 # Manual sources aren't distributed, but may be extracted from CVS via...
@@ -36,10 +36,11 @@ Source0:     http://superb-east.dl.sourceforge.net/sourceforge/csound/Csound5.03
 # cvs -z9 -d :pserver:anonymous@csound.cvs.sourceforge.net:/cvsroot/csound checkout -P -r csound-5_03_0 manual
 Source1: Csound5.03_manual.tgz
 
-Patch0: csound-5.03.0-uninitialized.patch
-Patch1: csound-5.03.0-printf-redef.patch
-Patch2: csound-5.03.0-enable-fluidsynth.patch
-Patch3: csound-5.03.0-no-gstabs.patch
+Patch0: csound-5.03.0-enable-fluidsynth.patch
+Patch1: csound-5.03.0-gstabs-disable-option.patch
+Patch2: csound-5.03.0-no-usr-local.patch
+Patch3: csound-5.03.0-disable-atsa.patch
+Patch4: csound-5.03.0-remote-fixes.patch
 
 
 %description
@@ -109,6 +110,15 @@ Requires: fltk xdg-utils
 %description gui
 Contains a FLTK-based GUI for Csound
 
+%package fltk
+Summary: FLTK plugins for Csound
+Group: Applications/Multimedia
+Requires: %{name} = %{version}-%{release}
+Requires: fltk
+
+%description fltk
+Contains FLTK plugins for csound
+
 %package jack
 Summary: Jack Audio plugins for Csound
 Group: Applications/Multimedia
@@ -144,6 +154,15 @@ Requires: %{name} = %{version}-%{release}
 %description osc
 Open Sound Control (OSC) plugin for Csound
 
+%package virtual-keyboard
+Summary: Virtual MIDI keyboard plugin for Csound
+Group: Applications/Multimedia
+Requires: %{name} = %{version}-%{release}
+Requires: fltk
+
+%description virtual-keyboard
+A virtual MIDI keyboard plugin for Csound
+
 %package manual
 Summary: Csound manual
 Group: Documentation
@@ -161,10 +180,12 @@ Tutorial documentation and sample files for Csound.
 
 %prep
 %setup -q -n Csound5.03.0
-%patch0 -p1 -b .uninitialized
-%patch1 -p1 -b .printf-redef
-%patch2 -p1 -b .enable-fluidsynth
-%patch3 -p1 -b .no-gstabs
+%patch0 -p1 -b .enable-fluidsynth
+%patch1 -p1 -b .gstabs-disable-option
+%patch2 -p1 -b .no-usr-local
+%patch3 -p1 -b .disable-atsa
+%patch4 -p1 -b .remote-fixes
+
 tar xf %{SOURCE1}
 
 %build
@@ -174,6 +195,11 @@ sed -ie 's#\"firefox /usr/local/share/doc/csound/manual/#\"xdg-open file://%{_do
       frontends/fltk_gui/CsoundGlobalSettings.cpp
 
 scons dynamicCsoundLibrary=1 \
+      buildRelease=0 \
+      noDebug=0 \
+      disableGStabs=1 \
+      buildInterfaces=1 \
+      useALSA=1 \
       usePortAudio=0 \
       usePortMIDI=0 \
       useOSC=1 \
@@ -186,6 +212,7 @@ scons dynamicCsoundLibrary=1 \
       buildTclcsound=1 \
       buildJavaWrapper=1 \
       buildDSSI=1 \
+      buildUtilities=1 \
       prefix=%{_prefix} \
       customCCFLAGS="%{optflags}" \
       customCXXFLAGS="%{optflags}" \
@@ -268,6 +295,8 @@ fi
 %{_bindir}/scsort
 %{_bindir}/sndinfo
 %{_bindir}/srconv
+%{_bindir}/pv_export
+%{_bindir}/pv_import
 %{_libdir}/lib%{name}.so.5.1
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/xmg/*.xmg
@@ -298,6 +327,9 @@ fi
 %{_libdir}/%{name}/plugins/libudprecv.so
 %{_libdir}/%{name}/plugins/libudpsend.so
 %{_libdir}/%{name}/plugins/libvbap.so
+%{_libdir}/%{name}/plugins/libharmon.so
+%{_libdir}/%{name}/plugins/libugakbari.so
+%{_libdir}/%{name}/plugins/libvaops.so
 %{_libdir}/%{name}/plugins/opcodes.dir
 
 %files devel
@@ -332,6 +364,9 @@ fi
 %files gui
 %defattr(-,root,root,0755)
 %{_bindir}/csound5gui
+
+%files fltk
+%defattr(-,root,root,0755)
 %{_libdir}/%{name}/plugins/libwidgets.so
 
 %files jack
@@ -350,6 +385,10 @@ fi
 %defattr(-,root,root,0755)
 %{_libdir}/%{name}/plugins/libosc.so
 
+%files virtual-keyboard
+%defattr(-,root,root,0755)
+%{_libdir}/%{name}/plugins/libvirtual.so
+
 %files manual
 %defattr(-,root,root,0755)
 %doc manual/copying.txt manual/credits.txt manual/bugs.txt manual/readme.txt manual/news.txt
@@ -364,6 +403,24 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Sat Oct 28 2006 Dan Williams <dcbw@redhat.com> 5.03.0-7
+- Rebuild to drop old source tarball
+
+* Fri Oct 27 2006 Dan Williams <dcbw@redhat.com> 5.03.0-6
+- Update to a cvs snapshot for the remote plugin and a few other fixes
+- Split csound FLTK plugin out from -gui package since it's unrelated to the GUI bits
+- Put the virtual MIDI keyboard into its own package
+
+* Wed Oct 25 2006 Dan Williams <dcbw@redhat.com> 5.03.0-5
+- Fix the remote plugin's local IP address read code, add more error checking
+
+* Mon Oct 23 2006 Dan Williams <dcbw@redhat.com> 5.03.0-4
+- Drop csound-5.03.0-uninitialized.patch, upstream
+- Drop csound-5.03.0-printf-redef.patch, upstream
+- CVS snapshot to grab some updated opcodes and fixes
+- Make disabling -gstabs an option for better upstream palatability
+- Disable atsa; it breaks the build for some unknown reason
+
 * Fri Sep  8 2006 Dan Williams <dcbw@redhat.com> 5.03.0-3
 - csound-5.03.0-no-gstabs.patch added; produce dwarf2 like everyone else
 

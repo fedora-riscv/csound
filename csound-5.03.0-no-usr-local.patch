@@ -1,0 +1,61 @@
+--- Csound5.03.0/SConstruct.no-usr-local	2006-10-27 16:24:08.000000000 -0400
++++ Csound5.03.0/SConstruct	2006-10-27 16:26:03.000000000 -0400
+@@ -306,10 +306,10 @@
+ if commonEnvironment['buildRelease'] == '0':
+     commonEnvironment.Prepend(CPPFLAGS = ['-DBETA'])
+ if commonEnvironment['Word64'] == '1':
+-    commonEnvironment.Prepend(LIBPATH = ['.', '#.', '/usr/local/lib64'])
++    commonEnvironment.Prepend(LIBPATH = ['.', '#.'])
+     commonEnvironment.Append(CCFLAGS = ['-fPIC'])
+ else:
+-    commonEnvironment.Prepend(LIBPATH = ['.', '#.', '/usr/local/lib'])
++    commonEnvironment.Prepend(LIBPATH = ['.', '#.'])
+ 
+ if commonEnvironment['useDouble'] == '0':
+     print 'CONFIGURATION DECISION: Using single-precision floating point for audio samples.'
+@@ -324,14 +324,12 @@
+ 
+ if getPlatform() == 'linux':
+     commonEnvironment.Append(CCFLAGS = "-DLINUX")
+-    commonEnvironment.Append(CPPPATH = '/usr/local/include')
+     commonEnvironment.Append(CPPPATH = '/usr/include')
+     commonEnvironment.Append(CPPPATH = '/usr/X11R6/include')
+     commonEnvironment.Append(CCFLAGS = "-DPIPES")
+     commonEnvironment.Append(LINKFLAGS = ['-Wl,-Bdynamic'])
+ elif getPlatform() == 'darwin':
+     commonEnvironment.Append(CCFLAGS = "-DMACOSX")
+-    commonEnvironment.Append(CPPPATH = '/usr/local/include')
+     commonEnvironment.Append(CCFLAGS = "-DPIPES")
+     if commonEnvironment['useAltivec'] == '1':
+         print 'CONFIGURATION DECISION using Altivec optmisation'
+@@ -342,7 +340,6 @@
+     commonEnvironment.Append(CCFLAGS = "-DPIPES")
+     commonEnvironment.Append(CCFLAGS = "-DOS_IS_WIN32")
+     if not withMSVC():
+-        commonEnvironment.Append(CPPPATH = '/usr/local/include')
+         commonEnvironment.Append(CPPPATH = '/usr/include')
+         commonEnvironment.Append(CCFLAGS = "-mthreads")
+     else:
+@@ -350,18 +347,17 @@
+ 
+ if getPlatform() == 'linux':
+     path1 = '/usr/include/python%s' % commonEnvironment['pythonVersion']
+-    path2 = '/usr/local/include/python%s' % commonEnvironment['pythonVersion']
+-    pythonIncludePath = [path1, path2]
++    pythonIncludePath = [path1]
+     path1 = '/usr/include/tcl8.4'
+     path2 = '/usr/include/tk8.4'
+-    tclIncludePath = [path1, path2]
++    tclIncludePath = [path1]
+     pythonLinkFlags = []
+     if commonEnvironment['Word64'] == '1':
+         tmp = '/usr/lib64/python%s/config' % commonEnvironment['pythonVersion']
+-        pythonLibraryPath = ['/usr/local/lib64', '/usr/lib64', tmp]
++        pythonLibraryPath = ['/usr/lib64', tmp]
+     else:
+         tmp = '/usr/lib/python%s/config' % commonEnvironment['pythonVersion']
+-        pythonLibraryPath = ['/usr/local/lib', '/usr/lib', tmp]
++        pythonLibraryPath = ['/usr/lib', tmp]
+     pythonLibs = ['python%s' % commonEnvironment['pythonVersion']]
+ elif getPlatform() == 'darwin':
+     pyBasePath = '/System/Library/Frameworks/Python.Framework'
