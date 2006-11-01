@@ -1,0 +1,28 @@
+--- Csound5.03.0/Top/csmodule.c.default-plugindir	2006-11-01 10:44:42.000000000 -0500
++++ Csound5.03.0/Top/csmodule.c	2006-11-01 10:45:58.000000000 -0500
+@@ -123,17 +123,20 @@
+ /* default directory to load plugins from if environment variable is not set */
+ #if !(defined(_CSOUND_RELEASE_) && (defined(LINUX) || defined(__MACH__)))
+ #  define ENABLE_OPCODEDIR_WARNINGS 1
+-#  ifdef CS_DEFAULT_PLUGINDIR
+-#    undef CS_DEFAULT_PLUGINDIR
++#  ifndef CS_DEFAULT_PLUGINDIR
++#    ifndef USE_DOUBLE
++#      define CS_DEFAULT_PLUGINDIR  "/usr/lib/csound/plugins"
++#    else
++#      define CS_DEFAULT_PLUGINDIR  "/usr/lib64/csound/plugins"
++#    endif
+ #  endif
+-#  define CS_DEFAULT_PLUGINDIR      "."
+ #else
+ #  define ENABLE_OPCODEDIR_WARNINGS 0
+ #  ifndef CS_DEFAULT_PLUGINDIR
+ #    ifndef USE_DOUBLE
+-#      define CS_DEFAULT_PLUGINDIR  "/usr/local/lib/csound/plugins"
++#      define CS_DEFAULT_PLUGINDIR  "/usr/lib/csound/plugins"
+ #    else
+-#      define CS_DEFAULT_PLUGINDIR  "/usr/local/lib/csound/plugins64"
++#      define CS_DEFAULT_PLUGINDIR  "/usr/lib64/csound/plugins"
+ #    endif
+ #  endif
+ #endif
