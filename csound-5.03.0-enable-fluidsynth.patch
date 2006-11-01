@@ -1,24 +1,24 @@
---- Csound5.03.0/SConstruct.enable-fluidsynth	2006-10-21 11:03:22.000000000 -0400
-+++ Csound5.03.0/SConstruct	2006-10-23 15:36:10.000000000 -0400
-@@ -225,6 +225,9 @@
+--- Csound5.03.0/SConstruct.enable-fluidsynth	2006-11-01 09:50:30.000000000 -0500
++++ Csound5.03.0/SConstruct	2006-11-01 10:36:08.000000000 -0500
+@@ -224,6 +224,9 @@
      '0')
  opts.Add('isWinNT', 'On windows, if win2000 or NT is used',
            '%d' % withMSVC())
 +opts.Add('useFluidsynth',
 +    'Set to 1 if you want OSC support',
 +    '0')
- 
- # Define the common part of the build environment.
- # This section also sets up customized options for third-party libraries, which
-@@ -426,6 +429,7 @@
- pdhfound = configure.CheckHeader("m_pd.h", language = "C")
- tclhfound = configure.CheckHeader("tcl.h", language = "C")
+ opts.Add('buildCSEditor',
+     'Set to 1 to build the Csound syntax highlighting text editor. Requires FLTK headers and libs',
+     '0')
+@@ -437,6 +440,7 @@
+         tmp = '%s/tcl.h' % i
+         tclhfound = tclhfound or configure.CheckHeader(tmp, language = "C")
  luaFound = configure.CheckHeader("lua.h", language = "C")
 +fluidsynthFound = configure.CheckHeader("fluidsynth.h", language = "C")
  swigFound = 'swig' in commonEnvironment['TOOLS']
  print 'Checking for SWIG... %s' % (['no', 'yes'][int(swigFound)])
  pythonFound = configure.CheckHeader("Python.h", language = "C")
-@@ -1228,7 +1232,7 @@
+@@ -1263,7 +1267,7 @@
  
  # FLUIDSYNTH OPCODES
  
