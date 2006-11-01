@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       7%{?dist}
+Release:       8%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -28,7 +28,7 @@ BuildRequires: java-gcj-compat-devel
 BuildRequires: tk-devel tcl-devel
 BuildRequires: tetex tetex-latex libxslt
 
-Source0: http://superb-east.dl.sourceforge.net/sourceforge/csound/Csound5.03_src-cvs20061027.tar.bz2
+Source0: http://superb-east.dl.sourceforge.net/sourceforge/csound/Csound5.03.0_src-cvs20061101.tar.bz2
 
 # NOTE:
 # Manual sources aren't distributed, but may be extracted from CVS via...
@@ -40,8 +40,7 @@ Patch0: csound-5.03.0-enable-fluidsynth.patch
 Patch1: csound-5.03.0-gstabs-disable-option.patch
 Patch2: csound-5.03.0-no-usr-local.patch
 Patch3: csound-5.03.0-disable-atsa.patch
-Patch4: csound-5.03.0-remote-fixes.patch
-
+Patch4: csound-5.03.0-default-opcodedir.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -184,7 +183,7 @@ Tutorial documentation and sample files for Csound.
 %patch1 -p1 -b .gstabs-disable-option
 %patch2 -p1 -b .no-usr-local
 %patch3 -p1 -b .disable-atsa
-%patch4 -p1 -b .remote-fixes
+%patch4 -p1 -b .default-opcodedir
 
 tar xf %{SOURCE1}
 
@@ -403,6 +402,13 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Wed Nov  1 2006 Dan Williams <dcbw@redhat.com> 5.03.0-8
+- CVS snapshot to pick up virtual Midi keyboard
+- Make the default for OPCODEDIR be where the plugins are actually installed
+
+* Sat Oct 28 2006 Dan Williams <dcbw@redhat.com> 5.03.0-7
+- Rebuild to drop old source tarball
+
 * Fri Oct 27 2006 Dan Williams <dcbw@redhat.com> 5.03.0-6
 - Update to a cvs snapshot for the remote plugin and a few other fixes
 - Split csound FLTK plugin out from -gui package since it's unrelated to the GUI bits
