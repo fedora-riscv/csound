@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       8%{?dist}
+Release:       9%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -28,7 +28,7 @@ BuildRequires: java-gcj-compat-devel
 BuildRequires: tk-devel tcl-devel
 BuildRequires: tetex tetex-latex libxslt
 
-Source0: http://superb-east.dl.sourceforge.net/sourceforge/csound/Csound5.03.0_src-cvs20061101.tar.bz2
+Source0: http://superb-east.dl.sourceforge.net/sourceforge/csound/Csound5.03.0_src-cvs20061108.tar.bz2
 
 # NOTE:
 # Manual sources aren't distributed, but may be extracted from CVS via...
@@ -402,6 +402,9 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Wed Nov  8 2006 Dan Williams <dcbw@redhat.com> 5.03.0-9
+- CVS snapshot for fixes to the virtual midi keyboard
+
 * Wed Nov  1 2006 Dan Williams <dcbw@redhat.com> 5.03.0-8
 - CVS snapshot to pick up virtual Midi keyboard
 - Make the default for OPCODEDIR be where the plugins are actually installed
