@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       9%{?dist}
+Release:       10%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -402,6 +402,9 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Tue Feb 20 2007 Dan Williams <dcbw@redhat.com> - 5.03.0-10
+- Rebuild for Python 2.5
+
 * Wed Nov  8 2006 Dan Williams <dcbw@redhat.com> 5.03.0-9
 - CVS snapshot for fixes to the virtual midi keyboard
 
