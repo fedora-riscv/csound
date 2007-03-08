@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       10%{?dist}
+Release:       11%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -41,6 +41,7 @@ Patch1: csound-5.03.0-gstabs-disable-option.patch
 Patch2: csound-5.03.0-no-usr-local.patch
 Patch3: csound-5.03.0-disable-atsa.patch
 Patch4: csound-5.03.0-default-opcodedir.patch
+Patch5: csound-5.03.0-rtalsa-fix.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -184,6 +185,7 @@ Tutorial documentation and sample files for Csound.
 %patch2 -p1 -b .no-usr-local
 %patch3 -p1 -b .disable-atsa
 %patch4 -p1 -b .default-opcodedir
+%patch5 -p1 -b .rtalsa-fix
 
 tar xf %{SOURCE1}
 
@@ -402,6 +404,10 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Tue Feb 20 2007 Dan Williams <dcbw@redhat.com> - 5.03.0-11
+- Rebuild for Python 2.5 (again)
+- Fix rtalsa compile error (RH #220856)
+
 * Tue Feb 20 2007 Dan Williams <dcbw@redhat.com> - 5.03.0-10
 - Rebuild for Python 2.5
 
