@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       11%{?dist}
+Release:       12%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -73,7 +73,7 @@ Summary: Java Csound support
 Group: System Environment/Libraries
 Requires: %{name} = %{version}-%{release}
 Requires:         jpackage-utils >= 1.5
-Requires:         java-1.4.2-gcj-compat >= 1.4.2.0-40jpp_88rh
+Requires:         java-1.5.0-gcj
 Requires(post):   jpackage-utils >= 1.5
 Requires(postun): jpackage-utils >= 1.5
 Requires(post):   java-gcj-compat
@@ -404,6 +404,9 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Sat Mar 31 2007 Thomas Fitzsimmons <fitzsim@redhat.com> - 5.03.0-12
+- Require java-1.5.0-gcj
+
 * Tue Feb 20 2007 Dan Williams <dcbw@redhat.com> - 5.03.0-11
 - Rebuild for Python 2.5 (again)
 - Fix rtalsa compile error (RH #220856)
