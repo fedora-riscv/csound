@@ -1,0 +1,20 @@
+--- Csound5.03.0.orig/frontends/fltk_gui/CsoundGUIConsole_FLTK.fl	2006-06-03 12:29:13.000000000 -0400
++++ Csound5.03.0/frontends/fltk_gui/CsoundGUIConsole_FLTK.fl	2007-04-02 16:10:41.000000000 -0400
+@@ -32,7 +32,6 @@
+     Fl_Window window {
+       label {Csound console messages} open
+       xywh {438 150 585 320} type Double resizable
+-      code0 {window = (Fl_Double_Window*) o;} visible
+     } {
+       Fl_Text_Display textDisplay {
+         xywh {0 0 585 320} box DOWN_BOX color 255 labelsize 12 textfont 4 textsize 12 resizable
+--- Csound5.03.0.orig/frontends/fltk_gui/CsoundPerformanceSettingsPanel_FLTK.fl	2006-06-03 12:29:13.000000000 -0400
++++ Csound5.03.0/frontends/fltk_gui/CsoundPerformanceSettingsPanel_FLTK.fl	2007-04-02 16:00:39.000000000 -0400
+@@ -22,7 +22,6 @@
+       label {Csound performance settings}
+       callback {status = 1;} open
+       xywh {331 173 390 450} type Double
+-      code0 {window = o;} visible
+     } {
+       Fl_Tabs {} {open
+         xywh {0 0 390 405}

@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       12%{?dist}
+Release:       13%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -42,6 +42,7 @@ Patch2: csound-5.03.0-no-usr-local.patch
 Patch3: csound-5.03.0-disable-atsa.patch
 Patch4: csound-5.03.0-default-opcodedir.patch
 Patch5: csound-5.03.0-rtalsa-fix.patch
+Patch6: csound-5.03.0-fltk-fixes.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -186,6 +187,7 @@ Tutorial documentation and sample files for Csound.
 %patch3 -p1 -b .disable-atsa
 %patch4 -p1 -b .default-opcodedir
 %patch5 -p1 -b .rtalsa-fix
+%patch6 -p1 -b .fltk-fixes
 
 tar xf %{SOURCE1}
 
@@ -243,7 +245,7 @@ scons dynamicCsoundLibrary=1 \
 # This file is zero-lenth for some reason
 %{__rm} -f manual/examples/ifthen.csd
 
-%{__mv} %{buildroot}%{_libdir}/lib_csnd.so %{buildroot}%{_libdir}/python2.4/site-packages/_csnd.so
+%{__mv} %{buildroot}%{_libdir}/lib_csnd.so %{buildroot}%{_libdir}/python2.5/site-packages/_csnd.so
 
 install -dm 755 %{buildroot}%{_javadir}
 (cd %{buildroot}%{_javadir}; ln -s %{_libdir}/%{name}/java/csnd.jar .)
@@ -340,7 +342,7 @@ fi
 
 %files python
 %defattr(-,root,root,0755)
-%{_libdir}/python2.4/site-packages/*
+%{_libdir}/python2.5/site-packages/*
 
 %files java
 %{_libdir}/lib_jcsound.so
@@ -404,6 +406,11 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Mon Apr  2 2007 Thomas Fitzsimmons <fitzsim@redhat.com> - 5.03.0-13
+- Patch out FLTK widget initialization code made unnecessary by
+  fltk-fluid 1.1.8, snapshot r5555
+- Update python site-packages version to 2.5
+
 * Sat Mar 31 2007 Thomas Fitzsimmons <fitzsim@redhat.com> - 5.03.0-12
 - Require java-1.5.0-gcj
 
