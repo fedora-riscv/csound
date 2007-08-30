@@ -10,8 +10,8 @@
 
 Summary:       Csound - sound synthesis language and library
 Name:          csound
-Version:       5.03.0
-Release:       13%{?dist}
+Version:       5.07.0
+Release:       0.1.cvs20070830%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -28,21 +28,20 @@ BuildRequires: java-gcj-compat-devel
 BuildRequires: tk-devel tcl-devel
 BuildRequires: tetex tetex-latex libxslt
 
-Source0: http://superb-east.dl.sourceforge.net/sourceforge/csound/Csound5.03.0_src-cvs20061108.tar.bz2
+Source0: http://superb-east.dl.sourceforge.net/sourceforge/csound/Csound5.07.0_src-cvs20070830.tar.bz2
 
 # NOTE:
 # Manual sources aren't distributed, but may be extracted from CVS via...
 # cvs -d :pserver:anonymous@csound.cvs.sourceforge.net:/cvsroot/csound login
 # cvs -z9 -d :pserver:anonymous@csound.cvs.sourceforge.net:/cvsroot/csound checkout -P -r csound-5_03_0 manual
-Source1: Csound5.03_manual.tgz
+Source1: Csound5.07.0_manual-cvs20070830.tar.bz2
 
 Patch0: csound-5.03.0-enable-fluidsynth.patch
-Patch1: csound-5.03.0-gstabs-disable-option.patch
+Patch1: csound-5.07.0-install-fixes.patch
 Patch2: csound-5.03.0-no-usr-local.patch
 Patch3: csound-5.03.0-disable-atsa.patch
 Patch4: csound-5.03.0-default-opcodedir.patch
 Patch5: csound-5.03.0-rtalsa-fix.patch
-Patch6: csound-5.03.0-fltk-fixes.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -180,14 +179,13 @@ Tutorial documentation and sample files for Csound.
 
 
 %prep
-%setup -q -n Csound5.03.0
+%setup -q -n csound5
 %patch0 -p1 -b .enable-fluidsynth
-%patch1 -p1 -b .gstabs-disable-option
+%patch1 -p1 -b .install-fixes
 %patch2 -p1 -b .no-usr-local
 %patch3 -p1 -b .disable-atsa
 %patch4 -p1 -b .default-opcodedir
 %patch5 -p1 -b .rtalsa-fix
-%patch6 -p1 -b .fltk-fixes
 
 tar xf %{SOURCE1}
 
@@ -208,6 +206,7 @@ scons dynamicCsoundLibrary=1 \
       useOSC=1 \
       useJack=1 \
       useFLTK=1 \
+      buildVirtual=1 \
       useFluidsynth=1 \
       generatePdf=0 \
       buildCsound5GUI=1 \
@@ -244,8 +243,6 @@ scons dynamicCsoundLibrary=1 \
 
 # This file is zero-lenth for some reason
 %{__rm} -f manual/examples/ifthen.csd
-
-%{__mv} %{buildroot}%{_libdir}/lib_csnd.so %{buildroot}%{_libdir}/python2.5/site-packages/_csnd.so
 
 install -dm 755 %{buildroot}%{_javadir}
 (cd %{buildroot}%{_javadir}; ln -s %{_libdir}/%{name}/java/csnd.jar .)
@@ -304,36 +301,46 @@ fi
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/xmg/*.xmg
 %dir %{_libdir}/%{name}/plugins
+%{_libdir}/%{name}/plugins/libampmidid.so
 %{_libdir}/%{name}/plugins/libbabo.so
 %{_libdir}/%{name}/plugins/libbarmodel.so
 %{_libdir}/%{name}/plugins/libcompress.so
 %{_libdir}/%{name}/plugins/libcontrol.so
+%{_libdir}/%{name}/plugins/libcsnd.so
+%{_libdir}/%{name}/plugins/libdate.so
+%{_libdir}/%{name}/plugins/libeqfil.so
 %{_libdir}/%{name}/plugins/libftest.so
+%{_libdir}/%{name}/plugins/libgabnew.so
 %{_libdir}/%{name}/plugins/libgrain4.so
 %{_libdir}/%{name}/plugins/libhrtferX.so
 %{_libdir}/%{name}/plugins/libloscilx.so
 %{_libdir}/%{name}/plugins/libminmax.so
 %{_libdir}/%{name}/plugins/libmixer.so
 %{_libdir}/%{name}/plugins/libmodal4.so
+%{_libdir}/%{name}/plugins/libmutexops.so
+%{_libdir}/%{name}/plugins/libpartikkel.so
 %{_libdir}/%{name}/plugins/libphisem.so
 %{_libdir}/%{name}/plugins/libphysmod.so
 %{_libdir}/%{name}/plugins/libpitch.so
+%{_libdir}/%{name}/plugins/libptrack.so
 %{_libdir}/%{name}/plugins/libpvoc.so
+%{_libdir}/%{name}/plugins/libpvsbuffer.so
 %{_libdir}/%{name}/plugins/libpvs_ops.so
 %{_libdir}/%{name}/plugins/libpy.so
 %{_libdir}/%{name}/plugins/librtalsa.so
 %{_libdir}/%{name}/plugins/libscansyn.so
+%{_libdir}/%{name}/plugins/libscoreline.so
 %{_libdir}/%{name}/plugins/libsfont.so
 %{_libdir}/%{name}/plugins/libstackops.so
 %{_libdir}/%{name}/plugins/libstdopcod.so
 %{_libdir}/%{name}/plugins/libstdutil.so
+%{_libdir}/%{name}/plugins/libsystem_call.so
 %{_libdir}/%{name}/plugins/libudprecv.so
 %{_libdir}/%{name}/plugins/libudpsend.so
 %{_libdir}/%{name}/plugins/libvbap.so
 %{_libdir}/%{name}/plugins/libharmon.so
 %{_libdir}/%{name}/plugins/libugakbari.so
 %{_libdir}/%{name}/plugins/libvaops.so
-%{_libdir}/%{name}/plugins/opcodes.dir
 
 %files devel
 %defattr(-,root,root,0755)
@@ -406,6 +413,16 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Thu Aug 30 2007 Dan Williams <dcbw@redhat.com> - 5.07.0-0.1.cvs20070830
+- Update to CVS snapshot of 5.07
+    - Expose functions for fluid opcodes that work better on low-power machines
+
+* Fri Aug 24 2007 Dan Williams <dcbw@redhat.com> - 5.07.0-0.1.cvs20070824
+- Update to CVS snapshot of 5.07
+
+* Wed Aug 22 2007 Dan Williams <dcbw@redhat.com> - 5.07.0-0.1.cvs20070822
+- Update to CVS snapshot of 5.07
+
 * Mon Apr  2 2007 Thomas Fitzsimmons <fitzsim@redhat.com> - 5.03.0-13
 - Patch out FLTK widget initialization code made unnecessary by
   fltk-fluid 1.1.8, snapshot r5555

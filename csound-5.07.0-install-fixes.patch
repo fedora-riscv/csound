@@ -1,0 +1,74 @@
+--- csound5/install.py.fixes	2007-08-22 23:43:42.000000000 -0400
++++ csound5/install.py	2007-08-22 23:48:46.000000000 -0400
+@@ -242,7 +242,7 @@ if ('csound' in installedBinaries) or ('
+ print ' === Installing executables ==='
+ for i in exeFiles1:
+     if findFiles('.', i).__len__() > 0:
+-        err = installXFile('--strip-unneeded', i, binDir)
++        err = installXFile('', i, binDir)
+         installErrors = installErrors or err
+ for i in exeFiles2:
+     if findFiles('.', i).__len__() > 0:
+@@ -256,22 +256,21 @@ libList = findFiles('.', 'libcsound\\.a'
+ libList += findFiles('.', 'libcsound64\\.a')
+ libList += findFiles('.', 'libcsound\\.so\\..+')
+ libList += findFiles('.', 'libcsound64\\.so\\..+')
+-libList += findFiles('.', 'lib_csnd\\.so')
++libList += findFiles('.', '_csnd\\.so')
+ libList += findFiles('.', 'lib_jcsound\\.so')
+ libList += findFiles('.', 'lib_CsoundVST\\.so')
+ for i in libList:
+     if i[-2:] == '.a':
+         err = installFile(i, libDir)
++    elif i == '_csnd.so':
++        err = installFile(i, pythonDir2)
+     else:
+-        err = installXFile('--strip-debug', i, libDir)
++        err = installFile(i, libDir)
+     if err == 0:
+         if i[:13] == 'libcsound.so.':
+             err = installLink(i, concatPath([libDir, 'libcsound.so']))
+         elif i[:15] == 'libcsound64.so.':
+             err = installLink(i, concatPath([libDir, 'libcsound64.so']))
+-        elif i == 'lib_csnd.so':
+-            err = installLink(concatPath([libDir, i]),
+-                              concatPath([pythonDir2, '_csnd.so']))
+         elif i == 'lib_CsoundVST.so':
+             err = installLink(concatPath([libDir, i]),
+                               concatPath([pythonDir2, '_CsoundVST.so']))
+@@ -291,7 +290,7 @@ for i in ['libcsound.so', 'libcsound64.s
+     if i in pluginList:
+         pluginList.remove(i)
+ for i in pluginList:
+-    err = installXFile('--strip-unneeded', i, pluginDir)
++    err = installXFile('', i, pluginDir)
+     installErrors = installErrors or err
+ 
+ # copy header files
+@@ -318,7 +317,7 @@ for i in wrapperList:
+         if i[1] == '0':
+             err = installFile(fName, i[2])
+         else:
+-            err = installXFile('--strip-debug', fName, i[2])
++            err = installXFile('', fName, i[2])
+         installErrors = installErrors or err
+ 
+ # copy XMG files
+@@ -339,7 +338,7 @@ installErrors = installErrors or err
+ 
+ print ' === Installing Tcl/Tk modules and scripts ==='
+ if findFiles('.', 'tclcsound\\.so').__len__() > 0:
+-    err = installXFile('--strip-unneeded', 'tclcsound.so', tclDir)
++    err = installXFile('', 'tclcsound.so', tclDir)
+     installErrors = installErrors or err
+     err = installFile('frontends/tclcsound/command_summary.txt', tclDir)
+     installErrors = installErrors or err
+@@ -381,7 +380,7 @@ except:
+     pdDir = ''
+ if pdDir != '':
+     print ' === Installing csoundapi~ PD object ==='
+-    err = installXFile('--strip-unneeded', 'csoundapi~.pd_linux', pdDir)
++    err = installXFile('', 'csoundapi~.pd_linux', pdDir)
+     if err == 0:
+         try:
+             os.chmod(concatPath([instDir, pdDir, 'csoundapi~.pd_linux']), 0644)
