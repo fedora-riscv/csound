@@ -1,0 +1,11 @@
+--- csound5/frontends/csound/csound_main.c.segfix	2007-08-30 18:28:48.000000000 -0400
++++ csound5/frontends/csound/csound_main.c	2007-08-30 18:28:54.000000000 -0400
+@@ -89,7 +89,7 @@ int main(int argc, char **argv)
+       else if (i < (argc - 1) && strcmp(argv[i], "-O") == 0)
+         fname = argv[i + 1];
+     }
+-    if (!strcmp(fname, "NULL") || !strcmp(fname, "null")) nomessages = 1;
++    if (!fname || !strcmp(fname, "NULL") || !strcmp(fname, "null")) nomessages = 1;
+   
+      else if (fname != NULL) {
+       if ((logFile = fopen(fname, "w")) == NULL) {

@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.07.0
-Release:       0.1.cvs20070830%{?dist}
+Release:       0.2.cvs20070830%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -42,6 +42,7 @@ Patch2: csound-5.03.0-no-usr-local.patch
 Patch3: csound-5.03.0-disable-atsa.patch
 Patch4: csound-5.03.0-default-opcodedir.patch
 Patch5: csound-5.03.0-rtalsa-fix.patch
+Patch6: csound-5.07-log-segfault-fix.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -186,6 +187,7 @@ Tutorial documentation and sample files for Csound.
 %patch3 -p1 -b .disable-atsa
 %patch4 -p1 -b .default-opcodedir
 %patch5 -p1 -b .rtalsa-fix
+%patch6 -p1 -b .logfile-segfault-fix
 
 tar xf %{SOURCE1}
 
@@ -413,6 +415,9 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Thu Aug 30 2007 Dan Williams <dcbw@redhat.com> - 5.07.0-0.2.cvs20070830
+- Fix segfault when no logfile is specified
+
 * Thu Aug 30 2007 Dan Williams <dcbw@redhat.com> - 5.07.0-0.1.cvs20070830
 - Update to CVS snapshot of 5.07
     - Expose functions for fluid opcodes that work better on low-power machines
