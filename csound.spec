@@ -27,6 +27,7 @@ BuildRequires: jpackage-utils >= 1.5
 BuildRequires: java-gcj-compat-devel
 BuildRequires: tk-devel tcl-devel
 BuildRequires: tetex tetex-latex libxslt
+BuildRequires: libvorbis-devel libogg-devel
 
 Source0: http://superb-east.dl.sourceforge.net/sourceforge/csound/Csound5.07.0_src-cvs20070830.tar.bz2
 
