@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.07.0
-Release:       0.2.cvs20070830%{?dist}
+Release:       0.3.cvs20070830%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -43,6 +43,7 @@ Patch3: csound-5.03.0-disable-atsa.patch
 Patch4: csound-5.03.0-default-opcodedir.patch
 Patch5: csound-5.03.0-rtalsa-fix.patch
 Patch6: csound-5.07-log-segfault-fix.patch
+Patch7: csound-5.03.0-add-oggplay.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -188,6 +189,7 @@ Tutorial documentation and sample files for Csound.
 %patch4 -p1 -b .default-opcodedir
 %patch5 -p1 -b .rtalsa-fix
 %patch6 -p1 -b .logfile-segfault-fix
+%patch7 -p1 -b .add-oggplay
 
 tar xf %{SOURCE1}
 
@@ -205,6 +207,7 @@ scons dynamicCsoundLibrary=1 \
       useALSA=1 \
       usePortAudio=0 \
       usePortMIDI=0 \
+      useOGG=1 \
       useOSC=1 \
       useJack=1 \
       useFLTK=1 \
@@ -320,6 +323,7 @@ fi
 %{_libdir}/%{name}/plugins/libmixer.so
 %{_libdir}/%{name}/plugins/libmodal4.so
 %{_libdir}/%{name}/plugins/libmutexops.so
+%{_libdir}/%{name}/plugins/liboggplay.so
 %{_libdir}/%{name}/plugins/libpartikkel.so
 %{_libdir}/%{name}/plugins/libphisem.so
 %{_libdir}/%{name}/plugins/libphysmod.so
@@ -415,6 +419,9 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Fri Aug 31 2007 Dan Williams <dcbw@redhat.com> - 5.07.0-0.3.cvs20070830
+- Add oggplay patch
+
 * Thu Aug 30 2007 Dan Williams <dcbw@redhat.com> - 5.07.0-0.2.cvs20070830
 - Fix segfault when no logfile is specified
 
