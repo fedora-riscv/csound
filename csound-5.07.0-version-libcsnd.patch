@@ -1,0 +1,75 @@
+diff -up csound5/install.py.version-libcsnd csound5/install.py
+--- csound5/install.py.version-libcsnd	2007-09-13 14:50:54.000000000 -0400
++++ csound5/install.py	2007-09-13 14:51:40.000000000 -0400
+@@ -256,6 +256,7 @@ libList = findFiles('.', 'libcsound\\.a'
+ libList += findFiles('.', 'libcsound64\\.a')
+ libList += findFiles('.', 'libcsound\\.so\\..+')
+ libList += findFiles('.', 'libcsound64\\.so\\..+')
++libList += findFiles('.', 'libcsnd\\.so\\..+')
+ libList += findFiles('.', '_csnd\\.so')
+ libList += findFiles('.', 'lib_jcsound\\.so')
+ libList += findFiles('.', 'lib_CsoundVST\\.so')
+@@ -269,6 +270,8 @@ for i in libList:
+     if err == 0:
+         if i[:13] == 'libcsound.so.':
+             err = installLink(i, concatPath([libDir, 'libcsound.so']))
++        elif i[:11] == 'libcsnd.so.':
++            err = installLink(i, concatPath([libDir, 'libcsnd.so']))
+         elif i[:15] == 'libcsound64.so.':
+             err = installLink(i, concatPath([libDir, 'libcsound64.so']))
+         elif i == 'lib_CsoundVST.so':
+diff -up csound5/SConstruct.version-libcsnd csound5/SConstruct
+--- csound5/SConstruct.version-libcsnd	2007-09-13 13:58:28.000000000 -0400
++++ csound5/SConstruct	2007-09-13 13:58:28.000000000 -0400
+@@ -1097,6 +1097,8 @@ else:
+         os.spawnvp(os.P_WAIT, 'rm', ['rm', '-f', '_csnd.so'])
+         # os.symlink('lib_csnd.so', '_csnd.so')
+         csoundInterfacesEnvironment.Append(LINKFLAGS = ['-Wl,-rpath-link,.'])
++    # Copy here to avoid poluting SHLINKFLAGS for python
++    csndPythonEnvironment = csoundInterfacesEnvironment.Copy()
+     if getPlatform() == 'darwin':
+         ilibName = "lib_csnd.dylib"
+         ilibVersion = csoundLibraryVersion
+@@ -1112,22 +1114,35 @@ else:
+         csoundInterfaces = csoundInterfacesEnvironment.SharedLibrary(
+          '_csnd', csoundInterfacesSources)
+     else:
+-        csoundInterfaces = csoundInterfacesEnvironment.SharedLibrary('csnd', csoundInterfacesSources)
++        if getPlatform() == 'linux':
++            # save interfaces environment before adding -soname
++            libName = 'libcsnd.so'
++            libName2 = libName + '.' + csoundLibraryVersion
++            os.spawnvp(os.P_WAIT, 'rm', ['rm', '-f', libName])
++            os.symlink(libName2, libName)
++            tmp = csoundInterfacesEnvironment['SHLINKFLAGS']
++            tmp += ['-Wl,-soname=%s' % libName2]
++            csoundInterfaces = csoundInterfacesEnvironment.SharedLibrary(
++                libName2, csoundInterfacesSources,
++                SHLINKFLAGS = tmp, SHLIBPREFIX = '', SHLIBSUFFIX = '')
++        else:
++            csoundInterfaces = csoundInterfacesEnvironment.SharedLibrary('csnd', csoundInterfacesSources)
++
+     Depends(csoundInterfaces, csoundLibrary)
+     libs.append(csoundInterfaces)
+     if pythonFound:
+-        csoundInterfacesEnvironment.Append(LINKFLAGS = pythonLinkFlags)
+-        csoundInterfacesEnvironment.Prepend(LIBPATH = pythonLibraryPath)
+-        csoundInterfacesEnvironment.Prepend(LIBS = pythonLibs)
+-        csoundInterfacesEnvironment.Append(CPPPATH = pythonIncludePath)
+-        csndPythonEnvironment = csoundInterfacesEnvironment.Copy()
++        csndPythonEnvironment.Append(LINKFLAGS = pythonLinkFlags)
++        csndPythonEnvironment.Prepend(LIBPATH = pythonLibraryPath)
++        csndPythonEnvironment.Prepend(LIBS = pythonLibs)
++        csndPythonEnvironment.Append(CPPPATH = pythonIncludePath)
+         if getPlatform() == 'darwin':
+          csndPythonEnvironment.Append(LIBS = ['_csnd'])
+         else:
+          csndPythonEnvironment.Append(LIBS = ['csnd'])
+         csoundPythonInterface = csndPythonEnvironment.SharedObject(
+             'interfaces/python_interface.i',
+-            SWIGFLAGS = [swigflags, '-python', '-outdir', '.'])
++            SWIGFLAGS = [swigflags, '-python', '-outdir', '.'],
++            SHLINKFLAGS = '')
+         if getPlatform() == 'win32' and pythonLibs[0] < 'python24' and not withMSVC():
+             Depends(csoundPythonInterface, pythonImportLibrary)
+         csndModule = makePythonModule(csndPythonEnvironment, 'csnd', [csoundPythonInterface])

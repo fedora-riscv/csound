@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.07.0
-Release:       0.3.cvs20070830%{?dist}
+Release:       0.4.cvs20070830%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -45,6 +45,7 @@ Patch4: csound-5.03.0-default-opcodedir.patch
 Patch5: csound-5.03.0-rtalsa-fix.patch
 Patch6: csound-5.07-log-segfault-fix.patch
 Patch7: csound-5.03.0-add-oggplay.patch
+Patch8: csound-5.07.0-version-libcsnd.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -191,6 +192,7 @@ Tutorial documentation and sample files for Csound.
 %patch5 -p1 -b .rtalsa-fix
 %patch6 -p1 -b .logfile-segfault-fix
 %patch7 -p1 -b .add-oggplay
+%patch8 -p1 -b .version-libcsnd
 
 tar xf %{SOURCE1}
 
@@ -250,6 +252,8 @@ scons dynamicCsoundLibrary=1 \
 # This file is zero-lenth for some reason
 %{__rm} -f manual/examples/ifthen.csd
 
+%{__rm} -f %{buildroot}%{_libdir}/%{name}/plugins/libcsnd.so
+
 install -dm 755 %{buildroot}%{_javadir}
 (cd %{buildroot}%{_javadir}; ln -s %{_libdir}/%{name}/java/csnd.jar .)
 
@@ -304,6 +308,7 @@ fi
 %{_bindir}/pv_export
 %{_bindir}/pv_import
 %{_libdir}/lib%{name}.so.5.1
+%{_libdir}/libcsnd.so.5.1
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/xmg/*.xmg
 %dir %{_libdir}/%{name}/plugins
@@ -312,7 +317,6 @@ fi
 %{_libdir}/%{name}/plugins/libbarmodel.so
 %{_libdir}/%{name}/plugins/libcompress.so
 %{_libdir}/%{name}/plugins/libcontrol.so
-%{_libdir}/%{name}/plugins/libcsnd.so
 %{_libdir}/%{name}/plugins/libdate.so
 %{_libdir}/%{name}/plugins/libeqfil.so
 %{_libdir}/%{name}/plugins/libftest.so
@@ -353,6 +357,7 @@ fi
 %defattr(-,root,root,0755)
 %{_includedir}/%{name}/
 %{_libdir}/lib%{name}.so
+%{_libdir}/libcsnd.so
 
 %files python
 %defattr(-,root,root,0755)
@@ -420,6 +425,9 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Thu Sep 13 2007 Dan Williams <dcbw@redhat.com> - 5.07.0-0.4.cvs20070830
+- Put libcsnd.so in the right place, and version it
+
 * Fri Aug 31 2007 Dan Williams <dcbw@redhat.com> - 5.07.0-0.3.cvs20070830
 - Add oggplay patch
 
