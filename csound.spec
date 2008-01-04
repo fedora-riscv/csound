@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       13%{?dist}
+Release:       14%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -406,6 +406,9 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Thu Jan 03 2008 Alex Lancaster <alexlan at fedoraproject dot org> - 5.03.0-14
+- Rebuild for new tcl (8.5)
+
 * Mon Apr  2 2007 Thomas Fitzsimmons <fitzsim@redhat.com> - 5.03.0-13
 - Patch out FLTK widget initialization code made unnecessary by
   fltk-fluid 1.1.8, snapshot r5555
