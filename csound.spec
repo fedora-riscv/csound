@@ -11,7 +11,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       14%{?dist}
+Release:       15%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -43,6 +43,7 @@ Patch3: csound-5.03.0-disable-atsa.patch
 Patch4: csound-5.03.0-default-opcodedir.patch
 Patch5: csound-5.03.0-rtalsa-fix.patch
 Patch6: csound-5.03.0-fltk-fixes.patch
+Patch7: Csound5.03.0.makebuild.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -188,6 +189,7 @@ Tutorial documentation and sample files for Csound.
 %patch4 -p1 -b .default-opcodedir
 %patch5 -p1 -b .rtalsa-fix
 %patch6 -p1 -b .fltk-fixes
+%patch7 -p1 -b .makebuild
 
 tar xf %{SOURCE1}
 
@@ -406,6 +408,9 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Thu Jan 10 2008 Caolan McNamara <caolanm@redhat.com> - 5.03.0-15
+- Resolves: rhbz#428176 make build
+
 * Thu Jan 03 2008 Alex Lancaster <alexlan at fedoraproject dot org> - 5.03.0-14
 - Rebuild for new tcl (8.5)
 

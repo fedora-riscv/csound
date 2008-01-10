@@ -1,0 +1,43 @@
+diff -ru Csound5.03.0.orig/InOut/widgets.cpp Csound5.03.0/InOut/widgets.cpp
+--- Csound5.03.0.orig/InOut/widgets.cpp	2006-11-08 23:45:51.000000000 +0000
++++ Csound5.03.0/InOut/widgets.cpp	2008-01-09 17:42:45.000000000 +0000
+@@ -2838,7 +2838,7 @@
+   return OK;
+ }
+ 
+-static int fl_box(CSOUND *csound, FL_BOX *p)
++static int fl_boxthing(CSOUND *csound, FL_BOX *p)
+ {
+   char *text = GetString(csound, p->itext, p->XSTRCODE);
+   Fl_Box *o =  new Fl_Box((int)*p->ix, (int)*p->iy,
+@@ -3885,7 +3885,7 @@
+     { "FLsetAlign",     S(FL_TALIGN),           1,  "",     "ii",
+         (SUBR) fl_align,                (SUBR) NULL,              (SUBR) NULL },
+     { "FLbox",          S(FL_BOX),              1,  "i",    "Tiiiiiii",
+-        (SUBR) fl_box,                  (SUBR) NULL,              (SUBR) NULL },
++        (SUBR) fl_boxthing,             (SUBR) NULL,              (SUBR) NULL },
+     { "FLvalue",        S(FLVALUE),             1,  "i",    "Tjjjj",
+         (SUBR) fl_value,                (SUBR) NULL,              (SUBR) NULL },
+     { "FLpanel",        S(FLPANEL),             1,  "",     "Tjjjooo",
+--- Csound5.03.0.orig/SConstruct	2008-01-09 18:57:30.000000000 +0000
++++ Csound5.03.0/SConstruct	2008-01-09 18:57:44.000000000 +0000
+@@ -351,8 +351,8 @@
+ if getPlatform() == 'linux':
+     path1 = '/usr/include/python%s' % commonEnvironment['pythonVersion']
+     pythonIncludePath = [path1]
+-    path1 = '/usr/include/tcl8.4'
+-    path2 = '/usr/include/tk8.4'
++    path1 = '/usr/include/tcl8.5'
++    path2 = '/usr/include/tk8.5'
+     tclIncludePath = [path1]
+     pythonLinkFlags = []
+     if commonEnvironment['Word64'] == '1':
+@@ -1787,7 +1787,7 @@
+         '''))
+     elif getPlatform() == 'linux':
+         csTclEnvironment.Append(CPPPATH = tclIncludePath)
+-        csTclEnvironment.Append(LIBS = ['tcl8.4', 'tk8.4', 'dl', 'pthread'])
++        csTclEnvironment.Append(LIBS = ['tcl8.5', 'tk8.5', 'dl', 'pthread'])
+     elif getPlatform() == 'win32':
+         csTclEnvironment.Append(LIBS = ['tcl84', 'tk84'])
+         csTclEnvironment.Append(LIBS = csoundWindowsLibraries)
