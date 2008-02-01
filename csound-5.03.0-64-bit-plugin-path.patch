@@ -1,0 +1,58 @@
+diff -up Csound5.03.0/SConstruct.64-bit-plugin-path Csound5.03.0/SConstruct
+--- Csound5.03.0/SConstruct.64-bit-plugin-path	2008-02-01 07:20:15.000000000 -0500
++++ Csound5.03.0/SConstruct	2008-02-01 07:20:15.000000000 -0500
+@@ -570,9 +570,7 @@ def buildzip(env, target, source):
+ # library version is CS_VERSION.CS_APIVERSION
+ csoundLibraryVersion = '5.1'
+ csoundLibraryName = 'csound'
+-if commonEnvironment['useDouble'] != '0':
+-    csoundLibraryName += '64'
+-elif getPlatform() == 'win32':
++if getPlatform() == 'win32':
+     csoundLibraryName += '32'
+ # flags for linking with the Csound library
+ libCsoundLinkFlags = []
+@@ -600,8 +598,6 @@ if commonEnvironment['buildRelease'] != 
+             tmp = '%s/lib/csound/plugins' % commonEnvironment['prefix']
+         else:
+             tmp = '%s/lib64/csound/plugins' % commonEnvironment['prefix']
+-        if commonEnvironment['useDouble'] != '0':
+-            tmp += '64'
+         s = '-DCS_DEFAULT_PLUGINDIR=\\"%s\\"' % tmp
+         csoundLibraryEnvironment.Append(CPPFLAGS = [s])
+     elif buildOSXFramework != 0:
+@@ -1964,10 +1960,7 @@ for i in sys.path:
+     if i[:sys.prefix.__len__()] == sys.prefix and i[-13:] == 'site-packages':
+         PYTHON_DIR = i
+ 
+-if commonEnvironment['useDouble'] == '0':
+-    PLUGIN_DIR = LIB_DIR + "/csound/plugins"
+-else:
+-    PLUGIN_DIR = LIB_DIR + "/csound/plugins64"
++PLUGIN_DIR = LIB_DIR + "/csound/plugins"
+ 
+ if commonEnvironment['install'] == '1':
+     installExecutables = Alias('install-executables',
+diff -up Csound5.03.0/Top/csmodule.c.64-bit-plugin-path Csound5.03.0/Top/csmodule.c
+--- Csound5.03.0/Top/csmodule.c.64-bit-plugin-path	2008-02-01 07:23:56.000000000 -0500
++++ Csound5.03.0/Top/csmodule.c	2008-02-01 07:24:18.000000000 -0500
+@@ -617,17 +617,12 @@ int csoundLoadModules(CSOUND *csound)
+       return CSOUND_ERROR;
+ 
+     /* open plugin directory */
+-    dname = csoundGetEnv(csound, (sizeof(MYFLT) == sizeof(float) ?
+-                                  plugindir_envvar : plugindir64_envvar));
++    dname = csoundGetEnv(csound, plugindir_envvar);
+     if (dname == NULL) {
+ #if ENABLE_OPCODEDIR_WARNINGS
+       csound->opcodedirWasOK = 0;
+-#  ifdef USE_DOUBLE
+-      dname = csoundGetEnv(csound, plugindir_envvar);
+-      if (dname == NULL)
+-#  endif
+ #endif
+-        dname = CS_DEFAULT_PLUGINDIR;
++      dname = CS_DEFAULT_PLUGINDIR;
+     }
+     dir = opendir(dname);
+     if (dir == (DIR*) NULL) {

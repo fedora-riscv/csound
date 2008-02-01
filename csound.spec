@@ -2,16 +2,18 @@
 %ifarch x86_64 ia64 ppc64
 %define build64bit 1
 %define install64bit --word64
+%define useDouble 1
 %else
 %define build64bit 0
 %define install64bit %{nil}
+%define useDouble 0
 %endif
 
 
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       13%{?dist}
+Release:       14%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPL
 Group:         Applications/Multimedia
@@ -43,6 +45,8 @@ Patch3: csound-5.03.0-disable-atsa.patch
 Patch4: csound-5.03.0-default-opcodedir.patch
 Patch5: csound-5.03.0-rtalsa-fix.patch
 Patch6: csound-5.03.0-fltk-fixes.patch
+Patch7: csound-5.03.0-64-bit-plugin-path.patch
+Patch8: csound-5.03.0-fix-conflicts.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -167,6 +171,7 @@ A virtual MIDI keyboard plugin for Csound
 %package manual
 Summary: Csound manual
 Group: Documentation
+Requires: %{name} = %{version}-%{release}
 
 %description manual
 Canonical Reference Manual for Csound.
@@ -174,6 +179,7 @@ Canonical Reference Manual for Csound.
 %package tutorial
 Summary: Csound tutorial
 Group: Documentation
+Requires: %{name} = %{version}-%{release}
 
 %description tutorial
 Tutorial documentation and sample files for Csound.
@@ -188,6 +194,8 @@ Tutorial documentation and sample files for Csound.
 %patch4 -p1 -b .default-opcodedir
 %patch5 -p1 -b .rtalsa-fix
 %patch6 -p1 -b .fltk-fixes
+%patch7 -p1 -b .64-bit-plugin-path
+%patch8 -p1 -b .fix-conflicts
 
 tar xf %{SOURCE1}
 
@@ -219,7 +227,8 @@ scons dynamicCsoundLibrary=1 \
       prefix=%{_prefix} \
       customCCFLAGS="%{optflags}" \
       customCXXFLAGS="%{optflags}" \
-      Word64=%{build64bit}
+      Word64=%{build64bit} \
+      useDouble=%{useDouble}
 
 # Build the manual
 (cd manual; make)
@@ -275,14 +284,14 @@ fi
 %files
 %defattr(-,root,root,0755)
 %doc COPYING ChangeLog readme-csound5.txt
-%{_bindir}/cs
+%{_bindir}/cs-launcher
 %{_bindir}/csb64enc
 %{_bindir}/csound
 %{_bindir}/cvanal
 %{_bindir}/dnoise
-%{_bindir}/envext
-%{_bindir}/extract
-%{_bindir}/extractor
+%{_bindir}/cs-envext
+%{_bindir}/cs-extract
+%{_bindir}/cs-extractor
 %{_bindir}/het_export
 %{_bindir}/het_import
 %{_bindir}/hetro
@@ -290,19 +299,21 @@ fi
 %{_bindir}/lpc_export
 %{_bindir}/lpc_import
 %{_bindir}/makecsd
-%{_bindir}/mixer
+%{_bindir}/cs-mixer
 %{_bindir}/pvanal
 %{_bindir}/pvlook
-%{_bindir}/scale
-%{_bindir}/scot
+%{_bindir}/cs-scale
+%{_bindir}/cs-scot
 %{_bindir}/scsort
-%{_bindir}/sndinfo
-%{_bindir}/srconv
+%{_bindir}/cs-sndinfo
+%{_bindir}/cs-srconv
 %{_bindir}/pv_export
 %{_bindir}/pv_import
 %{_libdir}/lib%{name}.so.5.1
 %dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/xmg
 %{_datadir}/%{name}/xmg/*.xmg
+%dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/plugins
 %{_libdir}/%{name}/plugins/libbabo.so
 %{_libdir}/%{name}/plugins/libbarmodel.so
@@ -406,6 +417,11 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Fri Feb  1 2008 Dan Williams <dcbw@redhat.com> - 5.03.0-14
+- Fix default plugin path on 64-bit platforms (rh #407911)
+- Fix file conflicts with other packages (rh #210215)
+- Fix unowned directories (rh #233830)
+
 * Mon Apr  2 2007 Thomas Fitzsimmons <fitzsim@redhat.com> - 5.03.0-13
 - Patch out FLTK widget initialization code made unnecessary by
   fltk-fluid 1.1.8, snapshot r5555
