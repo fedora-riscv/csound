@@ -13,9 +13,9 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       16%{?dist}
+Release:       17%{?dist}
 URL:           http://csound.sourceforge.net/
-License:       LGPL
+License:       LGPLv2+
 Group:         Applications/Multimedia
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -419,6 +419,9 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Thu May 22 2008 Seth Vidal <skvidal at fedoraproject.org> - 5.03.0-17
+- license tag fix
+
 * Fri Feb  1 2008 Dan Williams <dcbw@redhat.com> - 5.03.0-16
 - Fix default plugin path on 64-bit platforms (rh #407911)
 - Fix file conflicts with other packages (rh #210215)
