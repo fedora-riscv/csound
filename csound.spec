@@ -9,11 +9,12 @@
 %define useDouble 0
 %endif
 
+%{?!pyver: %define pyver %(python -c 'import sys;print(sys.version[0:3])')}
 
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       18%{?dist}
+Release:       19%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -256,7 +257,7 @@ scons dynamicCsoundLibrary=1 \
 # This file is zero-lenth for some reason
 %{__rm} -f manual/examples/ifthen.csd
 
-%{__mv} %{buildroot}%{_libdir}/lib_csnd.so %{buildroot}%{_libdir}/python2.5/site-packages/_csnd.so
+%{__mv} %{buildroot}%{_libdir}/lib_csnd.so %{buildroot}%{_libdir}/python%{pyver}/site-packages/_csnd.so
 
 install -dm 755 %{buildroot}%{_javadir}
 (cd %{buildroot}%{_javadir}; ln -s %{_libdir}/%{name}/java/csnd.jar .)
@@ -355,7 +356,7 @@ fi
 
 %files python
 %defattr(-,root,root,0755)
-%{_libdir}/python2.5/site-packages/*
+%{_libdir}/python%{pyver}/site-packages/*
 
 %files java
 %{_libdir}/lib_jcsound.so
@@ -419,6 +420,9 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 5.03.0-19
+- Fix locations for Python 2.6
+
 * Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 5.03.0-18
 - Rebuild for Python 2.6
 
