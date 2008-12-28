@@ -1,5 +1,5 @@
 # Csound is really dumb about 64-bit
-%ifarch x86_64 ia64 ppc64
+%ifarch x86_64 ia64 ppc64 sparc64
 %define build64bit 1
 %define install64bit --word64
 %define useDouble 1
@@ -13,7 +13,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       17%{?dist}
+Release:       17%{?dist}.1
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -419,6 +419,9 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Sun Dec 28 2008 Dennis Gilmore <dennis@ausil.us> - 5.03.0-17.1
+- add sparc64 to 64 bit arches list
+
 * Thu May 22 2008 Seth Vidal <skvidal at fedoraproject.org> - 5.03.0-17
 - license tag fix
 
