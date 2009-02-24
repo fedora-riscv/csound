@@ -14,7 +14,7 @@
 Summary:       Csound - sound synthesis language and library
 Name:          csound
 Version:       5.03.0
-Release:       20%{?dist}
+Release:       21%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -420,6 +420,9 @@ fi
 %doc tutorial/*.py
 
 %changelog
+* Tue Feb 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.03.0-21
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
+
 * Sun Dec 28 2008 Dennis Gilmore <dennis@ausil.us> - 5.03.0-20
 - add sparc64 to list of 64 bit arches
 
