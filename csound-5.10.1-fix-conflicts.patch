@@ -1,8 +1,7 @@
-diff -up Csound5.03.0/SConstruct.fix-conflicts Csound5.03.0/SConstruct
---- Csound5.03.0/SConstruct.fix-conflicts	2008-02-01 10:18:51.000000000 -0500
-+++ Csound5.03.0/SConstruct	2008-02-01 10:31:36.000000000 -0500
-@@ -1463,36 +1463,44 @@ if (commonEnvironment['buildUtilities'] 
-     utils = [
+--- Csound5.10.1/SConstruct.orig	2009-03-31 10:03:57.000000000 +0100
++++ Csound5.10.1/SConstruct	2009-03-31 10:15:37.000000000 +0100
+@@ -1975,38 +1975,43 @@
+         ['atsa',        'util/atsa_main.c'    ],
          ['cvanal',      'util/cvl_main.c'     ],
          ['dnoise',      'util/dnoise_main.c'  ],
 -        ['envext',      'util/env_main.c'     ],
@@ -28,43 +27,41 @@ diff -up Csound5.03.0/SConstruct.fix-conflicts Csound5.03.0/SConstruct
 +        ['cs-sndinfo',     'util/sndinfo_main.c' ],
 +        ['cs-srconv',      'util/srconv_main.c'  ]]
      for i in utils:
--        executables.append(csoundProgramEnvironment.Program(i[0], i[1]))
-+        a = csoundProgramEnvironment.Program(i[0], i[1])
-+        executables.append(a)
-+        if i[0].startswith("cs-"):
-+            Depends(a, csoundLibrary)
+-       executables.append(csoundProgramEnvironment.Program(i[0], i[1]))
++       a = csoundProgramEnvironment.Program(i[0], i[1])
++       executables.append(a)
++       if i[0].startswith("cs-"):
++           Depends(a, csoundLibrary)
  
- executables.append(csoundProgramEnvironment.Program('scsort',
+ if not buildOLPC:
+   executables.append(csoundProgramEnvironment.Program('scsort',
      ['util1/sortex/smain.c']))
--executables.append(csoundProgramEnvironment.Program('extract',
+-  executables.append(csoundProgramEnvironment.Program('extract',
 -    ['util1/sortex/xmain.c']))
--executables.append(commonEnvironment.Program('cs',
--    ['util1/csd_util/cs.c']))
-+
-+a = csoundProgramEnvironment.Program('cs-extract', ['util1/sortex/xmain.c'])
-+executables.append(a)
-+Depends(a, csoundLibrary)
-+
-+a = commonEnvironment.Program('cs-launcher', ['util1/csd_util/cs.c'])
-+executables.append(a)
-+Depends(a, csoundLibrary)
-+
- executables.append(commonEnvironment.Program('csb64enc',
-     ['util1/csd_util/base64.c', 'util1/csd_util/csb64enc.c']))
- executables.append(commonEnvironment.Program('makecsd',
-     ['util1/csd_util/base64.c', 'util1/csd_util/makecsd.c']))
--executables.append(commonEnvironment.Program('scot',
-+executables.append(commonEnvironment.Program('cs-scot',
-     ['util1/scot/scot_main.c', 'util1/scot/scot.c']))
- 
++  a = csoundProgramEnvironment.Program('cs-extract', ['util1/sortex/xmain.c'])
++  executables.append(a)
++  Depends(a, csoundLibrary)
+   if compilerGNU():
+-    executables.append(commonEnvironment.Program('cs',
+-      ['util1/csd_util/cs.c']))
++    a = commonEnvironment.Program('cs-launcher', ['util1/csd_util/cs.c'])
++    executables.append(a)
++    Depends(a, csoundLibrary)
+     executables.append(commonEnvironment.Program('csb64enc',
+       ['util1/csd_util/base64.c', 'util1/csd_util/csb64enc.c']))
+     executables.append(commonEnvironment.Program('makecsd',
+       ['util1/csd_util/base64.c', 'util1/csd_util/makecsd.c']))
+-    executables.append(commonEnvironment.Program('scot',
++    executables.append(commonEnvironment.Program('cs-scot',
+       ['util1/scot/scot_main.c', 'util1/scot/scot.c']))
  #executables.append(csoundProgramEnvironment.Program('cscore',
-diff -up Csound5.03.0/install.py.fix-conflicts Csound5.03.0/install.py
---- Csound5.03.0/install.py.fix-conflicts	2008-02-01 10:40:00.000000000 -0500
-+++ Csound5.03.0/install.py	2008-02-01 10:41:02.000000000 -0500
-@@ -20,12 +20,12 @@ headerFiles = ['H/cfgvar.h', 'H/cscore.h
+ #    ['util1/cscore/cscore_main.c']))
+--- Csound5.10.1/install.py.orig	2009-03-31 10:19:04.000000000 +0100
++++ Csound5.10.1/install.py	2009-03-31 10:20:37.000000000 +0100
+@@ -20,12 +20,12 @@
  
  exeFiles1 = ['csound', 'csound5gui', 'CsoundVST', 'winsound',
-              'cstclsh', 'cswish',
+              'cstclsh', 'cswish', 'cseditor',
 -             'cvanal', 'dnoise', 'envext', 'extractor',
 +             'cvanal', 'dnoise', 'cs-envext', 'cs-extractor',
               'het_export', 'het_import', 'hetro', 'lpanal',
