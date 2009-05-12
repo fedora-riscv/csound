@@ -22,8 +22,8 @@ Group:         Applications/Multimedia
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: swig scons libsndfile-devel libpng-devel libjpeg-devel
 BuildRequires: python python-devel
-BuildRequires: alsa-lib-devel fluidsynth-devel
-BuildRequires: jack-audio-connection-kit-devel liblo-devel dssi-devel 
+BuildRequires: alsa-lib-devel jack-audio-connection-kit-devel pulseaudio-libs-devel
+BuildRequires: fluidsynth-deve lliblo-devel dssi-devel
 BuildRequires: fltk-devel fltk-fluid
 BuildRequires: java-devel >= 1.4.0
 BuildRequires: jpackage-utils >= 1.5
@@ -250,6 +250,7 @@ install -dm 755 %{buildroot}%{_javadir}
 (cd %{buildroot}%{_javadir}; ln -s %{_libdir}/%{name}/java/csnd.jar .)
 
 install -dm 644 %{buildroot}%{_javadocdir}/%{name}-java
+%{__chmod} -R 755 %{buildroot}%{_javadocdir}/%{name}-java
 (cd interfaces; tar cf - *.html csnd/*.html) | (cd %{buildroot}%{_javadocdir}/%{name}-java; tar xvf -)
 
 %{_bindir}/aot-compile-rpm
@@ -309,6 +310,7 @@ fi
 %{_libdir}/%{name}/plugins/libampmidid.so
 %{_libdir}/%{name}/plugins/libbabo.so
 %{_libdir}/%{name}/plugins/libbarmodel.so
+%{_libdir}/%{name}/plugins/libchua.so
 %{_libdir}/%{name}/plugins/libcompress.so
 %{_libdir}/%{name}/plugins/libcontrol.so
 %{_libdir}/%{name}/plugins/libcs_date.so
@@ -336,6 +338,7 @@ fi
 %{_libdir}/%{name}/plugins/libpvsbuffer.so
 %{_libdir}/%{name}/plugins/libpy.so
 %{_libdir}/%{name}/plugins/librtalsa.so
+%{_libdir}/%{name}/plugins/librtpulse.so
 %{_libdir}/%{name}/plugins/libscansyn.so
 %{_libdir}/%{name}/plugins/libscoreline.so
 %{_libdir}/%{name}/plugins/libsfont.so
@@ -419,7 +422,10 @@ fi
 %doc manual/examples
 
 %changelog
-* Wed Mar 25 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-1
+* Tue May 12 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-2
+- Some build fixes. Enable pulseaudio support
+
+* Mon May 11 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-1
 - Update to 5.10.1 based massively on dcbw's 5.07 spec from the OLPC-2 cvs branch
   rebase what looks to be relevant pataches from both branches
   add a number of other build fixes
