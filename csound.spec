@@ -14,7 +14,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.10.1
-Release:       2%{?dist}
+Release:       3%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -23,7 +23,7 @@ BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: swig scons libsndfile-devel libpng-devel libjpeg-devel
 BuildRequires: python python-devel
 BuildRequires: alsa-lib-devel jack-audio-connection-kit-devel pulseaudio-libs-devel
-BuildRequires: fluidsynth-deve lliblo-devel dssi-devel
+BuildRequires: fluidsynth-devel liblo-devel dssi-devel
 BuildRequires: fltk-devel fltk-fluid
 BuildRequires: java-devel >= 1.4.0
 BuildRequires: jpackage-utils >= 1.5
@@ -422,6 +422,9 @@ fi
 %doc manual/examples
 
 %changelog
+* Tue May 12 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-3
+- Some further spec fixes
+
 * Tue May 12 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-2
 - Some build fixes. Enable pulseaudio support
 
