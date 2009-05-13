@@ -11,10 +11,10 @@
 
 %{?!pyver: %define pyver %(python -c 'import sys;print(sys.version[0:3])')}
 
-Summary:       Csound - sound synthesis language and library
+Summary:       A sound synthesis language and library
 Name:          csound
-Version:       5.03.0
-Release:       21%{?dist}
+Version:       5.10.1
+Release:       4%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -22,33 +22,32 @@ Group:         Applications/Multimedia
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: swig scons libsndfile-devel libpng-devel libjpeg-devel
 BuildRequires: python python-devel
-BuildRequires: alsa-lib-devel fluidsynth-devel
-BuildRequires: jack-audio-connection-kit-devel liblo-devel dssi-devel 
+BuildRequires: alsa-lib-devel jack-audio-connection-kit-devel pulseaudio-libs-devel
+BuildRequires: fluidsynth-devel liblo-devel dssi-devel
 BuildRequires: fltk-devel fltk-fluid
 BuildRequires: java-devel >= 1.4.0
 BuildRequires: jpackage-utils >= 1.5
 BuildRequires: java-gcj-compat-devel
 BuildRequires: tk-devel tcl-devel
 BuildRequires: tetex tetex-latex libxslt
+BuildRequires: libvorbis-devel libogg-devel
+BuildRequires: gettext
 
-Source0: http://superb-east.dl.sourceforge.net/sourceforge/csound/Csound5.03.0_src-cvs20061108.tar.bz2
+Source0: http://downloads.sourceforge.net/csound/Csound5.10.1.tar.gz
+Source1: http://downloads.sourceforge.net/csound/Csound5.10_manual_src.tar.gz
+Source2: http://downloads.sourceforge.net/csound/Csound5.10_manual_html.zip
 
-# NOTE:
-# Manual sources aren't distributed, but may be extracted from CVS via...
-# cvs -d :pserver:anonymous@csound.cvs.sourceforge.net:/cvsroot/csound login
-# cvs -z9 -d :pserver:anonymous@csound.cvs.sourceforge.net:/cvsroot/csound checkout -P -r csound-5_03_0 manual
-Source1: Csound5.03_manual.tgz
+Patch1: csound-5.10.1-no-usr-local.patch
+Patch2: csound-5.10.1-default-opcodedir.patch
+Patch3: csound-5.10.1-rtalsa-fix.patch
+Patch4: csound-5.10.1-makebuild.patch
+Patch5: csound-5.10.1-64-bit-plugin-path.patch
+Patch6: csound-5.10.1-fix-conflicts.patch
+Patch7: csound-5.10.1-fix-locale-install.patch
+Patch8: csound-5.10.1-enable-oggplay.patch
 
-Patch0: csound-5.03.0-enable-fluidsynth.patch
-Patch1: csound-5.03.0-gstabs-disable-option.patch
-Patch2: csound-5.03.0-no-usr-local.patch
-Patch3: csound-5.03.0-disable-atsa.patch
-Patch4: csound-5.03.0-default-opcodedir.patch
-Patch5: csound-5.03.0-rtalsa-fix.patch
-Patch6: csound-5.03.0-fltk-fixes.patch
-Patch7: Csound5.03.0.makebuild.patch
-Patch8: csound-5.03.0-64-bit-plugin-path.patch
-Patch9: csound-5.03.0-fix-conflicts.patch
+#FIXME
+Patch9: csound-5.10.1-version-libcsnd.patch3
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -139,7 +138,6 @@ Contains Jack Audio plugins for Csound
 Summary: Fluidsyth soundfont plugin for Csound
 Group: Applications/Multimedia
 Requires: %{name} = %{version}-%{release}
-Requires: fluidsynth-libs
 
 %description fluidsynth
 Contains Fluidsynth soundfont plugin for Csound.
@@ -174,33 +172,27 @@ A virtual MIDI keyboard plugin for Csound
 Summary: Csound manual
 Group: Documentation
 Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
 
 %description manual
 Canonical Reference Manual for Csound.
 
-%package tutorial
-Summary: Csound tutorial
-Group: Documentation
-Requires: %{name} = %{version}-%{release}
-
-%description tutorial
-Tutorial documentation and sample files for Csound.
-
 
 %prep
-%setup -q -n Csound5.03.0
-%patch0 -p1 -b .enable-fluidsynth
-%patch1 -p1 -b .gstabs-disable-option
-%patch2 -p1 -b .no-usr-local
-%patch3 -p1 -b .disable-atsa
-%patch4 -p1 -b .default-opcodedir
-%patch5 -p1 -b .rtalsa-fix
-%patch6 -p1 -b .fltk-fixes
-%patch7 -p1 -b .makebuild
-%patch8 -p1 -b .64-bit-plugin-path
-%patch9 -p1 -b .fix-conflicts
+%setup -q -n Csound5.10.1
+%patch1 -p1 -b .no-usr-local
+%patch2 -p1 -b .default-opcodedir
+%patch3 -p1 -b .rtalsa
+%patch4 -p1 -b .makebuild
+%patch5 -p1 -b .64-bit-plugin-path
+%patch6 -p1 -b .fix-conflicts
+%patch7 -p1 -b .fix-local-install
+%patch8 -p1 -b .enable-oggplay
+#FIXME
+%patch9 -p0 -b .version-libcsnd
 
 tar xf %{SOURCE1}
+(cd manual; unzip -q %{SOURCE2})
 
 %build
 
@@ -213,12 +205,15 @@ scons dynamicCsoundLibrary=1 \
       noDebug=0 \
       disableGStabs=1 \
       buildInterfaces=1 \
+      useGettext=1 \
       useALSA=1 \
       usePortAudio=0 \
       usePortMIDI=0 \
+      useOGG=1 \
       useOSC=1 \
       useJack=1 \
       useFLTK=1 \
+      buildVirtual=1 \
       useFluidsynth=1 \
       generatePdf=0 \
       buildCsound5GUI=1 \
@@ -233,16 +228,8 @@ scons dynamicCsoundLibrary=1 \
       Word64=%{build64bit} \
       useDouble=%{useDouble}
 
-# Build the manual
-(cd manual; make)
-
 # Generate javadoc
 (cd interfaces; javadoc *.java)
-
-# Build the tutorial documentation
-(cd tutorial; \
- pdflatex tutorial; bibtex tutorial; pdflatex tutorial; pdflatex tutorial)
-
 
 %install
 %{__rm} -rf %{buildroot}
@@ -256,16 +243,19 @@ scons dynamicCsoundLibrary=1 \
 
 # This file is zero-lenth for some reason
 %{__rm} -f manual/examples/ifthen.csd
-
-%{__mv} %{buildroot}%{_libdir}/lib_csnd.so %{buildroot}%{_libdir}/python%{pyver}/site-packages/_csnd.so
+# Remove the CVS dir in examples
+%{__rm} -rf manual/examples/CVS
 
 install -dm 755 %{buildroot}%{_javadir}
 (cd %{buildroot}%{_javadir}; ln -s %{_libdir}/%{name}/java/csnd.jar .)
 
-install -dm 766 %{buildroot}%{_javadocdir}/%{name}-java
+install -dm 644 %{buildroot}%{_javadocdir}/%{name}-java
+%{__chmod} -R 755 %{buildroot}%{_javadocdir}/%{name}-java
 (cd interfaces; tar cf - *.html csnd/*.html) | (cd %{buildroot}%{_javadocdir}/%{name}-java; tar xvf -)
 
 %{_bindir}/aot-compile-rpm
+
+%find_lang %{name}5
 
 %clean
 %{__rm} -rf %{buildroot}
@@ -284,8 +274,8 @@ if [ -x %{_bindir}/rebuild-gcj-db ]; then
   %{_bindir}/rebuild-gcj-db
 fi
 
-%files
-%defattr(-,root,root,0755)
+%files -f %{name}5.lang
+%defattr(-,root,root,-)
 %doc COPYING ChangeLog readme-csound5.txt
 %{_bindir}/cs-launcher
 %{_bindir}/csb64enc
@@ -312,53 +302,70 @@ fi
 %{_bindir}/cs-srconv
 %{_bindir}/pv_export
 %{_bindir}/pv_import
-%{_libdir}/lib%{name}.so.5.1
-%dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/xmg
-%{_datadir}/%{name}/xmg/*.xmg
-%dir %{_libdir}/%{name}
+%{_libdir}/lib%{name}.so.5.2
+#FIXME
+#%{_libdir}/libcsnd.so.5.2
 %dir %{_libdir}/%{name}/plugins
+%{_libdir}/%{name}/plugins/libambicode1.so
+%{_libdir}/%{name}/plugins/libampmidid.so
 %{_libdir}/%{name}/plugins/libbabo.so
 %{_libdir}/%{name}/plugins/libbarmodel.so
 %{_libdir}/%{name}/plugins/libcompress.so
 %{_libdir}/%{name}/plugins/libcontrol.so
+%{_libdir}/%{name}/plugins/libcs_date.so
+%{_libdir}/%{name}/plugins/libcs_pan2.so
+%{_libdir}/%{name}/plugins/libcs_pvs_ops.so
+%{_libdir}/%{name}/plugins/libeqfil.so
 %{_libdir}/%{name}/plugins/libftest.so
+%{_libdir}/%{name}/plugins/libgabnew.so
 %{_libdir}/%{name}/plugins/libgrain4.so
 %{_libdir}/%{name}/plugins/libhrtferX.so
+%{_libdir}/%{name}/plugins/libhrtfnew.so
+%{_libdir}/%{name}/plugins/libimage.so
 %{_libdir}/%{name}/plugins/libloscilx.so
 %{_libdir}/%{name}/plugins/libminmax.so
 %{_libdir}/%{name}/plugins/libmixer.so
 %{_libdir}/%{name}/plugins/libmodal4.so
+%{_libdir}/%{name}/plugins/libmutexops.so
+%{_libdir}/%{name}/plugins/liboggplay.so
+%{_libdir}/%{name}/plugins/libpartikkel.so
 %{_libdir}/%{name}/plugins/libphisem.so
 %{_libdir}/%{name}/plugins/libphysmod.so
 %{_libdir}/%{name}/plugins/libpitch.so
+%{_libdir}/%{name}/plugins/libptrack.so
 %{_libdir}/%{name}/plugins/libpvoc.so
-%{_libdir}/%{name}/plugins/libpvs_ops.so
+%{_libdir}/%{name}/plugins/libpvsbuffer.so
 %{_libdir}/%{name}/plugins/libpy.so
 %{_libdir}/%{name}/plugins/librtalsa.so
+%{_libdir}/%{name}/plugins/librtpulse.so
 %{_libdir}/%{name}/plugins/libscansyn.so
+%{_libdir}/%{name}/plugins/libscoreline.so
 %{_libdir}/%{name}/plugins/libsfont.so
+%{_libdir}/%{name}/plugins/libshape.so
 %{_libdir}/%{name}/plugins/libstackops.so
 %{_libdir}/%{name}/plugins/libstdopcod.so
 %{_libdir}/%{name}/plugins/libstdutil.so
+%{_libdir}/%{name}/plugins/libsystem_call.so
 %{_libdir}/%{name}/plugins/libudprecv.so
 %{_libdir}/%{name}/plugins/libudpsend.so
 %{_libdir}/%{name}/plugins/libvbap.so
 %{_libdir}/%{name}/plugins/libharmon.so
 %{_libdir}/%{name}/plugins/libugakbari.so
 %{_libdir}/%{name}/plugins/libvaops.so
-%{_libdir}/%{name}/plugins/opcodes.dir
+%{_libdir}/%{name}/plugins/libvosim.so
 
 %files devel
-%defattr(-,root,root,0755)
+%defattr(-,root,root,-)
 %{_includedir}/%{name}/
 %{_libdir}/lib%{name}.so
+%{_libdir}/libcsnd.so
 
 %files python
-%defattr(-,root,root,0755)
+%defattr(-,root,root,-)
 %{_libdir}/python%{pyver}/site-packages/*
 
 %files java
+%defattr(-,root,root,-)
 %{_libdir}/lib_jcsound.so
 %{_libdir}/%{name}/java/
 %{_javadir}/csnd.jar
@@ -369,7 +376,7 @@ fi
 %doc %{_javadocdir}/%{name}-java
 
 %files tk
-%defattr(-,root,root,0755)
+%defattr(-,root,root,-)
 %{_libdir}/%{name}/tcl/
 %{_bindir}/matrix.tk
 %{_bindir}/brkpt
@@ -379,47 +386,55 @@ fi
 %{_bindir}/cswish
 
 %files gui
-%defattr(-,root,root,0755)
+%defattr(-,root,root,-)
 %{_bindir}/csound5gui
 
 %files fltk
-%defattr(-,root,root,0755)
+%defattr(-,root,root,-)
 %{_libdir}/%{name}/plugins/libwidgets.so
 
 %files jack
-%defattr(-,root,root,0755)
+%defattr(-,root,root,-)
 %{_libdir}/%{name}/plugins/librtjack.so
+%{_libdir}/%{name}/plugins/libjackTransport.so
 
 %files fluidsynth
-%defattr(-,root,root,0755)
+%defattr(-,root,root,-)
 %{_libdir}/%{name}/plugins/libfluidOpcodes.so
 
 %files dssi
-%defattr(-,root,root,0755)
+%defattr(-,root,root,-)
 %{_libdir}/%{name}/plugins/libdssi4cs.so
 
 %files osc
-%defattr(-,root,root,0755)
+%defattr(-,root,root,-)
 %{_libdir}/%{name}/plugins/libosc.so
 
 %files virtual-keyboard
-%defattr(-,root,root,0755)
+%defattr(-,root,root,-)
 %{_libdir}/%{name}/plugins/libvirtual.so
 
 %files manual
 %defattr(-,root,root,0755)
-%doc manual/copying.txt manual/credits.txt manual/bugs.txt manual/readme.txt manual/news.txt
+%doc manual/copying.txt manual/credits.txt manual/readme.txt manual/news.txt
 %doc manual/html/*
 %doc manual/examples
 
-%files tutorial
-%defattr(-,root,root,0755)
-%doc tutorial/tutorial.pdf
-%doc tutorial/*.csd
-%doc tutorial/*.cpr
-%doc tutorial/*.py
-
 %changelog
+* Tue May 12 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-4
+- Once more with feeling :-)
+
+* Tue May 12 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-3
+- Some further spec fixes
+
+* Tue May 12 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-2
+- Some build fixes. Enable pulseaudio support
+
+* Mon May 11 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-1
+- Update to 5.10.1 based massively on dcbw's 5.07 spec from the OLPC-2 cvs branch
+  rebase what looks to be relevant pataches from both branches
+  add a number of other build fixes
+
 * Tue Feb 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.03.0-21
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 

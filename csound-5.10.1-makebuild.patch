@@ -1,0 +1,31 @@
+--- Csound5.10.1/InOut/widgets.cpp.orig	2009-03-30 15:27:44.000000000 +0100
++++ Csound5.10.1/InOut/widgets.cpp	2009-03-30 15:28:47.000000000 +0100
+@@ -2946,7 +2946,7 @@
+       return OK;
+   }
+ 
+-  static int fl_box_(CSOUND *csound, FL_BOX *p)
++  static int fl_boxthing_(CSOUND *csound, FL_BOX *p)
+   {
+       char *text = GetString(csound, p->itext, p->XSTRCODE);
+       Fl_Box *o =  new Fl_Box((int)*p->ix, (int)*p->iy,
+@@ -5465,7 +5465,7 @@
+   { (char*)"FLsetAlign",  S(FL_TALIGN),    1,  (char*)"",     (char*)"ii",
+     (SUBR) fl_align,                (SUBR) NULL,              (SUBR) NULL },
+   { (char*)"FLbox",       S(FL_BOX),       1,  (char*)"i",    (char*)"Tiiiiiii",
+-    (SUBR) fl_box_,                  (SUBR) NULL,              (SUBR) NULL },
++    (SUBR) fl_boxthing_,            (SUBR) NULL,              (SUBR) NULL },
+   { (char*)"FLvalue",     S(FLVALUE),      1,  (char*)"i",    (char*)"Tjjjj",
+     (SUBR) fl_value,                (SUBR) NULL,              (SUBR) NULL },
+   { (char*)"FLpanel",     S(FLPANEL),      1,  (char*)"",     (char*)"Tjjjoooo",
+--- Csound5.10.1/SConstruct.orig	2009-03-30 15:30:20.000000000 +0100
++++ Csound5.10.1/SConstruct	2009-03-30 15:31:11.000000000 +0100
+@@ -243,7 +243,7 @@
+     '0')
+ commandOptions.Add('tclversion',
+     'Set to 8.4 or 8.5',
+-    '8.4')
++    '8.5')
+ 
+ # Define the common part of the build environment.
+ # This section also sets up customized options for third-party libraries, which
