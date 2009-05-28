@@ -14,7 +14,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.10.1
-Release:       4%{?dist}
+Release:       5%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -32,6 +32,8 @@ BuildRequires: tk-devel tcl-devel
 BuildRequires: tetex tetex-latex libxslt
 BuildRequires: libvorbis-devel libogg-devel
 BuildRequires: gettext
+
+Obsoletes: csound-tutorial <= 5.08
 
 Source0: http://downloads.sourceforge.net/csound/Csound5.10.1.tar.gz
 Source1: http://downloads.sourceforge.net/csound/Csound5.10_manual_src.tar.gz
@@ -421,6 +423,9 @@ fi
 %doc manual/examples
 
 %changelog
+* Thu May 28 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-5
+- Obsolete csound-tutorial
+
 * Tue May 12 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-4
 - Once more with feeling :-)
 
