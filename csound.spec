@@ -14,7 +14,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.10.1
-Release:       6%{?dist}
+Release:       7%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -34,6 +34,7 @@ BuildRequires: libvorbis-devel libogg-devel
 BuildRequires: gettext
 
 Obsoletes: csound-tutorial <= 5.08
+Obsoletes: olpcsound <= 5.08
 
 Source0: http://downloads.sourceforge.net/csound/Csound5.10.1.tar.gz
 Source1: http://downloads.sourceforge.net/csound/Csound5.10_manual_src.tar.gz
@@ -423,6 +424,9 @@ fi
 %doc manual/examples
 
 %changelog
+* Thu Jun 18 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-7
+- Obsolete olpcsound
+
 * Thu May 28 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-6
 - Obsolete csound-tutorial
 
