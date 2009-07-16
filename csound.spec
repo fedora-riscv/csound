@@ -14,7 +14,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.10.1
-Release:       7%{?dist}
+Release:       8%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -34,7 +34,7 @@ BuildRequires: libvorbis-devel libogg-devel
 BuildRequires: gettext
 
 Obsoletes: csound-tutorial <= 5.08
-Obsoletes: olpcsound <= 5.08
+Obsoletes: olpcsound <= 5.08.92
 
 Source0: http://downloads.sourceforge.net/csound/Csound5.10.1.tar.gz
 Source1: http://downloads.sourceforge.net/csound/Csound5.10_manual_src.tar.gz
@@ -48,9 +48,7 @@ Patch5: csound-5.10.1-64-bit-plugin-path.patch
 Patch6: csound-5.10.1-fix-conflicts.patch
 Patch7: csound-5.10.1-fix-locale-install.patch
 Patch8: csound-5.10.1-enable-oggplay.patch
-
-#FIXME
-Patch9: csound-5.10.1-version-libcsnd.patch3
+Patch9: csound-2817271-soname.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -63,6 +61,7 @@ at least classical, pop, techno, ambient...
 Summary: Csound development files and libraries
 Group: Development/Libraries
 Requires: %{name} = %{version}-%{release}
+Obsoletes: olpcsound-devel <= 5.08.92
 
 %description devel
 Contains headers and libraries for developing applications that use Csound.
@@ -191,8 +190,7 @@ Canonical Reference Manual for Csound.
 %patch6 -p1 -b .fix-conflicts
 %patch7 -p1 -b .fix-local-install
 %patch8 -p1 -b .enable-oggplay
-#FIXME
-%patch9 -p0 -b .version-libcsnd
+%patch9 -p1 -b .2817271-soname
 
 tar xf %{SOURCE1}
 (cd manual; unzip -q %{SOURCE2})
@@ -306,15 +304,15 @@ fi
 %{_bindir}/pv_export
 %{_bindir}/pv_import
 %{_libdir}/lib%{name}.so.5.2
-#FIXME
-#%{_libdir}/libcsnd.so.5.2
 %dir %{_libdir}/%{name}/plugins
 %{_libdir}/%{name}/plugins/libambicode1.so
 %{_libdir}/%{name}/plugins/libampmidid.so
 %{_libdir}/%{name}/plugins/libbabo.so
 %{_libdir}/%{name}/plugins/libbarmodel.so
+%{_libdir}/%{name}/plugins/libchua.so
 %{_libdir}/%{name}/plugins/libcompress.so
 %{_libdir}/%{name}/plugins/libcontrol.so
+%{_libdir}/%{name}/plugins/libcsnd.so
 %{_libdir}/%{name}/plugins/libcs_date.so
 %{_libdir}/%{name}/plugins/libcs_pan2.so
 %{_libdir}/%{name}/plugins/libcs_pvs_ops.so
@@ -424,6 +422,9 @@ fi
 %doc manual/examples
 
 %changelog
+* Thu Jul 16 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-8
+- Apply patch to fix libcsnd.so
+
 * Thu Jun 18 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-7
 - Obsolete olpcsound
 
