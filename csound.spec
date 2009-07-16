@@ -14,7 +14,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.10.1
-Release:       8%{?dist}
+Release:       9%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -309,7 +309,6 @@ fi
 %{_libdir}/%{name}/plugins/libampmidid.so
 %{_libdir}/%{name}/plugins/libbabo.so
 %{_libdir}/%{name}/plugins/libbarmodel.so
-%{_libdir}/%{name}/plugins/libchua.so
 %{_libdir}/%{name}/plugins/libcompress.so
 %{_libdir}/%{name}/plugins/libcontrol.so
 %{_libdir}/%{name}/plugins/libcsnd.so
@@ -422,6 +421,9 @@ fi
 %doc manual/examples
 
 %changelog
+* Thu Jul 16 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-9
+- Update included files
+
 * Thu Jul 16 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-8
 - Apply patch to fix libcsnd.so
 
