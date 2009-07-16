@@ -1,0 +1,11 @@
+--- Csound5.10.1/SConstruct.orig	2009-07-06 05:23:11.000000000 +0000
++++ Csound5.10.1/SConstruct	2009-07-06 06:26:39.000000000 +0000
+@@ -1102,7 +1102,7 @@
+         os.spawnvp(os.P_WAIT, 'rm', ['rm', '-f', libName])
+         os.symlink(libName2, libName)
+         tmp = csoundDynamicLibraryEnvironment['SHLINKFLAGS']
+-        tmp += ['-Wl,-soname=%s' % libName2]
++        tmp = tmp + ['-Wl,-soname=%s' % libName2]
+         cflags = csoundDynamicLibraryEnvironment['CCFLAGS']
+         if configure.CheckGcc4():
+             cflags   += ['-fvisibility=hidden']
