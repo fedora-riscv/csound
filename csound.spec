@@ -14,7 +14,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.10.1
-Release:       10%{?dist}
+Release:       11%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -23,7 +23,7 @@ BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: swig scons libsndfile-devel libpng-devel libjpeg-devel
 BuildRequires: python python-devel
 BuildRequires: alsa-lib-devel jack-audio-connection-kit-devel pulseaudio-libs-devel
-BuildRequires: fluidsynth-devel liblo-devel dssi-devel
+BuildRequires: fluidsynth-devel liblo-devel dssi-devel lua-devel
 BuildRequires: fltk-devel fltk-fluid
 BuildRequires: java-devel >= 1.4.0
 BuildRequires: jpackage-utils >= 1.5
@@ -49,6 +49,7 @@ Patch6: csound-5.10.1-fix-conflicts.patch
 Patch7: csound-5.10.1-fix-locale-install.patch
 Patch8: csound-5.10.1-enable-oggplay.patch
 Patch9: csound-2817271-soname.patch
+Patch0: csound-fixpython.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -182,6 +183,7 @@ Canonical Reference Manual for Csound.
 
 %prep
 %setup -q -n Csound5.10.1
+%patch0 -p1 -b .fixpython
 %patch1 -p1 -b .no-usr-local
 %patch2 -p1 -b .default-opcodedir
 %patch3 -p1 -b .rtalsa
@@ -218,7 +220,10 @@ scons dynamicCsoundLibrary=1 \
       useFluidsynth=1 \
       generatePdf=0 \
       buildCsound5GUI=1 \
+      pythonVersion=2.6 \
       buildPythonOpcodes=1 \
+      buildPythonWrapper=1 \
+      buildLuaWrapper=1 \
       buildTclcsound=1 \
       buildJavaWrapper=1 \
       buildDSSI=1 \
@@ -311,7 +316,7 @@ fi
 %{_libdir}/%{name}/plugins/libbarmodel.so
 %{_libdir}/%{name}/plugins/libcompress.so
 %{_libdir}/%{name}/plugins/libcontrol.so
-%{_libdir}/%{name}/plugins/libcsnd.so
+%{_libdir}/%{name}/plugins/libchua.so
 %{_libdir}/%{name}/plugins/libcs_date.so
 %{_libdir}/%{name}/plugins/libcs_pan2.so
 %{_libdir}/%{name}/plugins/libcs_pvs_ops.so
@@ -358,10 +363,10 @@ fi
 %defattr(-,root,root,-)
 %{_includedir}/%{name}/
 %{_libdir}/lib%{name}.so
-%{_libdir}/libcsnd.so
 
 %files python
 %defattr(-,root,root,-)
+%{_libdir}/libcsnd.so
 %{_libdir}/python%{pyver}/site-packages/*
 
 %files java
@@ -421,6 +426,9 @@ fi
 %doc manual/examples
 
 %changelog
+* Tue Aug 18 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-12
+- Further python build fixes
+
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.10.1-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
