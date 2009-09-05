@@ -430,11 +430,8 @@ fi
 %doc manual/examples
 
 %changelog
-* Sat Sep  5 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-13
+* Sat Sep  5 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-12
 - Build fixes, set PulseAudio as default
-
-* Tue Aug 18 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-12
-- Further python build fixes
 
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.10.1-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
