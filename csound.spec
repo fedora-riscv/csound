@@ -14,7 +14,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.10.1
-Release:       11%{?dist}
+Release:       12%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -32,6 +32,7 @@ BuildRequires: tk-devel tcl-devel
 BuildRequires: tetex tetex-latex libxslt
 BuildRequires: libvorbis-devel libogg-devel
 BuildRequires: gettext
+BuildRequires: gcc-c++ boost-devel
 
 Obsoletes: csound-tutorial <= 5.08
 Obsoletes: olpcsound <= 5.08.92
@@ -48,8 +49,10 @@ Patch5: csound-5.10.1-64-bit-plugin-path.patch
 Patch6: csound-5.10.1-fix-conflicts.patch
 Patch7: csound-5.10.1-fix-locale-install.patch
 Patch8: csound-5.10.1-enable-oggplay.patch
+
 Patch9: csound-2817271-soname.patch
 Patch0: csound-fixpython.patch
+Patch10: csound-default-pulse.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -193,6 +196,7 @@ Canonical Reference Manual for Csound.
 %patch7 -p1 -b .fix-local-install
 %patch8 -p1 -b .enable-oggplay
 %patch9 -p1 -b .2817271-soname
+%patch10 -p1 -b .default-pulse
 
 tar xf %{SOURCE1}
 (cd manual; unzip -q %{SOURCE2})
@@ -377,7 +381,7 @@ fi
 %attr(-,root,root) %{_libdir}/gcj/%{name}
 
 %files javadoc
-%defattr(-,root,root,0755)
+%defattr(-,root,root,-)
 %doc %{_javadocdir}/%{name}-java
 
 %files tk
@@ -420,12 +424,15 @@ fi
 %{_libdir}/%{name}/plugins/libvirtual.so
 
 %files manual
-%defattr(-,root,root,0755)
+%defattr(-,root,root,-)
 %doc manual/copying.txt manual/credits.txt manual/readme.txt manual/news.txt
 %doc manual/html/*
 %doc manual/examples
 
 %changelog
+* Sat Sep  5 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-13
+- Build fixes, set PulseAudio as default
+
 * Tue Aug 18 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-12
 - Further python build fixes
 
