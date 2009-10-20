@@ -14,7 +14,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.10.1
-Release:       12%{?dist}
+Release:       13%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -49,10 +49,11 @@ Patch5: csound-5.10.1-64-bit-plugin-path.patch
 Patch6: csound-5.10.1-fix-conflicts.patch
 Patch7: csound-5.10.1-fix-locale-install.patch
 Patch8: csound-5.10.1-enable-oggplay.patch
-
 Patch9: csound-2817271-soname.patch
 Patch0: csound-fixpython.patch
 Patch10: csound-default-pulse.patch
+Patch11: csound-5.10.1-compile-flag.patch
+Patch12: csound-5.10.1-all-midi.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -197,6 +198,8 @@ Canonical Reference Manual for Csound.
 %patch8 -p1 -b .enable-oggplay
 %patch9 -p1 -b .2817271-soname
 %patch10 -p1 -b .default-pulse
+%patch11 -p1 -b .compile-flag
+%patch12 -p1 -b .all-midi
 
 tar xf %{SOURCE1}
 (cd manual; unzip -q %{SOURCE2})
@@ -430,8 +433,14 @@ fi
 %doc manual/examples
 
 %changelog
+* Tue Oct 20 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-13
+- Fix use of multiple midi devices, fix segfault (RHBZ 529293)
+
 * Sat Sep  5 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-12
 - Build fixes, set PulseAudio as default
+
+* Tue Aug 18 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-11
+- Further python build fixes
 
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.10.1-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
