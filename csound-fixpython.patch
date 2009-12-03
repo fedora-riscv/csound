@@ -1,16 +1,29 @@
---- Csound5.10.1/install.py.orig	2009-08-18 09:58:32.000000000 +0100
-+++ Csound5.10.1/install.py	2009-08-18 09:59:39.000000000 +0100
-@@ -269,9 +269,6 @@
+Index: Csound5.10.1/install.py
+===================================================================
+--- Csound5.10.1.orig/install.py
++++ Csound5.10.1/install.py
+@@ -256,7 +256,7 @@ libList = findFiles('.', 'libcsound\\.a'
+ libList += findFiles('.', 'libcsound64\\.a')
+ libList += findFiles('.', 'libcsound\\.so\\..+')
+ libList += findFiles('.', 'libcsound64\\.so\\..+')
+-libList += findFiles('.', 'libcsnd\\.so')
++libList += findFiles('.', 'libcsnd\\.so\\..+')
+ libList += findFiles('.', 'lib_jcsound\\.so')
+ libList += findFiles('.', 'lib_CsoundVST\\.so')
+ for i in libList:
+@@ -269,9 +269,8 @@ for i in libList:
              err = installLink(i, concatPath([libDir, 'libcsound.so']))
          elif i[:15] == 'libcsound64.so.':
              err = installLink(i, concatPath([libDir, 'libcsound64.so']))
 -        elif i == 'libcsnd.so':
 -            err = installLink(concatPath([libDir, i]),
 -                              concatPath([pythonDir2, '_csnd.so']))
++        elif i[:11] == 'libcsnd.so.':
++            err = installLink(i, concatPath([libDir, 'libcsnd.so']))
          elif i == 'lib_CsoundVST.so':
              err = installLink(concatPath([libDir, i]),
                                concatPath([pythonDir2, '_CsoundVST.so']))
-@@ -287,7 +284,7 @@
+@@ -287,7 +286,7 @@ else:
  #err = installFile('opcodes.dir', pluginDir)
  installErrors = installErrors or err
  pluginList = findFiles('.', 'lib[A-Za-z].*\\.so')
@@ -19,7 +32,7 @@
      if i in pluginList:
          pluginList.remove(i)
  for i in pluginList:
-@@ -304,6 +301,7 @@
+@@ -304,6 +303,7 @@ installErrors = installErrors or err
  
  print ' === Installing language interfaces ==='
  wrapperList = [['csnd\\.py', '0', pythonDir],
