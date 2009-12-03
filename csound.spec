@@ -14,7 +14,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.10.1
-Release:       13%{?dist}
+Release:       14%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -80,6 +80,14 @@ Requires: python
 %description python
 Contains Python language bindings for developing Python applications that
 use Csound.
+
+%package python-devel
+Summary: Csound python development files and libraries
+Group: Development/Libraries
+Requires: %{name} = %{version}-%{release}
+
+%description python-devel
+Contains libraries for developing against csound-python.
 
 %package java
 Summary: Java Csound support
@@ -373,8 +381,12 @@ fi
 
 %files python
 %defattr(-,root,root,-)
-%{_libdir}/libcsnd.so
+%{_libdir}/libcsnd.so.5.2
 %{_libdir}/python%{pyver}/site-packages/*
+
+%files python-devel
+%defattr(-,root,root,-)
+%{_libdir}/libcsnd.so
 
 %files java
 %defattr(-,root,root,-)
@@ -433,6 +445,9 @@ fi
 %doc manual/examples
 
 %changelog
+* Thu Dec  3 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-14
+- Updated python patch thanks to dsd.
+
 * Tue Oct 20 2009 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-13
 - Fix use of multiple midi devices, fix segfault (RHBZ 529293)
 
