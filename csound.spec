@@ -1,4 +1,4 @@
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
+%{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 
 # Csound is really dumb about 64-bit
 %ifarch x86_64 ia64 ppc64 sparc64
@@ -14,7 +14,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.10.1
-Release:       15%{?dist}
+Release:       16%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -382,8 +382,8 @@ fi
 %files python
 %defattr(-,root,root,-)
 %{_libdir}/libcsnd.so.5.2
-%{python_sitelib}/csnd*
-%{python_sitelib}/_csnd*
+%{python_sitearch}/csnd*
+%{python_sitearch}/snd*
 
 %files python-devel
 %defattr(-,root,root,-)
@@ -446,6 +446,9 @@ fi
 %doc manual/examples
 
 %changelog
+* Sat Jan  9 2010 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-16
+- Some further cleanups
+
 * Sat Jan  9 2010 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-15
 - Updated to the new python sysarch spec file reqs
 
