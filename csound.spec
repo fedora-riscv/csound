@@ -14,7 +14,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.10.1
-Release:       16%{?dist}
+Release:       17%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -382,8 +382,8 @@ fi
 %files python
 %defattr(-,root,root,-)
 %{_libdir}/libcsnd.so.5.2
+%{python_sitearch}/_csnd*
 %{python_sitearch}/csnd*
-%{python_sitearch}/snd*
 
 %files python-devel
 %defattr(-,root,root,-)
@@ -446,6 +446,9 @@ fi
 %doc manual/examples
 
 %changelog
+* Sat Jan  9 2010 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-17
+- Some further cleanups
+
 * Sat Jan  9 2010 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-16
 - Some further cleanups
 
