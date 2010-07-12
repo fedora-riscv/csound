@@ -14,7 +14,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.10.1
-Release:       17%{?dist}
+Release:       18%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -398,6 +398,7 @@ fi
 
 %files javadoc
 %defattr(-,root,root,-)
+%doc COPYING
 %doc %{_javadocdir}/%{name}-java
 
 %files tk
@@ -446,6 +447,9 @@ fi
 %doc manual/examples
 
 %changelog
+* Mon Jul 12 2010 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-18
+- Add license file to -javadocs
+
 * Sat Jan  9 2010 Peter Robinson <pbrobinson@gmail.com> - 5.10.1-17
 - Some further cleanups
 
