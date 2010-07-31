@@ -1,4 +1,5 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+%{!?python_version: %global python_version %(%{__python} -c "import sys; print '%s.%s' % sys.version_info[:2]")}
 
 # Csound is really dumb about 64-bit
 %ifarch x86_64 ia64 ppc64 sparc64
@@ -14,7 +15,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.10.1
-Release:       20%{?dist}
+Release:       21%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -235,7 +236,7 @@ scons dynamicCsoundLibrary=1 \
       useFluidsynth=1 \
       generatePdf=0 \
       buildCsound5GUI=1 \
-      pythonVersion=2.6 \
+      pythonVersion=%{python_version} \
       buildPythonOpcodes=1 \
       buildPythonWrapper=1 \
       buildLuaWrapper=1 \
@@ -447,6 +448,9 @@ fi
 %doc manual/examples
 
 %changelog
+* Sat Jul 31 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 5.10.1-21
+- Fix python location
+
 * Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 5.10.1-20
 - Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 
