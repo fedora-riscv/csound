@@ -14,13 +14,12 @@
 
 Summary:       A sound synthesis language and library
 Name:          csound
-Version:       5.10.1
-Release:       21%{?dist}
+Version:       5.12.1
+Release:       1%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
 
-BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: swig scons libsndfile-devel libpng-devel libjpeg-devel
 BuildRequires: python python-devel
 BuildRequires: alsa-lib-devel jack-audio-connection-kit-devel pulseaudio-libs-devel
@@ -35,26 +34,21 @@ BuildRequires: libvorbis-devel libogg-devel
 BuildRequires: gettext
 BuildRequires: gcc-c++ boost-devel
 
-Obsoletes: csound-tutorial <= 5.08
-Obsoletes: olpcsound <= 5.08.92
+Source0: http://downloads.sourceforge.net/csound/Csound5.12.1.tar.gz
+Source1: http://downloads.sourceforge.net/csound/Csound5.12-manual-src.tar.gz
+Source2: http://downloads.sourceforge.net/csound/Csound5.12_manual_html.zip
 
-Source0: http://downloads.sourceforge.net/csound/Csound5.10.1.tar.gz
-Source1: http://downloads.sourceforge.net/csound/Csound5.10_manual_src.tar.gz
-Source2: http://downloads.sourceforge.net/csound/Csound5.10_manual_html.zip
-
-Patch1: csound-5.10.1-no-usr-local.patch
+Patch0: csound-5.12.1-fixpython.patch
+Patch1: csound-5.12.1-no-usr-local.patch
 Patch2: csound-5.10.1-default-opcodedir.patch
 Patch3: csound-5.10.1-rtalsa-fix.patch
-Patch4: csound-5.10.1-makebuild.patch
+Patch4: csound-5.12.1-makebuild.patch
 Patch5: csound-5.10.1-64-bit-plugin-path.patch
 Patch6: csound-5.10.1-fix-conflicts.patch
 Patch7: csound-5.10.1-fix-locale-install.patch
 Patch8: csound-5.10.1-enable-oggplay.patch
-Patch9: csound-2817271-soname.patch
-Patch0: csound-fixpython.patch
-Patch10: csound-default-pulse.patch
-Patch11: csound-5.10.1-compile-flag.patch
-Patch12: csound-5.10.1-all-midi.patch
+Patch9: csound-5.10.1-default-pulse.patch
+Patch10: csound-5.10.1-compile-flag.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -62,12 +56,10 @@ composition and performance over a wide range of platforms. It is not
 restricted to any style of music, having been used for many years in
 at least classical, pop, techno, ambient...
 
-
 %package devel
 Summary: Csound development files and libraries
 Group: Development/Libraries
 Requires: %{name} = %{version}-%{release}
-Obsoletes: olpcsound-devel <= 5.08.92
 
 %description devel
 Contains headers and libraries for developing applications that use Csound.
@@ -195,7 +187,7 @@ Canonical Reference Manual for Csound.
 
 
 %prep
-%setup -q -n Csound5.10.1
+%setup -q -n Csound5.12.1
 %patch0 -p1 -b .fixpython
 %patch1 -p1 -b .no-usr-local
 %patch2 -p1 -b .default-opcodedir
@@ -205,10 +197,8 @@ Canonical Reference Manual for Csound.
 %patch6 -p1 -b .fix-conflicts
 %patch7 -p1 -b .fix-local-install
 %patch8 -p1 -b .enable-oggplay
-%patch9 -p1 -b .2817271-soname
-%patch10 -p1 -b .default-pulse
-%patch11 -p1 -b .compile-flag
-%patch12 -p1 -b .all-midi
+%patch9 -p1 -b .default-pulse
+%patch10 -p1 -b .compile-flag
 
 tar xf %{SOURCE1}
 (cd manual; unzip -q %{SOURCE2})
@@ -333,13 +323,16 @@ fi
 %{_libdir}/%{name}/plugins/libcompress.so
 %{_libdir}/%{name}/plugins/libcontrol.so
 %{_libdir}/%{name}/plugins/libchua.so
+%{_libdir}/%{name}/plugins/libcrossfm.so
 %{_libdir}/%{name}/plugins/libcs_date.so
 %{_libdir}/%{name}/plugins/libcs_pan2.so
 %{_libdir}/%{name}/plugins/libcs_pvs_ops.so
+%{_libdir}/%{name}/plugins/libdoppler.so
 %{_libdir}/%{name}/plugins/libeqfil.so
 %{_libdir}/%{name}/plugins/libftest.so
 %{_libdir}/%{name}/plugins/libgabnew.so
 %{_libdir}/%{name}/plugins/libgrain4.so
+%{_libdir}/%{name}/plugins/libharmon.so
 %{_libdir}/%{name}/plugins/libhrtferX.so
 %{_libdir}/%{name}/plugins/libhrtfnew.so
 %{_libdir}/%{name}/plugins/libimage.so
@@ -363,14 +356,15 @@ fi
 %{_libdir}/%{name}/plugins/libscoreline.so
 %{_libdir}/%{name}/plugins/libsfont.so
 %{_libdir}/%{name}/plugins/libshape.so
+%{_libdir}/%{name}/plugins/libsignalflowgraph.so
 %{_libdir}/%{name}/plugins/libstackops.so
 %{_libdir}/%{name}/plugins/libstdopcod.so
 %{_libdir}/%{name}/plugins/libstdutil.so
 %{_libdir}/%{name}/plugins/libsystem_call.so
+%{_libdir}/%{name}/plugins/libtabsum.so
 %{_libdir}/%{name}/plugins/libudprecv.so
 %{_libdir}/%{name}/plugins/libudpsend.so
 %{_libdir}/%{name}/plugins/libvbap.so
-%{_libdir}/%{name}/plugins/libharmon.so
 %{_libdir}/%{name}/plugins/libugakbari.so
 %{_libdir}/%{name}/plugins/libvaops.so
 %{_libdir}/%{name}/plugins/libvosim.so
@@ -388,7 +382,7 @@ fi
 
 %files python-devel
 %defattr(-,root,root,-)
-%{_libdir}/libcsnd.so
+# %{_libdir}/libcsnd.so
 
 %files java
 %defattr(-,root,root,-)
@@ -448,6 +442,9 @@ fi
 %doc manual/examples
 
 %changelog
+* Sun Dec 26 2010 Peter Robinson <pbrobinson@gmail.com> - 5.12.1-1
+- Update to 5.12.1.
+
 * Sat Jul 31 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 5.10.1-21
 - Fix python location
 
