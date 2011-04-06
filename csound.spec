@@ -34,9 +34,9 @@ BuildRequires: libvorbis-devel libogg-devel
 BuildRequires: gettext
 BuildRequires: gcc-c++ boost-devel
 
-Source0: http://downloads.sourceforge.net/csound/Csound5.12.1.tar.gz
-Source1: http://downloads.sourceforge.net/csound/Csound5.12-manual-src.tar.gz
-Source2: http://downloads.sourceforge.net/csound/Csound5.12_manual_html.zip
+Source0: http://downloads.sourceforge.net/csound/Csound5.13.1.tar.gz
+Source1: http://downloads.sourceforge.net/csound/Csound5.13-manual-src.tar.gz
+Source2: http://downloads.sourceforge.net/csound/Csound5.13_manual_html.zip
 
 Patch0: csound-5.12.1-fixpython.patch
 Patch1: csound-5.12.1-no-usr-local.patch
@@ -187,7 +187,7 @@ Canonical Reference Manual for Csound.
 
 
 %prep
-%setup -q -n Csound5.12.1
+%setup -q -n Csound5.13.1
 %patch0 -p1 -b .fixpython
 %patch1 -p1 -b .no-usr-local
 %patch2 -p1 -b .default-opcodedir
@@ -442,7 +442,7 @@ fi
 %doc manual/examples
 
 %changelog
-* Wed Apr  6 2011 Peter Robinson <pbrobinson@gmail.com> - 5.12.1-1
+* Wed Apr  6 2011 Peter Robinson <pbrobinson@gmail.com> - 5.13.1-1
 - Update to 5.13.1.
 
 * Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.12.1-2
