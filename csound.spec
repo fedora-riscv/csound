@@ -14,7 +14,7 @@
 
 Summary:       A sound synthesis language and library
 Name:          csound
-Version:       5.13.1
+Version:       5.13.0
 Release:       1%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
@@ -34,7 +34,7 @@ BuildRequires: libvorbis-devel libogg-devel
 BuildRequires: gettext
 BuildRequires: gcc-c++ boost-devel
 
-Source0: http://downloads.sourceforge.net/csound/Csound5.13.1.tar.gz
+Source0: http://downloads.sourceforge.net/csound/Csound%{version}.tar.gz
 Source1: http://downloads.sourceforge.net/csound/Csound5.13-manual-src.tar.gz
 Source2: http://downloads.sourceforge.net/csound/Csound5.13_manual_html.zip
 
@@ -187,18 +187,18 @@ Canonical Reference Manual for Csound.
 
 
 %prep
-%setup -q -n Csound5.13.1
+%setup -q -n Csound%{version}
 %patch0 -p1 -b .fixpython
-%patch1 -p1 -b .no-usr-local
-%patch2 -p1 -b .default-opcodedir
+#%patch1 -p1 -b .no-usr-local
+#%patch2 -p1 -b .default-opcodedir
 %patch3 -p1 -b .rtalsa
-%patch4 -p1 -b .makebuild
+#%patch4 -p1 -b .makebuild
 %patch5 -p1 -b .64-bit-plugin-path
-%patch6 -p1 -b .fix-conflicts
-%patch7 -p1 -b .fix-local-install
+#%patch6 -p1 -b .fix-conflicts
+#%patch7 -p1 -b .fix-local-install
 %patch8 -p1 -b .enable-oggplay
-%patch9 -p1 -b .default-pulse
-%patch10 -p1 -b .compile-flag
+#%patch9 -p1 -b .default-pulse
+#%patch10 -p1 -b .compile-flag
 
 tar xf %{SOURCE1}
 (cd manual; unzip -q %{SOURCE2})
@@ -442,8 +442,8 @@ fi
 %doc manual/examples
 
 %changelog
-* Wed Apr  6 2011 Peter Robinson <pbrobinson@gmail.com> - 5.13.1-1
-- Update to 5.13.1.
+* Wed Apr  6 2011 Peter Robinson <pbrobinson@gmail.com> - 5.13.0-1
+- Update to 5.13.0.
 
 * Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.12.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
