@@ -39,16 +39,16 @@ Source1: http://downloads.sourceforge.net/csound/Csound5.13-manual-src.tar.gz
 Source2: http://downloads.sourceforge.net/csound/Csound5.13_manual_html.zip
 
 Patch0: csound-5.12.1-fixpython.patch
-Patch1: csound-5.12.1-no-usr-local.patch
-Patch2: csound-5.10.1-default-opcodedir.patch
+Patch1: csound-5.13.0-no-usr-local.patch
+Patch2: csound-5.13.0-default-opcodedir.patch
 Patch3: csound-5.10.1-rtalsa-fix.patch
-Patch4: csound-5.12.1-makebuild.patch
+Patch4: csound-5.13.0-tclversion.patch
 Patch5: csound-5.10.1-64-bit-plugin-path.patch
-Patch6: csound-5.10.1-fix-conflicts.patch
-Patch7: csound-5.10.1-fix-locale-install.patch
+Patch6: csound-5.13.0-fix-conflicts.patch
+Patch7: csound-5.13.0-fix-locale-install.patch
 Patch8: csound-5.10.1-enable-oggplay.patch
-Patch9: csound-5.10.1-default-pulse.patch
-Patch10: csound-5.10.1-compile-flag.patch
+Patch9: csound-5.13.0-default-pulse.patch
+Patch10: csound-5.13.0-compile-flag.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -189,16 +189,16 @@ Canonical Reference Manual for Csound.
 %prep
 %setup -q -n Csound%{version}
 %patch0 -p1 -b .fixpython
-#%patch1 -p1 -b .no-usr-local
-#%patch2 -p1 -b .default-opcodedir
+%patch1 -p1 -b .no-usr-local
+%patch2 -p1 -b .default-opcodedir
 %patch3 -p1 -b .rtalsa
-#%patch4 -p1 -b .makebuild
+%patch4 -p1 -b .makebuild
 %patch5 -p1 -b .64-bit-plugin-path
-#%patch6 -p1 -b .fix-conflicts
-#%patch7 -p1 -b .fix-local-install
+%patch6 -p1 -b .fix-conflicts
+%patch7 -p1 -b .fix-local-install
 %patch8 -p1 -b .enable-oggplay
-#%patch9 -p1 -b .default-pulse
-#%patch10 -p1 -b .compile-flag
+%patch9 -p1 -b .default-pulse
+%patch10 -p1 -b .compile-flag
 
 tar xf %{SOURCE1}
 (cd manual; unzip -q %{SOURCE2})
