@@ -22,6 +22,7 @@ Group:         Applications/Multimedia
 
 BuildRequires: swig scons libsndfile-devel libpng-devel libjpeg-devel
 BuildRequires: python python-devel
+BuildRequires: flex bison
 BuildRequires: alsa-lib-devel jack-audio-connection-kit-devel pulseaudio-libs-devel
 BuildRequires: fluidsynth-devel liblo-devel dssi-devel lua-devel
 BuildRequires: fltk-devel fltk-fluid
