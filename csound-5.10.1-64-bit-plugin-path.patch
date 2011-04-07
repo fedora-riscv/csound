@@ -54,3 +54,13 @@
      }
      dir = opendir(dname);
      if (UNLIKELY(dir == (DIR*) NULL)) {
+--- Csound5.13.0/Top/csmodule.c.orig	2011-04-07 10:48:47.631735127 +0100
++++ Csound5.13.0/Top/csmodule.c	2011-04-07 10:49:19.170735598 +0100
+@@ -127,7 +127,6 @@
+ 
+ /* environment variable storing path to plugin libraries */
+ static  const   char    *plugindir_envvar =   "OPCODEDIR";
+-static  const   char    *plugindir64_envvar = "OPCODEDIR64";
+ 
+ /* default directory to load plugins from if environment variable is not set */
+ #if !(defined(_CSOUND_RELEASE_) && (defined(LINUX) || defined(__MACH__)))
