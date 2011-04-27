@@ -287,6 +287,7 @@ fi
 %files -f %{name}5.lang
 %defattr(-,root,root,-)
 %doc COPYING ChangeLog readme-csound5.txt
+%{_bindir}/atsa
 %{_bindir}/cs-launcher
 %{_bindir}/csb64enc
 %{_bindir}/csound
@@ -334,10 +335,12 @@ fi
 %{_libdir}/%{name}/plugins/libhrtferX.so
 %{_libdir}/%{name}/plugins/libhrtfnew.so
 %{_libdir}/%{name}/plugins/libimage.so
+%{_libdir}/%{name}/plugins/libjacko.so
 %{_libdir}/%{name}/plugins/libloscilx.so
 %{_libdir}/%{name}/plugins/libminmax.so
 %{_libdir}/%{name}/plugins/libmixer.so
 %{_libdir}/%{name}/plugins/libmodal4.so
+%{_libdir}/%{name}/plugins/libmodmatrix.so
 %{_libdir}/%{name}/plugins/libmutexops.so
 %{_libdir}/%{name}/plugins/liboggplay.so
 %{_libdir}/%{name}/plugins/libpartikkel.so
@@ -345,6 +348,7 @@ fi
 %{_libdir}/%{name}/plugins/libphysmod.so
 %{_libdir}/%{name}/plugins/libpitch.so
 %{_libdir}/%{name}/plugins/libptrack.so
+%{_libdir}/%{name}/plugins/libpvlock.so
 %{_libdir}/%{name}/plugins/libpvoc.so
 %{_libdir}/%{name}/plugins/libpvsbuffer.so
 %{_libdir}/%{name}/plugins/libpy.so
@@ -362,15 +366,17 @@ fi
 %{_libdir}/%{name}/plugins/libtabsum.so
 %{_libdir}/%{name}/plugins/libudprecv.so
 %{_libdir}/%{name}/plugins/libudpsend.so
-%{_libdir}/%{name}/plugins/libvbap.so
 %{_libdir}/%{name}/plugins/libugakbari.so
+%{_libdir}/%{name}/plugins/liburandom.so
 %{_libdir}/%{name}/plugins/libvaops.so
+%{_libdir}/%{name}/plugins/libvbap.so
 %{_libdir}/%{name}/plugins/libvosim.so
 
 %files devel
 %defattr(-,root,root,-)
 %{_includedir}/%{name}/
 %{_libdir}/lib%{name}.so
+%{_libdir}/libcsnd.so
 
 %files python
 %defattr(-,root,root,-)
