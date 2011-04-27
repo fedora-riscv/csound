@@ -256,11 +256,6 @@ scons dynamicCsoundLibrary=1 \
 %{__rm} -f %{buildroot}%{_bindir}/uninstall-csound5
 %{__rm} -f %{buildroot}%{_prefix}/csound5-*.md5sums
 
-# This file is zero-lenth for some reason
-%{__rm} -f manual/examples/ifthen.csd
-# Remove the CVS dir in examples
-%{__rm} -rf manual/examples/CVS
-
 install -dm 755 %{buildroot}%{_javadir}
 (cd %{buildroot}%{_javadir}; ln -s %{_libdir}/%{name}/java/csnd.jar .)
 
@@ -442,7 +437,7 @@ fi
 %defattr(-,root,root,-)
 %doc manual/copying.txt manual/credits.txt manual/readme.txt manual/news.txt
 %doc manual/html/*
-%doc manual/examples
+%doc manual/examples/*
 
 %changelog
 * Wed Apr  6 2011 Peter Robinson <pbrobinson@gmail.com> - 5.13.0-1
