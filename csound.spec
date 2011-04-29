@@ -2,7 +2,7 @@
 %{!?python_version: %global python_version %(%{__python} -c "import sys; print '%s.%s' % sys.version_info[:2]")}
 
 # Csound is really dumb about 64-bit
-%ifarch x86_64 ia64 ppc64 sparc64
+%ifarch x86_64 ia64 ppc64 sparc64 s390x
 %define build64bit 1
 %define install64bit --word64
 %define useDouble 1
@@ -15,7 +15,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.13.0
-Release:       1%{?dist}
+Release:       2%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -446,6 +446,9 @@ fi
 %doc manual/examples/*
 
 %changelog
+* Fri Apr 29 2011 Dan Horák <dan[at]danny.cz> - 5.13.0-2
+- mark s390x as 64-bit arch
+
 * Wed Apr  6 2011 Peter Robinson <pbrobinson@gmail.com> - 5.13.0-1
 - Update to 5.13.0.
 
