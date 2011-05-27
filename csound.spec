@@ -15,7 +15,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.13.0
-Release:       1%{?dist}
+Release:       2%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -446,6 +446,9 @@ fi
 %doc manual/examples/*
 
 %changelog
+* Fri May 27 2011 Peter Robinson <pbrobinson@gmail.com> - 5.13.0-2
+- Bump build for new fltk
+
 * Wed Apr  6 2011 Peter Robinson <pbrobinson@gmail.com> - 5.13.0-1
 - Update to 5.13.0.
 
