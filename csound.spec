@@ -15,7 +15,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.13.0
-Release:       4%{?dist}
+Release:       5%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -215,7 +215,7 @@ sed -ie 's#\"firefox /usr/local/share/doc/csound/manual/#\"xdg-open file://%{_do
       frontends/fltk_gui/CsoundGlobalSettings.cpp
 
 scons dynamicCsoundLibrary=1 \
-      buildRelease=0 \
+      buildRelease=1 \
       noDebug=0 \
       disableGStabs=1 \
       buildInterfaces=1 \
@@ -448,6 +448,9 @@ fi
 %doc manual/examples/*
 
 %changelog
+* Tue Jun 14 2011 Peter Robinson <pbrobinson@gmail.com> - 5.13.0-5
+- Build the old Parser as the new Parser isn't stable even though it default!
+
 * Wed Jun 01 2011 Ralf Corsépius <corsepiu@fedoraproject.org> - 5.13.0-4
 - Reflect fltk include paths having changed.
 
