@@ -51,7 +51,6 @@ Patch8: csound-5.10.1-enable-oggplay.patch
 Patch9: csound-5.13.0-default-pulse.patch
 Patch10: csound-5.13.0-compile-flag.patch
 Patch11: csound-5.13.0-fixpythonint.patch
-Patch12: csound-5.13.0-fltk.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -203,7 +202,6 @@ Canonical Reference Manual for Csound.
 %patch9 -p1 -b .default-pulse
 %patch10 -p1 -b .compile-flag
 %patch11 -p1 -b .fixpythonint
-%patch12 -p1 -b .fltk
 
 tar xf %{SOURCE1}
 (cd manual; unzip -q %{SOURCE2})
