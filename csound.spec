@@ -20,7 +20,7 @@ URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
 
-BuildRequires: swig scons libsndfile-devel libpng-devel libjpeg-devel
+BuildRequires: swig scons libsndfile-devel libpng-devel libjpeg-turbo-devel
 BuildRequires: python python-devel
 BuildRequires: flex bison
 BuildRequires: alsa-lib-devel jack-audio-connection-kit-devel pulseaudio-libs-devel
