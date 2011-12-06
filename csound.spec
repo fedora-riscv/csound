@@ -15,7 +15,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.13.0
-Release:       5%{?dist}
+Release:       6%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -448,6 +448,9 @@ fi
 %doc manual/examples/*
 
 %changelog
+* Tue Dec 06 2011 Adam Jackson <ajax@redhat.com> - 5.13.0-6
+- Rebuild for new libpng
+
 * Tue Jun 14 2011 Peter Robinson <pbrobinson@gmail.com> - 5.13.0-5
 - Build the old Parser as the new Parser isn't stable even though it default!
 
