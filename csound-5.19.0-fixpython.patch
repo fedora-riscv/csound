@@ -1,5 +1,5 @@
---- Csound5.12.1/install.py.orig	2010-12-26 23:57:36.556893990 +0000
-+++ Csound5.12.1/install.py	2010-12-27 00:04:26.322205519 +0000
+--- Csound5.19.01/install.py.orig	2013-08-07 15:17:29.838998821 +0100
++++ Csound5.19.01/install.py	2013-08-07 15:18:40.184697145 +0100
 @@ -288,7 +288,7 @@
  #err = installFile('opcodes.dir', pluginDir)
  installErrors = installErrors or err
@@ -16,4 +16,4 @@
 +               ['_csnd\\.so', '1', pythonDir],
                 ['loris\\.py', '0', pythonDir],
                 ['CsoundVST\\.py', '0', pythonDir],
-                ['scoregen\\.py', '0', pythonDir],
+                ['CsoundVSTCsoundAC\\.py', '0', pythonDir],

@@ -1,6 +1,6 @@
---- Csound5.13.0/SConstruct.orig	2011-04-07 07:56:09.439110711 +0100
-+++ Csound5.13.0/SConstruct	2011-04-07 07:56:27.059538112 +0100
-@@ -2218,38 +2218,43 @@
+--- Csound5.19.01/SConstruct.orig	2013-08-07 14:45:04.436039677 +0100
++++ Csound5.19.01/SConstruct	2013-08-07 14:49:24.617319061 +0100
+@@ -2253,37 +2253,41 @@
          ['atsa',        'util/atsa_main.c'    ],
          ['cvanal',      'util/cvl_main.c'     ],
          ['dnoise',      'util/dnoise_main.c'  ],
@@ -33,15 +33,11 @@
 +       if i[0].startswith("cs-"):
 +           Depends(a, csoundLibrary)
  
- if not buildOLPC:
-   executables.append(csoundProgramEnvironment.Program('scsort',
+ executables.append(csoundProgramEnvironment.Program('scsort',
      ['util1/sortex/smain.c']))
--  executables.append(csoundProgramEnvironment.Program('extract',
--    ['util1/sortex/xmain.c']))
-+  a = csoundProgramEnvironment.Program('cs-extract', ['util1/sortex/xmain.c'])
-+  executables.append(a)
-+  Depends(a, csoundLibrary)
-   if compilerGNU():
+ executables.append(csoundProgramEnvironment.Program('extract',
+     ['util1/sortex/xmain.c']))
+ if compilerGNU():
 -    executables.append(commonEnvironment.Program('cs',
 -      ['util1/csd_util/cs.c']))
 +    a = commonEnvironment.Program('cs-launcher', ['util1/csd_util/cs.c'])
@@ -56,8 +52,8 @@
        ['util1/scot/scot_main.c', 'util1/scot/scot.c']))
  #executables.append(csoundProgramEnvironment.Program('cscore',
  #    ['util1/cscore/cscore_main.c']))
---- Csound5.13.0/install.py.orig	2011-04-07 07:56:43.608939511 +0100
-+++ Csound5.13.0/install.py	2011-04-07 07:58:42.764835288 +0100
+--- Csound5.19.01/install.py.orig	2013-08-07 14:49:34.152549197 +0100
++++ Csound5.19.01/install.py	2013-08-07 14:51:17.127034567 +0100
 @@ -20,12 +20,12 @@
  
  exeFiles1 = ['csound', 'csound5gui', 'CsoundVST', 'winsound',
@@ -68,10 +64,10 @@
 -             'lpc_export', 'lpc_import', 'mixer', 'pvanal',
 +             'lpc_export', 'lpc_import', 'cs-mixer', 'pvanal',
               'pv_export', 'pv_import', 'atsa',
--             'pvlook', 'scale', 'sndinfo', 'srconv', 'beats',
+-             'pvlook', 'scale', 'sndinfo', 'srconv', 'csbeats',
 -             'scsort', 'extract', 'cs', 'csb64enc', 'makecsd', 'scot']
-+             'pvlook', 'cs-scale', 'cs-sndinfo', 'cs-srconv', 'beats',
-+             'scsort', 'cs-extract', 'cs-launcher', 'csb64enc', 'makecsd', 'cs-scot']
++             'pvlook', 'cs-scale', 'cs-sndinfo', 'cs-srconv', 'csbeats',
++             'scsort', 'cs-extract', 'cs', 'csb64enc', 'makecsd', 'cs-scot']
  
  exeFiles2 = ['brkpt', 'linseg', 'tabdes']
  

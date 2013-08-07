@@ -1,6 +1,6 @@
---- Csound5.10.1/InOut/rtalsa.c.orig	2008-12-15 21:18:39.000000000 +0000
-+++ Csound5.10.1/InOut/rtalsa.c	2009-03-31 00:28:48.000000000 +0100
-@@ -45,6 +45,7 @@
+--- Csound5.19.01/InOut/rtalsa.c.orig	2013-01-07 12:49:34.000000000 +0000
++++ Csound5.19.01/InOut/rtalsa.c	2013-08-07 15:33:14.170798690 +0100
+@@ -49,6 +49,7 @@
  #include <sys/select.h>
  #include <termios.h>
  #include <errno.h>

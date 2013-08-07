@@ -1,0 +1,34 @@
+--- Csound5.19.01/SConstruct.orig	2013-08-07 14:40:05.284820226 +0100
++++ Csound5.19.01/SConstruct	2013-08-07 14:40:14.125033594 +0100
+@@ -873,9 +873,7 @@
+ # library version is CS_VERSION.CS_APIVERSION
+ csoundLibraryVersion = '5.2'
+ csoundLibraryName = 'csound'
+-if commonEnvironment['useDouble'] != '0':
+-    csoundLibraryName += '64'
+-elif getPlatform() == 'win32':
++if getPlatform() == 'win32':
+     csoundLibraryName += '32'
+ # flags for linking with the Csound library
+ libCsoundLinkFlags = commonEnvironment['LINKFLAGS'] 
+@@ -931,8 +929,6 @@
+             tmp = '%s/lib/csound/plugins' % commonEnvironment['prefix']
+         else:
+             tmp = '%s/lib64/csound/plugins' % commonEnvironment['prefix']
+-        if commonEnvironment['useDouble'] != '0':
+-            tmp += '64'
+         s = '-DCS_DEFAULT_PLUGINDIR=\\"%s\\"' % tmp
+         csoundLibraryEnvironment.Append(CPPFLAGS = [s])
+     elif buildOSXFramework != 0:
+@@ -2901,10 +2897,7 @@
+     if i[:sys.prefix.__len__()] == sys.prefix and i[-13:] == 'site-packages':
+         PYTHON_DIR = i
+ 
+-if commonEnvironment['useDouble'] == '0':
+-    PLUGIN_DIR = LIB_DIR + "/csound/plugins"
+-else:
+-    PLUGIN_DIR = LIB_DIR + "/csound/plugins64"
++PLUGIN_DIR = LIB_DIR + "/csound/plugins"
+ 
+ if commonEnvironment['install'] == '1':
+     installExecutables = Alias('install-executables',
