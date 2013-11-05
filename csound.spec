@@ -25,8 +25,8 @@ BuildRequires: python python-devel
 BuildRequires: flex bison
 BuildRequires: alsa-lib-devel jack-audio-connection-kit-devel pulseaudio-libs-devel
 BuildRequires: fluidsynth-devel liblo-devel dssi-devel
-#BuildRequires: lua-devel lua
-BuildRequires: compat-lua-devel compat-lua
+BuildRequires: lua-devel lua
+#BuildRequires: compat-lua-devel compat-lua
 BuildRequires: fltk-devel fltk-fluid
 BuildRequires: java-devel >= 1.4.0
 BuildRequires: jpackage-utils >= 1.5
