@@ -199,10 +199,6 @@ mkdir manual
 
 %build
 
-# Adjust location of the documentation for the GUI bits
-sed -ie 's#\"firefox /usr/local/share/doc/csound/manual/#\"xdg-open file://%{_docdir}/%{name}-manual-%{version}/#' \
-      frontends/fltk_gui/CsoundGlobalSettings.cpp
-
 cp custom-linux-mkg.py custom.py
 scons dynamicCsoundLibrary=1 \
       buildRelease=1 \
@@ -430,6 +426,9 @@ fi
 %doc examples/*
 
 %changelog
+* Sat Jan 25 2014 Ville Skyttä <ville.skytta@iki.fi>
+- Drop no longer applicable docdir adjustment from specfile (#993711).
+
 * Wed Aug  7 2013 Peter Robinson <pbrobinson@fedoraproject.org> 5.19.01-1
 - Update to 5.19.01 (fix FTBFS)
 - Initial rebase of patches
