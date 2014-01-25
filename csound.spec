@@ -15,7 +15,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.19.01
-Release:       1%{?dist}
+Release:       2%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -47,6 +47,7 @@ Patch3: csound-5.19.0-default-opcodedir.patch
 Patch4: csound-5.19.0-rtalsa-fix.patch
 Patch5: csound-5.13.0-fix-locale-install.patch
 Patch6: csound-5.19.0-default-pulse.patch
+Patch7: csound-5.19.01-xdg-open.patch
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -193,6 +194,7 @@ Canonical Reference Manual for Csound.
 %patch4 -p1 -b .rtalsa
 %patch5 -p1 -b .fix-locale-install
 %patch6 -p1 -b .default-pulse
+%patch7 -p1 -b .xdg-open
 
 mkdir manual
 (cd manual; unzip -q %{SOURCE2})
@@ -426,7 +428,8 @@ fi
 %doc examples/*
 
 %changelog
-* Sat Jan 25 2014 Ville Skyttä <ville.skytta@iki.fi>
+* Sat Jan 25 2014 Ville Skyttä <ville.skytta@iki.fi> - 5.19.01-2
+- Use xdg-open as help browser again.
 - Drop no longer applicable docdir adjustment from specfile (#993711).
 
 * Wed Aug  7 2013 Peter Robinson <pbrobinson@fedoraproject.org> 5.19.01-1

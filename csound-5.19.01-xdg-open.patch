@@ -1,0 +1,12 @@
+diff -up Csound5.19.01/frontends/fltk_gui/CsoundGlobalSettings.cpp~ Csound5.19.01/frontends/fltk_gui/CsoundGlobalSettings.cpp
+--- Csound5.19.01/frontends/fltk_gui/CsoundGlobalSettings.cpp~	2013-01-07 14:49:35.000000000 +0200
++++ Csound5.19.01/frontends/fltk_gui/CsoundGlobalSettings.cpp	2014-01-25 11:24:54.363214530 +0200
+@@ -25,7 +25,7 @@ CsoundGlobalSettings::CsoundGlobalSettin
+     textEditorProgram = "cseditor";
+     soundEditorProgram = "audacity";
+     soundPlayerProgram = "aplay";
+-    helpBrowserProgram = "firefox";
++    helpBrowserProgram = "xdg-open";
+ #elif defined(WIN32)
+     textEditorProgram = "cseditor";
+     soundEditorProgram = "audacity";
