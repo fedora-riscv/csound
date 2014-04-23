@@ -2,7 +2,7 @@
 %{!?python_version: %global python_version %(%{__python} -c "import sys; print '%s.%s' % sys.version_info[:2]")}
 
 # Csound is really dumb about 64-bit
-%ifarch x86_64 ia64 ppc64 sparc64 s390x aarch64
+%ifarch x86_64 ia64 ppc64 ppc64le sparc64 s390x aarch64
 %define build64bit 1
 %define install64bit --word64
 %define useDouble 1
@@ -15,7 +15,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.19.01
-Release:       5%{?dist}
+Release:       6%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -28,9 +28,8 @@ BuildRequires: fluidsynth-devel liblo-devel dssi-devel
 #BuildRequires: lua-devel lua
 BuildRequires: compat-lua-devel compat-lua
 BuildRequires: fltk-devel fltk-fluid
-BuildRequires: java-devel >= 1.4.0
-BuildRequires: jpackage-utils >= 1.5
-BuildRequires: java-gcj-compat-devel
+BuildRequires: java-devel
+BuildRequires: jpackage-utils
 BuildRequires: tk-devel tcl-devel
 BuildRequires: libxslt
 BuildRequires: libvorbis-devel libogg-devel
@@ -85,12 +84,8 @@ Contains libraries for developing against csound-python.
 Summary: Java Csound support
 Group: System Environment/Libraries
 Requires: %{name} = %{version}-%{release}
-Requires:         jpackage-utils >= 1.5
-Requires:         java-1.5.0-gcj
-Requires(post):   jpackage-utils >= 1.5
-Requires(postun): jpackage-utils >= 1.5
-Requires(post):   java-gcj-compat
-Requires(postun): java-gcj-compat
+Requires:         java-headless
+Requires:         jpackage-utils
 Requires(post):   /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -229,7 +224,7 @@ scons dynamicCsoundLibrary=1 \
       buildUtilities=1 \
       prefix=%{_prefix} \
       customCCFLAGS="%{optflags}" \
-      customCXXFLAGS="%{optflags}" \
+      customCXXFLAGS="%{optflags} -I/usr/lib/jvm/java/include -I/usr/lib/jvm/java/include/linux" \
       Word64=%{build64bit} \
       Lib64=%{build64bit} \
       useDouble=%{useDouble}
@@ -250,27 +245,14 @@ rm -f %{buildroot}%{_prefix}/csound5-*.md5sums
 install -dm 755 %{buildroot}%{_javadir}
 (cd %{buildroot}%{_javadir}; ln -s %{_libdir}/%{name}/java/csnd.jar .)
 
-install -dm 644 %{buildroot}%{_javadocdir}/%{name}-java
-chmod -R 755 %{buildroot}%{_javadocdir}/%{name}-java
+install -dm 755 %{buildroot}%{_javadocdir}/%{name}-java
 (cd interfaces; tar cf - *.html csnd/*.html) | (cd %{buildroot}%{_javadocdir}/%{name}-java; tar xvf -)
-
-%{_bindir}/aot-compile-rpm
 
 %find_lang %{name}5
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
-
-%post java
-if [ -x %{_bindir}/rebuild-gcj-db ]; then
-  %{_bindir}/rebuild-gcj-db
-fi
-
-%postun java
-if [ -x %{_bindir}/rebuild-gcj-db ]; then
-  %{_bindir}/rebuild-gcj-db
-fi
 
 %files -f %{name}5.lang
 %defattr(-,root,root,-)
@@ -385,11 +367,10 @@ fi
 %{_libdir}/lib_jcsound.so
 %{_libdir}/%{name}/java/
 %{_javadir}/csnd.jar
-%attr(-,root,root) %{_libdir}/gcj/%{name}
 
 %files javadoc
 %doc COPYING
-%doc %{_javadocdir}/%{name}-java
+%{_javadocdir}/%{name}-java
 
 %files tk
 %{_libdir}/%{name}/tcl/
@@ -428,6 +409,9 @@ fi
 %doc examples/*
 
 %changelog
+* Tue Jul 01 2014 Mat Booth <mat.booth@redhat.com> - 5.19.01-6
+- Drop support for GCJ AOT compilation (GCJ was retired)
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.19.01-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 

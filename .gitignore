@@ -1,2 +1,7 @@
 /Csound5.*.tar.gz
 /Csound5.*.zip
+/.build-*.log
+/results_csound
+/noarch
+/x86_64
+*.src.rpm
