@@ -15,7 +15,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.19.01
-Release:       4%{?dist}
+Release:       5%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -428,6 +428,9 @@ fi
 %doc examples/*
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.19.01-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Fri May 23 2014 Petr Machata <pmachata@redhat.com> - 5.19.01-4
 - Rebuild for boost 1.55.0
 
