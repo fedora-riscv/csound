@@ -2,7 +2,7 @@
 %{!?python_version: %global python_version %(%{__python} -c "import sys; print '%s.%s' % sys.version_info[:2]")}
 
 # Csound is really dumb about 64-bit
-%ifarch x86_64 ia64 ppc64 ppc64le sparc64 s390x aarch64
+%if %{__isa_bits} == 64
 %define build64bit 1
 %define install64bit --word64
 %define useDouble 1
@@ -15,7 +15,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       5.19.01
-Release:       6%{?dist}
+Release:       7%{?dist}
 URL:           http://csound.sourceforge.net/
 License:       LGPLv2+
 Group:         Applications/Multimedia
@@ -25,8 +25,7 @@ BuildRequires: python python-devel
 BuildRequires: flex bison
 BuildRequires: alsa-lib-devel jack-audio-connection-kit-devel pulseaudio-libs-devel
 BuildRequires: fluidsynth-devel liblo-devel dssi-devel
-#BuildRequires: lua-devel lua
-BuildRequires: compat-lua-devel compat-lua
+BuildRequires: compat-lua-devel
 BuildRequires: fltk-devel fltk-fluid
 BuildRequires: java-devel
 BuildRequires: jpackage-utils
@@ -255,7 +254,6 @@ install -dm 755 %{buildroot}%{_javadocdir}/%{name}-java
 %postun -p /sbin/ldconfig
 
 %files -f %{name}5.lang
-%defattr(-,root,root,-)
 %doc COPYING ChangeLog readme-csound5.txt
 %{_bindir}/atsa
 %{_bindir}/csb64enc
@@ -409,6 +407,9 @@ install -dm 755 %{buildroot}%{_javadocdir}/%{name}-java
 %doc examples/*
 
 %changelog
+* Tue Jul  8 2014 Peter Robinson <pbrobinson@fedoraproject.org> 5.19.01-7
+- Minor cleanups
+
 * Tue Jul 01 2014 Mat Booth <mat.booth@redhat.com> - 5.19.01-6
 - Drop support for GCJ AOT compilation (GCJ was retired)
 
