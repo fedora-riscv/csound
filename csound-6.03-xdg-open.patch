@@ -1,0 +1,20 @@
+--- installer/misc/vim/cshelp.orig	2014-05-04 05:49:43.318737126 -0600
++++ installer/misc/vim/cshelp	2014-05-05 21:15:00.000000000 -0600
+@@ -3,7 +3,9 @@
+ BROWSER_CMD=""
+ 
+ if [ "${DISPLAY}" != "" ] ; then
+-    if ( which links | grep -q -G -e "^/usr" ) ; then
++    if ( which xdg-open | grep -E -e "^(/usr)?/bin" ); then
++        BROWSER_CMD="xdg-open" ;
++    elif ( which links | grep -q -G -e "^/usr" ) ; then
+         BROWSER_CMD="links -g" ;
+     elif ( which konqueror | grep -q -G -e "^/opt" ) ; then
+         BROWSER_CMD="konqueror" ;
+@@ -38,5 +40,5 @@ else
+     OPNAME="${1}" ;
+ fi
+ 
+-exec ${BROWSER_CMD} "/usr/local/share/doc/csound/manual/${OPNAME}.html"
++exec ${BROWSER_CMD} "/usr/share/doc/csound-manual/${OPNAME}.html"
+ 

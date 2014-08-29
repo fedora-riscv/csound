@@ -1,0 +1,115 @@
+--- installer/linux/d32.sh.orig	2014-05-04 05:49:43.213736146 -0600
++++ installer/linux/d32.sh	2014-05-05 20:15:00.000000000 -0600
+@@ -13,7 +13,7 @@ mkdir -p -m 0755 ../../../CSDIST/$DIR/lo
+ 
+ rm ../../../CSDIST/$DIR/bin/*
+ 
+-cp -pv ../../{linseg,lpanal,brkpt,lpc_export,lpc_import,cs,makecsd,csb64enc,cscore,csound,csound5gui,cvanal,dnoise,mixer,envext,extract,extractor,pvanal,pvlook,het_export,het_import,hetro,scale,scot,scsort,sdif2ad,srconv,tabdes,winsound,cstclsh,cswish,matrix.tk,pv_export,pv_import,atsa,sndinfo} ../../../CSDIST/$DIR/bin
++cp -pv ../../{linseg,lpanal,brkpt,lpc_export,lpc_import,cs,makecsd,csb64enc,cscore,csound,csound5gui,cvanal,dnoise,cs-mixer,cs-envext,cs-extract,cs-extractor,pvanal,pvlook,het_export,het_import,hetro,scale,cs-scot,scsort,sdif2ad,cs-srconv,tabdes,winsound,cstclsh,cswish,matrix.tk,pv_export,pv_import,atsa,cs-sndinfo} ../../../CSDIST/$DIR/bin
+ 
+ strip ../../../CSDIST/$DIR/bin/*
+ 
+--- installer/linux/d64.sh.orig	2014-05-04 05:49:43.213736146 -0600
++++ installer/linux/d64.sh	2014-05-05 20:15:00.000000000 -0600
+@@ -12,7 +12,7 @@ mkdir -p -m 0755 ../../../CSDIST/$DIR/lo
+ 
+ rm ../../../CSDIST/$DIR/bin/*
+ 
+-cp -pv ../../{linseg,lpanal,brkpt,lpc_export,lpc_import,cs,makecsd,csb64enc,cscore,csound,csound5gui,cvanal,dnoise,mixer,envext,extract,extractor,pvanal,pvlook,het_export,het_import,hetro,scale,scot,scsort,sdif2ad,srconv,tabdes,winsound,cstclsh,cswish,matrix.tk,pv_export,pv_import,atsa,sndinfo,cseditor} ../../../CSDIST/$DIR/bin
++cp -pv ../../{linseg,lpanal,brkpt,lpc_export,lpc_import,cs,makecsd,csb64enc,cscore,csound,csound5gui,cvanal,dnoise,mixer,cs-envext,cs-extract,cs-extractor,pvanal,pvlook,het_export,het_import,hetro,scale,cs-scot,scsort,sdif2ad,cs-srconv,tabdes,winsound,cstclsh,cswish,matrix.tk,pv_export,pv_import,atsa,cs-sndinfo,cseditor} ../../../CSDIST/$DIR/bin
+ 
+ strip ../../../CSDIST/$DIR/bin/*
+ 
+--- installer/linux/f32.sh.orig	2014-05-04 05:49:43.213736146 -0600
++++ installer/linux/f32.sh	2014-05-05 20:15:00.000000000 -0600
+@@ -12,7 +12,7 @@ mkdir -p -m 0755 ../../../CSDIST/$DIR/lo
+ 
+ rm ../../../CSDIST/$DIR/bin/*
+ 
+-cp -pv ../../{linseg,lpanal,brkpt,lpc_export,lpc_import,cs,makecsd,csb64enc,cscore,csound,csound5gui,cvanal,dnoise,mixer,envext,extract,extractor,pvanal,pvlook,het_export,het_import,hetro,scale,scot,scsort,sdif2ad,srconv,tabdes,winsound,cstclsh,cswish,matrix.tk,pv_export,pv_import,atsa,sndinfo} ../../../CSDIST/$DIR/bin
++cp -pv ../../{linseg,lpanal,brkpt,lpc_export,lpc_import,cs,makecsd,csb64enc,cscore,csound,csound5gui,cvanal,dnoise,cs-mixer,cs-envext,cs-extract,cs-extractor,pvanal,pvlook,het_export,het_import,hetro,scale,cs-scot,scsort,sdif2ad,cs-srconv,tabdes,winsound,cstclsh,cswish,matrix.tk,pv_export,pv_import,atsa,cs-sndinfo} ../../../CSDIST/$DIR/bin
+ 
+ strip ../../../CSDIST/$DIR/bin/*
+ 
+--- installer/linux/f64.sh.orig	2014-05-04 05:49:43.213736146 -0600
++++ installer/linux/f64.sh	2014-05-05 20:15:00.000000000 -0600
+@@ -12,7 +12,7 @@ mkdir -p -m 0755 ../../../CSDIST/$DIR/lo
+ 
+ rm ../../../CSDIST/$DIR/bin/*
+ 
+-cp -pv ../../{linseg,lpanal,brkpt,lpc_export,lpc_import,cs,makecsd,csb64enc,cscore,csound,csound5gui,cvanal,dnoise,mixer,envext,extract,extractor,pvanal,pvlook,het_export,het_import,hetro,scale,scot,scsort,sdif2ad,srconv,tabdes,winsound,cstclsh,cswish,matrix.tk,pv_export,pv_import,atsa,sndinfo,cseditor} ../../../CSDIST/$DIR/bin
++cp -pv ../../{linseg,lpanal,brkpt,lpc_export,lpc_import,cs,makecsd,csb64enc,cscore,csound,csound5gui,cvanal,dnoise,cs-mixer,cs-envext,cs-extract,cs-extractor,pvanal,pvlook,het_export,het_import,hetro,scale,cs-scot,scsort,sdif2ad,cs-srconv,tabdes,winsound,cstclsh,cswish,matrix.tk,pv_export,pv_import,atsa,cs-sndinfo,cseditor} ../../../CSDIST/$DIR/bin
+ 
+ strip ../../../CSDIST/$DIR/bin/*
+ 
+--- installer/misc/mkpackage.py.orig	2014-05-05 17:00:10.347460267 -0600
++++ installer/misc/mkpackage.py	2014-05-05 20:15:00.000000000 -0600
+@@ -71,13 +71,13 @@ headerFiles += ['interfaces/CppSound.hpp
+ headerFiles += ['interfaces/CsoundFile.hpp']
+ 
+ utils1 = ['csound', 'winsound', 'cstclsh', 'cswish',
+-          'atsa', 'cvanal', 'dnoise', 'envext', 'extractor',
++          'atsa', 'cvanal', 'dnoise', 'cs-envext', 'cs-extractor',
+           'het_export', 'het_import', 'hetro', 'lpanal',
+-          'lpc_export', 'lpc_import', 'mixer', 'pvanal',
+-          'pvlook', 'pv_export', 'pv_import', 'scale', 'sndinfo',
+-          'srconv', 'cseditor']
++          'lpc_export', 'lpc_import', 'cs-mixer', 'pvanal',
++          'pvlook', 'pv_export', 'pv_import', 'cs-scale', 'cs-sndinfo',
++          'cs-srconv', 'cseditor']
+ 
+-utils2 = ['scsort', 'extract', 'cs', 'csb64enc', 'makecsd', 'scot']
++utils2 = ['scsort', 'cs-extract', 'cs', 'csb64enc', 'makecsd', 'cs-scot']
+ 
+ docFiles = ['COPYING', 'ChangeLog', 'INSTALL', 'readme-csound6.txt']
+ 
+--- util1/CMakeLists.txt.orig	2014-05-04 05:49:44.284746142 -0600
++++ util1/CMakeLists.txt	2014-05-05 20:15:00.000000000 -0600
+@@ -1,7 +1,7 @@
+ #extra utilities
+ 
+ make_utility(scsort      sortex/smain.c)
+-make_utility(extract     sortex/xmain.c)
++make_utility(cs-extract  sortex/xmain.c)
+ 
+ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_CLANG)
+     if(HAVE_UNISTD_H)
+@@ -19,6 +19,6 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMP
+     
+     set(scot_SRCS 
+         scot/scot_main.c scot/scot.c)
+-    make_utility(scot "${scot_SRCS}")
++    make_utility(cs-scot "${scot_SRCS}")
+ endif()
+ 
+--- util/CMakeLists.txt.orig	2014-05-04 05:49:44.239745722 -0600
++++ util/CMakeLists.txt	2014-05-05 20:15:00.000000000 -0600
+@@ -17,8 +17,8 @@ if(BUILD_UTILITIES)
+     make_utility(csanalyze   csanalyze.c)
+     make_utility(cvanal      cvl_main.c)
+     make_utility(dnoise      dnoise_main.c)
+-    make_utility(envext      env_main.c)
+-    make_utility(extractor   xtrc_main.c)
++    make_utility(cs-envext   env_main.c)
++    make_utility(cs-extractor  xtrc_main.c)
+     make_utility(het_export  hetx_main.c)
+     make_utility(het_import  heti_main.c)
+     make_utility(hetro       het_main.c)
+@@ -26,13 +26,13 @@ if(BUILD_UTILITIES)
+     make_utility(lpc_export  lpcx_main.c)
+     target_link_libraries(lpc_export m)
+     make_utility(lpc_import  lpci_main.c)
+-    make_executable(mixer-bin   mixer_main.c   "${CSOUNDLIB}" mixer)
++    make_executable(mixer-bin   mixer_main.c   "${CSOUNDLIB}" cs-mixer)
+     make_utility(pvanal      pvc_main.c)
+     make_utility(pvlook      pvl_main.c)
+     make_utility(pv_export   pvx_main.c)
+     make_utility(pv_import   pvi_main.c)
+-    make_utility(scale       scale_main.c)
+-    make_utility(sndinfo     sndinfo_main.c)
+-    make_utility(srconv      srconv_main.c)
++    make_utility(cs-scale    scale_main.c)
++    make_utility(cs-sndinfo  sndinfo_main.c)
++    make_utility(cs-srconv   srconv_main.c)
+     make_utility(scope       scope_main.c)          
+ endif()

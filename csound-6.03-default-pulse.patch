@@ -1,0 +1,11 @@
+--- Top/csound.c.orig	2014-05-04 10:25:40.373359897 -0600
++++ Top/csound.c	2014-05-05 20:30:00.000000000 -0600
+@@ -3127,7 +3127,7 @@ PUBLIC void csoundReset(CSOUND *csound)
+     csoundCreateGlobalVariable(csound, "_RTAUDIO", (size_t) max_len);
+     s = csoundQueryGlobalVariable(csound, "_RTAUDIO");
+ #ifndef LINUX
+-    strcpy(s, "PortAudio");
++    strcpy(s, "pulse");
+ #else
+     strcpy(s, "alsa");
+ #endif
