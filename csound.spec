@@ -248,9 +248,9 @@ chmod a-x examples/csoundapi_tilde/csoundapi-osx.pd \
 
 %build
 if [ "%{_libdir}" = "%{_prefix}/lib64" ]; then
-  %cmake -DUSE_LIB64:BOOL=ON -DUSE_DOUBLE:BOOL=ON
+  %cmake -DUSE_LIB64:BOOL=ON
 else
-  %cmake -DUSE_LIB64:BOOL=OFF -DUSE_DOUBLE:BOOL=OFF
+  %cmake -DUSE_LIB64:BOOL=OFF
 fi
 
 make %{?_smp_mflags} V=1
