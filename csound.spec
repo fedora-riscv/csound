@@ -1,6 +1,6 @@
 Summary:       A sound synthesis language and library
 Name:          csound
-Version:       6.03.1
+Version:       6.03.2
 Release:       1%{?dist}
 URL:           http://csound.github.io/
 License:       LGPLv2+
@@ -21,6 +21,7 @@ Patch4:  %{name}-6.03-porttime.patch
 Patch5:  %{name}-6.03-xdg-open.patch
 
 BuildRequires: bison
+BuildRequires: bluez-libs-devel
 BuildRequires: boost-devel
 BuildRequires: cmake
 BuildRequires: CUnit-devel
@@ -50,6 +51,7 @@ BuildRequires: python2-devel
 BuildRequires: stk-devel
 BuildRequires: swig
 BuildRequires: tkinter
+BuildRequires: wiiuse-devel
 
 # The fltk and tcl/tk frontends were removed in version 6.  These obsoletes
 # can be removed once Fedora 20 reaches EOL.
@@ -182,6 +184,13 @@ Requires: fltk
 %description virtual-keyboard
 A virtual MIDI keyboard plugin for Csound
 
+%package wiimote
+Summary: Wiimote plugin for Csound
+Requires: %{name}%{?_isa} = %{version}-%{release}
+
+%description wiimote
+A Wiimote plugin for Csound
+
 %package manual
 Summary: Csound manual
 License: GFDL
@@ -238,11 +247,11 @@ chmod a-x examples/csoundapi_tilde/csoundapi-osx.pd \
           manual6/examples/128*
 
 %build
-%if %{__isa_bits} == 64
+if [ "%{_libdir}" = "%{_prefix}/lib64" ]; then
   %cmake -DUSE_LIB64:BOOL=ON -DUSE_DOUBLE:BOOL=ON
-%else
+else
   %cmake -DUSE_LIB64:BOOL=OFF -DUSE_DOUBLE:BOOL=OFF
-%endif
+fi
 
 make %{?_smp_mflags} V=1
 
@@ -254,7 +263,7 @@ make -C manual6 html-dist \
   XSL_BASE_PATH=%{_datadir}/sgml/docbook/xsl-stylesheets
 
 %install
-make install
+make install DESTDIR=%{buildroot}
 
 # Fix the Java installation
 install -dm 755 %{buildroot}%{_javadir}
@@ -287,7 +296,8 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 make csdtests
 
 %files -f %{name}6.lang
-%doc COPYING ChangeLog README.md Release_Notes
+%doc ChangeLog README.md Release_Notes
+%license COPYING
 %{_bindir}/atsa
 %{_bindir}/cs
 %{_bindir}/csanalyze
@@ -366,7 +376,7 @@ make csdtests
 %{_javadir}/csnd.jar
 
 %files javadoc
-%doc COPYING
+%license COPYING
 %{_javadocdir}/%{name}-java
 
 %files lua
@@ -403,10 +413,20 @@ make csdtests
 %files virtual-keyboard
 %{_libdir}/%{name}/plugins-6.0/libvirtual.so
 
+%files wiimote
+%{_libdir}/%{name}/plugins-6.0/libwiimote.so
+
 %files manual
-%doc examples manual6/copying.txt manual6/html
+%doc examples manual6/html
+%license manual6/copying.txt
 
 %changelog
+* Tue Sep 16 2014 Jerry James <loganjerry@gmail.com> - 6.03.2-1
+- Update to 6.03.2
+- Fix installation
+- Fix license handling
+- Add wiimote subpackage, wiiuse-devel BR, and bluez-libs-devel BR (bz 1142457)
+
 * Fri Aug 29 2014 Peter Robinson <pbrobinson@fedoraproject.org> 6.03.1-1
 - Update to 6.03.1
 - Spec file fixups
