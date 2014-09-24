@@ -1,7 +1,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       6.03.2
-Release:       1%{?dist}
+Release:       2%{?dist}
 URL:           http://csound.github.io/
 License:       LGPLv2+
 
@@ -54,7 +54,7 @@ BuildRequires: tkinter
 BuildRequires: wiiuse-devel
 
 # The fltk and tcl/tk frontends were removed in version 6.  These obsoletes
-# can be removed once Fedora 20 reaches EOL.
+# can be removed in Fedora 23
 Obsoletes: %{name}-gui < 6.0-1%{?dist}
 Provides:  %{name}-gui = 6.0-1%{?dist}
 Obsoletes: %{name}-tk  < 6.0-1%{?dist}
@@ -342,7 +342,6 @@ make csdtests
 %{_libdir}/%{name}/plugins-6.0/libfractalnoise.so
 %{_libdir}/%{name}/plugins-6.0/libimage.so
 %{_libdir}/%{name}/plugins-6.0/libipmidi.so
-%{_libdir}/%{name}/plugins-6.0/libjacko.so
 %{_libdir}/%{name}/plugins-6.0/libjoystick.so
 %{_libdir}/%{name}/plugins-6.0/liblinear_algebra.so
 %{_libdir}/%{name}/plugins-6.0/libmixer.so
@@ -392,6 +391,7 @@ make csdtests
 %{_libdir}/%{name}/plugins-6.0/libwidgets.so
 
 %files jack
+%{_libdir}/%{name}/plugins-6.0/libjacko.so
 %{_libdir}/%{name}/plugins-6.0/librtjack.so
 %{_libdir}/%{name}/plugins-6.0/libjackTransport.so
 
@@ -421,6 +421,9 @@ make csdtests
 %license manual6/copying.txt
 
 %changelog
+* Wed Sep 24 2014 Peter Robinson <pbrobinson@fedoraproject.org> 6.03.2-2
+- Fix separation of jack into it's subpackage
+
 * Tue Sep 16 2014 Jerry James <loganjerry@gmail.com> - 6.03.2-1
 - Update to 6.03.2
 - Fix installation
