@@ -1,7 +1,11 @@
+%ifarch %{arm} %{ix86} x86_64
+%global has_luajit 1
+%endif
+
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       6.03.2
-Release:       2%{?dist}
+Release:       3%{?dist}
 URL:           http://csound.github.io/
 License:       LGPLv2+
 
@@ -42,8 +46,9 @@ BuildRequires: libpng-devel
 BuildRequires: libsndfile-devel
 BuildRequires: libvorbis-devel
 BuildRequires: libxslt
-BuildRequires: lua-devel
+%if 0%{?has_luajit}
 BuildRequires: luajit-devel
+%endif
 BuildRequires: portaudio-devel
 BuildRequires: portmidi-devel
 BuildRequires: pulseaudio-libs-devel
@@ -108,6 +113,7 @@ BuildArch: noarch
 %description javadoc
 API documentation for the %{name}-java package.
 
+%if 0%{?has_luajit}
 %package lua
 Summary: Lua Csound support
 Requires: %{name}%{?_isa} = %{version}-%{release}
@@ -115,6 +121,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %description lua
 Contains Lua language bindings for developing and running Lua
 applications that use Csound.
+%endif
 
 %package csoundac
 Summary: An FLTK and python frontend for Csound
@@ -378,9 +385,11 @@ make csdtests
 %license COPYING
 %{_javadocdir}/%{name}-java
 
+%if 0%{?has_luajit}
 %files lua
 %{_libdir}/%{name}/plugins-6.0/libLuaCsound.so
 %{_libdir}/lua/%{luaver}/*
+%endif
 
 %files csoundac
 %{python_sitearch}/CsoundAC.*
@@ -421,6 +430,9 @@ make csdtests
 %license manual6/copying.txt
 
 %changelog
+* Tue Sep 30 2014 Dan Horák <dan[at]danny.cz> - 6.03.2-3
+- luajit available only on selected arches
+
 * Wed Sep 24 2014 Peter Robinson <pbrobinson@fedoraproject.org> 6.03.2-2
 - Fix separation of jack into it's subpackage
 
