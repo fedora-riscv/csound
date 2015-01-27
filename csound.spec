@@ -5,7 +5,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       6.03.2
-Release:       3%{?dist}
+Release:       4%{?dist}
 URL:           http://csound.github.io/
 License:       LGPLv2+
 
@@ -430,6 +430,9 @@ make csdtests
 %license manual6/copying.txt
 
 %changelog
+* Tue Jan 27 2015 Petr Machata <pmachata@redhat.com> - 6.03.2-4
+- Rebuild for boost 1.57.0
+
 * Tue Sep 30 2014 Dan Horák <dan[at]danny.cz> - 6.03.2-3
 - luajit available only on selected arches
 
