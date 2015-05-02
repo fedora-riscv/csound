@@ -5,7 +5,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       6.03.2
-Release:       4%{?dist}
+Release:       5%{?dist}
 URL:           http://csound.github.io/
 License:       LGPLv2+
 
@@ -430,6 +430,9 @@ make csdtests
 %license manual6/copying.txt
 
 %changelog
+* Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 6.03.2-5
+- Rebuilt for GCC 5 C++11 ABI change
+
 * Tue Jan 27 2015 Petr Machata <pmachata@redhat.com> - 6.03.2-4
 - Rebuild for boost 1.57.0
 
