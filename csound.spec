@@ -5,7 +5,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       6.03.2
-Release:       10%{?dist}
+Release:       11%{?dist}
 URL:           http://csound.github.io/
 License:       LGPLv2+
 
@@ -430,6 +430,9 @@ make csdtests
 %license manual6/copying.txt
 
 %changelog
+* Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 6.03.2-11
+- https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
+
 * Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 6.03.2-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
