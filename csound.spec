@@ -1,5 +1,6 @@
 %ifarch %{arm} %{ix86} x86_64
 %global has_luajit 1
+%global luajit_version 2.1
 %endif
 
 Summary:       A sound synthesis language and library
@@ -226,6 +227,9 @@ sed -e 's,\(set(PYTHON_MODULE_INSTALL_DIR \).*,\1"%{python_sitearch}"),' \
     -e 's,\(set(JAVA_MODULE_INSTALL_DIR.*\)),\1/csound/java),' \
     -e 's,\(set(LUA_MODULE_INSTALL_DIR.*\)),\1/lua/%{luaver}),' \
     -i CMakeLists.txt
+
+# Fix luajit version
+find ./ -name CMakeLists.txt -exec sed -i 's|luajit-2.0|luajit-%{luajit_version}|g' {} \;
 
 # Fix end of line encodings
 %define fix_line_encoding() \
