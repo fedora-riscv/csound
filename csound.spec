@@ -6,7 +6,7 @@
 Summary:       A sound synthesis language and library
 Name:          csound
 Version:       6.03.2
-Release:       15%{?dist}
+Release:       16%{?dist}
 URL:           http://csound.github.io/
 License:       LGPLv2+
 
@@ -81,12 +81,16 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %description devel
 Contains headers and libraries for developing applications that use Csound.
 
-%package python
+%package -n python2-csound
+%{?python_provide:%python_provide python2-csound}
+# Remove before F30
+Provides: %{name}-python%{?_isa} = %{version}-%{release}
+Obsoletes: %{name}-python < %{version}-%{release}
 Summary: Python Csound development files and libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: python
 
-%description python
+%description -n python2-csound
 Contains Python language bindings for developing Python applications that
 use Csound.
 
@@ -295,9 +299,9 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 
 %postun -p /sbin/ldconfig
 
-%post python -p /sbin/ldconfig
+%post -n python2-csound -p /sbin/ldconfig
 
-%postun python -p /sbin/ldconfig
+%postun -n python2-csound -p /sbin/ldconfig
 
 %post csoundac -p /sbin/ldconfig
 
@@ -371,7 +375,7 @@ make csdtests
 %{_libdir}/lib%{name}64.so
 %{_libdir}/libcsnd6.so
 
-%files python
+%files -n python2-csound
 %{_libdir}/libcsnd6.so.6.0
 %{_libdir}/%{name}/plugins-6.0/libpy.so
 %{python_sitearch}/_csnd*
@@ -434,6 +438,10 @@ make csdtests
 %license manual6/copying.txt
 
 %changelog
+* Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 6.03.2-16
+- Python 2 binary package renamed to python2-csound
+  See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
+
 * Wed Aug 02 2017 Fedora Release Engineering <releng@fedoraproject.org> - 6.03.2-15
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
