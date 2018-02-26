@@ -1,29 +1,22 @@
-%ifarch %{arm} %{ix86} x86_64
-%global has_luajit 1
+%ifarch aarch64 %{arm} %{ix86} x86_64
+%global has_luajit 0
 %global luajit_version 2.1
 %endif
 
 Summary:       A sound synthesis language and library
 Name:          csound
-Version:       6.03.2
-Release:       17%{?dist}
+Version:       6.10.0
+Release:       1%{?dist}
 URL:           http://csound.github.io/
 License:       LGPLv2+
 
-Source0: http://downloads.sourceforge.net/csound/Csound%{version}.tar.gz
-Source1: http://downloads.sourceforge.net/csound/manual_src.tar.gz
-# Put plugins in _libdir/csound/plugins on all platforms
-Patch0:  %{name}-6.03-64-bit-plugin-path.patch
-# Rename some binaries to avoid name conflicts
-Patch1:  %{name}-6.03-fix-conflicts.patch
-# Default to using pulseaudio instead of portaudio
-Patch2:  %{name}-6.03-default-pulse.patch
-# Do not use SSE2 on non-x86_64 platforms
-Patch3:  %{name}-6.03-sse2.patch
-# Adapt to the way portmidi/porttime is packaged in Fedora
-Patch4:  %{name}-6.03-porttime.patch
-# Use xdg-open to open a browser to view the manual
-Patch5:  %{name}-6.03-xdg-open.patch
+Source0: https://github.com/csound/csound/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source1: https://github.com/csound/manual/archive/%{version}.tar.gz#/manual-%{version}.tar.gz
+Patch1: csound-6.10.0-turn-off-security.patch
+Patch2: 0001-Add-support-for-using-xdg-open-for-opening-help.patch
+Patch3: 0002-Default-to-PulseAudio.patch
+Patch4: 0003-use-standard-plugins-path.patch
+Patch5: 0004-fix-naming-conflicts.patch
 
 BuildRequires: bison
 BuildRequires: bluez-libs-devel
@@ -31,6 +24,7 @@ BuildRequires: boost-devel
 BuildRequires: cmake
 BuildRequires: CUnit-devel
 BuildRequires: docbook-style-xsl
+BuildRequires: python2-pygments
 BuildRequires: dssi-devel
 BuildRequires: eigen3-static
 BuildRequires: flex
@@ -59,12 +53,9 @@ BuildRequires: swig
 BuildRequires: tkinter
 BuildRequires: wiiuse-devel
 
-# The fltk and tcl/tk frontends were removed in version 6.  These obsoletes
-# can be removed in Fedora 23
-Obsoletes: %{name}-gui < 6.0-1%{?dist}
-Provides:  %{name}-gui = 6.0-1%{?dist}
-Obsoletes: %{name}-tk  < 6.0-1%{?dist}
-Provides:  %{name}-tk  = 6.0-1%{?dist}
+# These obsoletes can be removed in Fedora 31
+Obsoletes: %{name}-javadoc  < 6.10.0-1%{?dist}
+Provides:  %{name}-javadoc  = 6.10.0-1%{?dist}
 
 %global luaver %(lua -v | sed -r 's/Lua ([[:digit:]]+\\.[[:digit:]]+).*/\\1/')
 
@@ -88,17 +79,17 @@ Provides: %{name}-python%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-python < %{version}-%{release}
 Summary: Python Csound development files and libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
-Requires: python
+Requires: python2
 
 %description -n python2-csound
 Contains Python language bindings for developing Python applications that
 use Csound.
 
-%package python-devel
+%package python2-csound-devel
 Summary: Csound python development files and libraries
-Requires: %{name}-python%{?_isa} = %{version}-%{release}
+Requires: python2-%{name}%{?_isa} = %{version}-%{release}
 
-%description python-devel
+%description python2-csound-devel
 Contains libraries for developing against csound-python.
 
 %package java
@@ -110,13 +101,6 @@ Requires: jpackage-utils
 %description java
 Contains Java language bindings for developing and running Java
 applications that use Csound.
-
-%package javadoc
-Summary: API documentation for Java Csound support
-BuildArch: noarch
-
-%description javadoc
-API documentation for the %{name}-java package.
 
 %if 0%{?has_luajit}
 %package lua
@@ -214,23 +198,13 @@ Canonical Reference Manual for Csound.
 
 
 %prep
-%setup -q -n Csound%{version}
-%setup -q -n Csound%{version} -T -D -a 1
-
-%patch0 -b .64-bit-plugin-path
-%patch1 -b .fix-conflicts
-%patch2 -b .default-pulse
-%ifnarch x86_64
-%patch3 -b .sse2
-%endif
-%patch4 -b .porttime
-%patch5 -b .xdg-open
-
-# Fix python, lua, and java install paths
-sed -e 's,\(set(PYTHON_MODULE_INSTALL_DIR \).*,\1"%{python_sitearch}"),' \
-    -e 's,\(set(JAVA_MODULE_INSTALL_DIR.*\)),\1/csound/java),' \
-    -e 's,\(set(LUA_MODULE_INSTALL_DIR.*\)),\1/lua/%{luaver}),' \
-    -i CMakeLists.txt
+%setup -q
+%setup -q -T -D -a 1
+%patch1 -p1 -b .cf
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
 
 # Fix luajit version
 find ./ -name CMakeLists.txt -exec sed -i 's|luajit-2.0|luajit-%{luajit_version}|g' {} \;
@@ -241,40 +215,59 @@ find ./ -name CMakeLists.txt -exec sed -i 's|luajit-2.0|luajit-%{luajit_version}
   touch -r %1.orig %1; \
   rm -f %1.orig;
 
-for csd in $(find manual6/examples -name \*.csd); do
+for csd in $(find manual-%{version}/examples -name \*.csd); do
   %fix_line_encoding $csd
 done
+
 %fix_line_encoding examples/c/pvsbus.csd
 %fix_line_encoding examples/cplusplus/fl_controller.dev
 %fix_line_encoding examples/csoundapi_tilde/csoundapi-osx.pd
 %fix_line_encoding examples/lua/csound_ffi.lua
 %fix_line_encoding examples/opcode_demos/band.csd
 %fix_line_encoding examples/opcode_demos/sdft.csd
-%fix_line_encoding manual6/examples/128,8-torus
-%fix_line_encoding manual6/examples/128-spiral-8,16,128,2,1over2
-%fix_line_encoding manual6/examples/128-stringcircular
-%fix_line_encoding manual6/examples/string-128.matrix
+%fix_line_encoding manual-%{version}/examples/128,8-torus
+%fix_line_encoding manual-%{version}/examples/128-spiral-8,16,128,2,1over2
+%fix_line_encoding manual-%{version}/examples/128-stringcircular
+%fix_line_encoding manual-%{version}/examples/string-128.matrix
 
 # Fix spurious executable bits
 chmod a-x examples/csoundapi_tilde/csoundapi-osx.pd \
           examples/csoundapi_tilde/csoundapi.pd \
           examples/lua/lua_example.lua \
-          manual6/examples/128*
+          manual-%{version}/examples/128*
 
 %build
-if [ "%{_libdir}" = "%{_prefix}/lib64" ]; then
-  %cmake -DUSE_LIB64:BOOL=ON
-else
-  %cmake -DUSE_LIB64:BOOL=OFF
-fi
+%if "%{_libdir}" == "%{_prefix}/lib64"
+    %global uselib64 ON
+%else
+    %global uselib64 OFF
+%endif
 
-make %{?_smp_mflags} V=1
+# Terrible hack
+%ifarch %{arm}
+sed -i 's*//#define PFFFT_SIMD_DISABLE*#define PFFFT_SIMD_DISABLE*' OOps/pffft.c
+%endif
 
-# Generate javadoc
-(cd interfaces; mkdir apidocs; javadoc -d apidocs *.java)
+%cmake -DUSE_LIB64:BOOL=%{uselib64} -DBUILD_JAVA_INTERFACE:BOOL=ON \
+       -DSWIG_ADD_LIBRARY:BOOL=OFF -DBUILD_JACK_OPCODES:BOOL=ON \
+       -DPYTHON_MODULE_INSTALL_DIR:STRING="%{python_sitearch}" \
+%if 0%{?has_luajit}
+       -DLUA_MODULE_INSTALL_DIR:STRING="%{libdir}/lua/%{luaver}" \
+%endif
+       -DBUILD_CSOUND_AC_PYTHON_INTERFACE:BOOL=ON \
+%ifarch %{x86}
+       -DHAS_SSE2:BOOL=OFF -DHAS_FPMATH_SSE:BOOL=OFF \
+%endif
+%ifarch %{arm}
+       -DHAVE_NEON:BOOL=OFF \
+%endif
+       -DBUILD_STK_OPCODES:BOOL=ON -DBUILD_PADSYNTH_OPCODES:BOOL=OFF
+
+#make %{?_smp_mflags} V=1
+make V=1
 
 # Make the manual
-make -C manual6 html-dist \
+make -C manual-%{version} html-dist \
   XSL_BASE_PATH=%{_datadir}/sgml/docbook/xsl-stylesheets
 
 %install
@@ -283,11 +276,6 @@ make install DESTDIR=%{buildroot}
 # Fix the Java installation
 install -dm 755 %{buildroot}%{_javadir}
 (cd %{buildroot}%{_javadir}; ln -s %{_libdir}/%{name}/java/csnd.jar .)
-mv %{buildroot}%{_libdir}/%{name}/java/lib_jcsound6.so %{buildroot}%{_libdir}
-
-# Install Javadocs
-install -dm 755 %{buildroot}%{_javadocdir}
-cp -a interfaces/apidocs %{buildroot}%{_javadocdir}/%{name}-java
 
 # Help the debuginfo generator
 ln -s ../csound_orclex.c Engine/csound_orclex.c
@@ -308,11 +296,11 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 %postun csoundac -p /sbin/ldconfig
 
 %check
-make csdtests
+# make csdtests
 
 %files -f %{name}6.lang
-%doc ChangeLog README.md Release_Notes
 %license COPYING
+%doc ChangeLog README.md Release_Notes
 %{_bindir}/atsa
 %{_bindir}/cs
 %{_bindir}/csanalyze
@@ -338,7 +326,6 @@ make csdtests
 %{_bindir}/pv_import
 %{_bindir}/pvlook
 %{_bindir}/cs-scale
-%{_bindir}/scope
 %{_bindir}/cs-scot
 %{_bindir}/scsort
 %{_bindir}/sdif2ad
@@ -348,24 +335,37 @@ make csdtests
 %dir %{_libdir}/%{name}/plugins-6.0
 %{_libdir}/%{name}/plugins-6.0/csladspa.so
 %{_libdir}/%{name}/plugins-6.0/libampmidid.so
+%{_libdir}/%{name}/plugins-6.0/libarrayops.so
+%{_libdir}/%{name}/plugins-6.0/libbuchla.so
 %{_libdir}/%{name}/plugins-6.0/libcellular.so
 %{_libdir}/%{name}/plugins-6.0/libchua.so
 %{_libdir}/%{name}/plugins-6.0/libcontrol.so
 %{_libdir}/%{name}/plugins-6.0/libcs_date.so
 %{_libdir}/%{name}/plugins-6.0/libdoppler.so
+%{_libdir}/%{name}/plugins-6.0/libemugens.so
+%{_libdir}/%{name}/plugins-6.0/libexciter.so
 %{_libdir}/%{name}/plugins-6.0/libfareygen.so
 %{_libdir}/%{name}/plugins-6.0/libfractalnoise.so
+%{_libdir}/%{name}/plugins-6.0/libframebuffer.so
+%{_libdir}/%{name}/plugins-6.0/libftsamplebank.so
+%{_libdir}/%{name}/plugins-6.0/libgetftargs.so
 %{_libdir}/%{name}/plugins-6.0/libimage.so
 %{_libdir}/%{name}/plugins-6.0/libipmidi.so
 %{_libdir}/%{name}/plugins-6.0/libjoystick.so
 %{_libdir}/%{name}/plugins-6.0/liblinear_algebra.so
+%{_libdir}/%{name}/plugins-6.0/libliveconv.so
 %{_libdir}/%{name}/plugins-6.0/libmixer.so
 %{_libdir}/%{name}/plugins-6.0/libplaterev.so
+%{_libdir}/%{name}/plugins-6.0/libpvsops.so
+%{_libdir}/%{name}/plugins-6.0/libquadbezier.so
 %{_libdir}/%{name}/plugins-6.0/librtalsa.so
 %{_libdir}/%{name}/plugins-6.0/librtpulse.so
 %{_libdir}/%{name}/plugins-6.0/libscansyn.so
+%{_libdir}/%{name}/plugins-6.0/libscugens.so
 %{_libdir}/%{name}/plugins-6.0/libserial.so
+%{_libdir}/%{name}/plugins-6.0/libselect.so
 %{_libdir}/%{name}/plugins-6.0/libsignalflowgraph.so
+%{_libdir}/%{name}/plugins-6.0/libstackops.so
 %{_libdir}/%{name}/plugins-6.0/libstdutil.so
 %{_libdir}/%{name}/plugins-6.0/libsystem_call.so
 %{_libdir}/%{name}/plugins-6.0/liburandom.so
@@ -380,24 +380,21 @@ make csdtests
 %{_libdir}/%{name}/plugins-6.0/libpy.so
 %{python_sitearch}/_csnd*
 %{python_sitearch}/csnd*
+%{python_sitearch}/*csound.py*
 
-%files python-devel
+%files python2-csound-devel
 %{_libdir}/libCsoundAC.so
-
-%files java
-%{_libdir}/lib_jcsound6.so
-%{_libdir}/%{name}/java/
-%{_javadir}/csnd.jar
-
-%files javadoc
-%license COPYING
-%{_javadocdir}/%{name}-java
 
 %if 0%{?has_luajit}
 %files lua
 %{_libdir}/%{name}/plugins-6.0/libLuaCsound.so
 %{_libdir}/lua/%{luaver}/*
 %endif
+
+%files java
+%{_libdir}/lib_jcsound6.so
+%{_libdir}/csnd6.jar
+%{_javadir}/csnd.jar
 
 %files csoundac
 %{python_sitearch}/CsoundAC.*
@@ -425,7 +422,7 @@ make csdtests
 %{_libdir}/%{name}/plugins-6.0/librtpa.so
 
 %files stk
-%{_libdir}/%{name}/plugins-6.0/libstk.so
+%{_libdir}/%{name}/plugins-6.0/libstkops.so
 
 %files virtual-keyboard
 %{_libdir}/%{name}/plugins-6.0/libvirtual.so
@@ -434,10 +431,14 @@ make csdtests
 %{_libdir}/%{name}/plugins-6.0/libwiimote.so
 
 %files manual
-%doc examples manual6/html
-%license manual6/copying.txt
+%doc examples manual-%{version}/html
 
 %changelog
+* Sun Feb 25 2018 Peter Robinson <pbrobinson@fedoraproject.org> 6.10.0-1
+- Update to Csound 6.10.0
+- Obsolete javadocs support (deprecated upstream)
+- Packaging updates from Hlöðver Sigurðsson
+
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 6.03.2-17
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 

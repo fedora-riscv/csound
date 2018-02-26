@@ -1,6 +1,23 @@
---- installer/linux/d32.sh.orig	2014-05-04 05:49:43.213736146 -0600
-+++ installer/linux/d32.sh	2014-05-05 20:15:00.000000000 -0600
-@@ -13,7 +13,7 @@ mkdir -p -m 0755 ../../../CSDIST/$DIR/lo
+From 153a2fbf4092b3967cb2c6d746df0eaecc67e505 Mon Sep 17 00:00:00 2001
+From: Peter Robinson <pbrobinson@gmail.com>
+Date: Thu, 1 Feb 2018 09:36:26 +0000
+Subject: [PATCH] fix naming conflicts
+
+---
+ installer/linux/d32.sh      |  2 +-
+ installer/linux/d64.sh      |  2 +-
+ installer/linux/f32.sh      |  2 +-
+ installer/linux/f64.sh      |  2 +-
+ installer/misc/mkpackage.py | 10 +++++-----
+ util/CMakeLists.txt         | 12 ++++++------
+ util1/CMakeLists.txt        |  4 ++--
+ 7 files changed, 17 insertions(+), 17 deletions(-)
+
+diff --git a/installer/linux/d32.sh b/installer/linux/d32.sh
+index 8828e6db9..36b329eeb 100644
+--- a/installer/linux/d32.sh
++++ b/installer/linux/d32.sh
+@@ -13,7 +13,7 @@ mkdir -p -m 0755 ../../../CSDIST/$DIR/loc
  
  rm ../../../CSDIST/$DIR/bin/*
  
@@ -9,9 +26,11 @@
  
  strip ../../../CSDIST/$DIR/bin/*
  
---- installer/linux/d64.sh.orig	2014-05-04 05:49:43.213736146 -0600
-+++ installer/linux/d64.sh	2014-05-05 20:15:00.000000000 -0600
-@@ -12,7 +12,7 @@ mkdir -p -m 0755 ../../../CSDIST/$DIR/lo
+diff --git a/installer/linux/d64.sh b/installer/linux/d64.sh
+index 7a18783ed..2a94bd1ba 100644
+--- a/installer/linux/d64.sh
++++ b/installer/linux/d64.sh
+@@ -12,7 +12,7 @@ mkdir -p -m 0755 ../../../CSDIST/$DIR/loc
  
  rm ../../../CSDIST/$DIR/bin/*
  
@@ -20,9 +39,11 @@
  
  strip ../../../CSDIST/$DIR/bin/*
  
---- installer/linux/f32.sh.orig	2014-05-04 05:49:43.213736146 -0600
-+++ installer/linux/f32.sh	2014-05-05 20:15:00.000000000 -0600
-@@ -12,7 +12,7 @@ mkdir -p -m 0755 ../../../CSDIST/$DIR/lo
+diff --git a/installer/linux/f32.sh b/installer/linux/f32.sh
+index c5bd83528..5368566fb 100644
+--- a/installer/linux/f32.sh
++++ b/installer/linux/f32.sh
+@@ -12,7 +12,7 @@ mkdir -p -m 0755 ../../../CSDIST/$DIR/loc
  
  rm ../../../CSDIST/$DIR/bin/*
  
@@ -31,9 +52,11 @@
  
  strip ../../../CSDIST/$DIR/bin/*
  
---- installer/linux/f64.sh.orig	2014-05-04 05:49:43.213736146 -0600
-+++ installer/linux/f64.sh	2014-05-05 20:15:00.000000000 -0600
-@@ -12,7 +12,7 @@ mkdir -p -m 0755 ../../../CSDIST/$DIR/lo
+diff --git a/installer/linux/f64.sh b/installer/linux/f64.sh
+index 76b6ed1ef..090662533 100644
+--- a/installer/linux/f64.sh
++++ b/installer/linux/f64.sh
+@@ -12,7 +12,7 @@ mkdir -p -m 0755 ../../../CSDIST/$DIR/loc
  
  rm ../../../CSDIST/$DIR/bin/*
  
@@ -42,9 +65,11 @@
  
  strip ../../../CSDIST/$DIR/bin/*
  
---- installer/misc/mkpackage.py.orig	2014-05-05 17:00:10.347460267 -0600
-+++ installer/misc/mkpackage.py	2014-05-05 20:15:00.000000000 -0600
-@@ -71,13 +71,13 @@ headerFiles += ['interfaces/CppSound.hpp
+diff --git a/installer/misc/mkpackage.py b/installer/misc/mkpackage.py
+index fe3d86077..4dafa995c 100755
+--- a/installer/misc/mkpackage.py
++++ b/installer/misc/mkpackage.py
+@@ -71,13 +71,13 @@ headerFiles += ['interfaces/CppSound.hpp', 'interfaces/filebuilding.h']
  headerFiles += ['interfaces/CsoundFile.hpp']
  
  utils1 = ['csound', 'winsound', 'cstclsh', 'cswish',
@@ -63,28 +88,11 @@
  
  docFiles = ['COPYING', 'ChangeLog', 'INSTALL', 'readme-csound6.txt']
  
---- util1/CMakeLists.txt.orig	2014-05-04 05:49:44.284746142 -0600
-+++ util1/CMakeLists.txt	2014-05-05 20:15:00.000000000 -0600
-@@ -1,7 +1,7 @@
- #extra utilities
- 
- make_utility(scsort      sortex/smain.c)
--make_utility(extract     sortex/xmain.c)
-+make_utility(cs-extract  sortex/xmain.c)
- 
- if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_CLANG)
-     if(HAVE_UNISTD_H)
-@@ -19,6 +19,6 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMP
-     
-     set(scot_SRCS 
-         scot/scot_main.c scot/scot.c)
--    make_utility(scot "${scot_SRCS}")
-+    make_utility(cs-scot "${scot_SRCS}")
- endif()
- 
---- util/CMakeLists.txt.orig	2014-05-04 05:49:44.239745722 -0600
-+++ util/CMakeLists.txt	2014-05-05 20:15:00.000000000 -0600
-@@ -17,8 +17,8 @@ if(BUILD_UTILITIES)
+diff --git a/util/CMakeLists.txt b/util/CMakeLists.txt
+index da2e116a2..553a53f36 100644
+--- a/util/CMakeLists.txt
++++ b/util/CMakeLists.txt
+@@ -25,15 +25,15 @@ if(BUILD_UTILITIES)
      make_utility(csanalyze   csanalyze.c)
      make_utility(cvanal      cvl_main.c)
      make_utility(dnoise      dnoise_main.c)
@@ -95,21 +103,48 @@
      make_utility(het_export  hetx_main.c)
      make_utility(het_import  heti_main.c)
      make_utility(hetro       het_main.c)
-@@ -26,13 +26,13 @@ if(BUILD_UTILITIES)
+     make_utility(lpanal      lpc_main.c)
      make_utility(lpc_export  lpcx_main.c)
-     target_link_libraries(lpc_export m)
      make_utility(lpc_import  lpci_main.c)
 -    make_executable(mixer-bin   mixer_main.c   "${CSOUNDLIB}" mixer)
 +    make_executable(mixer-bin   mixer_main.c   "${CSOUNDLIB}" cs-mixer)
-     make_utility(pvanal      pvc_main.c)
+     if(LINUX)
+       target_link_libraries(mixer-bin m)
+     endif()
+@@ -41,9 +41,9 @@ if(BUILD_UTILITIES)
      make_utility(pvlook      pvl_main.c)
      make_utility(pv_export   pvx_main.c)
      make_utility(pv_import   pvi_main.c)
 -    make_utility(scale       scale_main.c)
 -    make_utility(sndinfo     sndinfo_main.c)
 -    make_utility(srconv      srconv_main.c)
-+    make_utility(cs-scale    scale_main.c)
-+    make_utility(cs-sndinfo  sndinfo_main.c)
-+    make_utility(cs-srconv   srconv_main.c)
-     make_utility(scope       scope_main.c)          
++    make_utility(cs-scale       scale_main.c)
++    make_utility(cs-sndinfo     sndinfo_main.c)
++    make_utility(cs-srconv      srconv_main.c)
+ 
+ 
+     find_library(LIBSNDFILE_LIBRARY sndfile libsndfile-1)
+diff --git a/util1/CMakeLists.txt b/util1/CMakeLists.txt
+index 639ed0ac6..2078c0136 100644
+--- a/util1/CMakeLists.txt
++++ b/util1/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ #extra utilities
+ 
+ make_utility(scsort      sortex/smain.c)
+-make_utility(extract     sortex/xmain.c)
++make_utility(cs-extract  sortex/xmain.c)
+ 
+ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_CLANG OR MSVC)
+     make_utility(cs         csd_util/cs.c)
+@@ -19,6 +19,6 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_CLANG OR MSVC)
+ 
+     set(scot_SRCS
+         scot/scot_main.c scot/scot.c)
+-    make_utility(scot "${scot_SRCS}")
++    make_utility(cs-scot "${scot_SRCS}")
  endif()
+ 
+-- 
+2.14.3
+
