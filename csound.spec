@@ -1,22 +1,20 @@
-%ifarch aarch64 %{arm} %{ix86} x86_64
 %global has_luajit 0
 %global luajit_version 2.1
-%endif
 
-Summary:       A sound synthesis language and library
-Name:          csound
-Version:       6.10.0
-Release:       1%{?dist}
-URL:           http://csound.github.io/
-License:       LGPLv2+
+Name:    csound
+Version: 6.10.0
+Release: 2%{?dist}
+Summary: A sound synthesis language and library
+URL:     http://csound.github.io/
+License: LGPLv2+
 
 Source0: https://github.com/csound/csound/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1: https://github.com/csound/manual/archive/%{version}.tar.gz#/manual-%{version}.tar.gz
-Patch1: csound-6.10.0-turn-off-security.patch
-Patch2: 0001-Add-support-for-using-xdg-open-for-opening-help.patch
-Patch3: 0002-Default-to-PulseAudio.patch
-Patch4: 0003-use-standard-plugins-path.patch
-Patch5: 0004-fix-naming-conflicts.patch
+Patch1:  csound-6.10.0-turn-off-security.patch
+Patch2:  0001-Add-support-for-using-xdg-open-for-opening-help.patch
+Patch3:  0002-Default-to-PulseAudio.patch
+Patch4:  0003-use-standard-plugins-path.patch
+Patch5:  0004-fix-naming-conflicts.patch
 
 BuildRequires: bison
 BuildRequires: bluez-libs-devel
@@ -56,6 +54,8 @@ BuildRequires: wiiuse-devel
 # These obsoletes can be removed in Fedora 31
 Obsoletes: %{name}-javadoc  < 6.10.0-1%{?dist}
 Provides:  %{name}-javadoc  = 6.10.0-1%{?dist}
+Obsoletes: %{name}-lua  < 6.10.0-1%{?dist}
+Provides:  %{name}-lua  = 6.10.0-1%{?dist}
 
 %global luaver %(lua -v | sed -r 's/Lua ([[:digit:]]+\\.[[:digit:]]+).*/\\1/')
 
@@ -85,12 +85,15 @@ Requires: python2
 Contains Python language bindings for developing Python applications that
 use Csound.
 
-%package python2-csound-devel
+%package -n python2-csound-devel
 Summary: Csound python development files and libraries
+# Remove before F30
+Provides: %{name}-python-devel%{?_isa} = %{version}-%{release}
+Obsoletes: %{name}-python-devel < %{version}-%{release}
 Requires: python2-%{name}%{?_isa} = %{version}-%{release}
 
-%description python2-csound-devel
-Contains libraries for developing against csound-python.
+%description -n python2-csound-devel
+Contains libraries for developing against CSound python bindings.
 
 %package java
 Summary: Java Csound support
@@ -434,6 +437,9 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 %doc examples manual-%{version}/html
 
 %changelog
+* Wed Apr 25 2018 Peter Robinson <pbrobinson@fedoraproject.org> 6.10.0-2
+- Fix upgrade path
+
 * Sun Feb 25 2018 Peter Robinson <pbrobinson@fedoraproject.org> 6.10.0-1
 - Update to Csound 6.10.0
 - Obsolete javadocs support (deprecated upstream)
