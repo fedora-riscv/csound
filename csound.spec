@@ -385,7 +385,7 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 %{python_sitearch}/csnd*
 %{python_sitearch}/*csound.py*
 
-%files python2-csound-devel
+%files -n python2-csound-devel
 %{_libdir}/libCsoundAC.so
 
 %if 0%{?has_luajit}
