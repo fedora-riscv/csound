@@ -16,6 +16,7 @@ Patch3:  0002-Default-to-PulseAudio.patch
 Patch4:  0003-use-standard-plugins-path.patch
 Patch5:  0004-fix-naming-conflicts.patch
 
+BuildRequires:  gcc-c++
 BuildRequires: bison
 BuildRequires: bluez-libs-devel
 BuildRequires: boost-devel
