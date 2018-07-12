@@ -3,7 +3,7 @@
 
 Name:    csound
 Version: 6.10.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: A sound synthesis language and library
 URL:     http://csound.github.io/
 License: LGPLv2+
@@ -438,6 +438,9 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 %doc examples manual-%{version}/html
 
 %changelog
+* Thu Jul 12 2018 Fedora Release Engineering <releng@fedoraproject.org> - 6.10.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Wed Apr 25 2018 Peter Robinson <pbrobinson@fedoraproject.org> 6.10.0-2
 - Fix upgrade path
 
