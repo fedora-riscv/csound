@@ -16,14 +16,13 @@ Patch3:  0002-Default-to-PulseAudio.patch
 Patch4:  0003-use-standard-plugins-path.patch
 Patch5:  0004-fix-naming-conflicts.patch
 
-BuildRequires:  gcc-c++
+BuildRequires: gcc gcc-c++
 BuildRequires: bison
 BuildRequires: bluez-libs-devel
 BuildRequires: boost-devel
 BuildRequires: cmake
 BuildRequires: CUnit-devel
 BuildRequires: docbook-style-xsl
-BuildRequires: python2-pygments
 BuildRequires: dssi-devel
 BuildRequires: eigen3-static
 BuildRequires: flex
@@ -37,6 +36,7 @@ BuildRequires: jpackage-utils
 BuildRequires: libcurl-devel
 BuildRequires: liblo-devel
 BuildRequires: libpng-devel
+BuildRequires: libsamplerate-devel
 BuildRequires: libsndfile-devel
 BuildRequires: libvorbis-devel
 BuildRequires: libxslt
@@ -46,7 +46,10 @@ BuildRequires: luajit-devel
 BuildRequires: portaudio-devel
 BuildRequires: portmidi-devel
 BuildRequires: pulseaudio-libs-devel
+BuildRequires: python-unversioned-command
 BuildRequires: python2-devel
+BuildRequires: python2-setuptools
+BuildRequires: python2-pygments
 BuildRequires: stk-devel
 BuildRequires: swig
 BuildRequires: tkinter
