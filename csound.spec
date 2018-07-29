@@ -385,9 +385,9 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 %files -n python2-csound
 %{_libdir}/libcsnd6.so.6.0
 %{_libdir}/%{name}/plugins-6.0/libpy.so
-%{python_sitearch}/_csnd*
-%{python_sitearch}/csnd*
-%{python_sitearch}/*csound.py*
+%{python2_sitearch}/_csnd*
+%{python2_sitearch}/csnd*
+%{python2_sitearch}/*csound.py*
 
 %files -n python2-csound-devel
 %{_libdir}/libCsoundAC.so
@@ -404,8 +404,8 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 %{_javadir}/csnd.jar
 
 %files csoundac
-%{python_sitearch}/CsoundAC.*
-%{python_sitearch}/_CsoundAC.*
+%{python2_sitearch}/CsoundAC.*
+%{python2_sitearch}/_CsoundAC.*
 %{_libdir}/libCsoundAC.so.*
 
 %files fltk
