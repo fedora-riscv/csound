@@ -46,7 +46,6 @@ BuildRequires: luajit-devel
 BuildRequires: portaudio-devel
 BuildRequires: portmidi-devel
 BuildRequires: pulseaudio-libs-devel
-BuildRequires: python-unversioned-command
 BuildRequires: python2-devel
 BuildRequires: python2-setuptools
 BuildRequires: python2-pygments
@@ -257,7 +256,7 @@ sed -i 's*//#define PFFFT_SIMD_DISABLE*#define PFFFT_SIMD_DISABLE*' OOps/pffft.c
 
 %cmake -DUSE_LIB64:BOOL=%{uselib64} -DBUILD_JAVA_INTERFACE:BOOL=ON \
        -DSWIG_ADD_LIBRARY:BOOL=OFF -DBUILD_JACK_OPCODES:BOOL=ON \
-       -DPYTHON_MODULE_INSTALL_DIR:STRING="%{python_sitearch}" \
+       -DPYTHON_MODULE_INSTALL_DIR:STRING="%{python2_sitearch}" \
 %if 0%{?has_luajit}
        -DLUA_MODULE_INSTALL_DIR:STRING="%{libdir}/lua/%{luaver}" \
 %endif
