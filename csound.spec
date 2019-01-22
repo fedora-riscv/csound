@@ -289,17 +289,11 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 
 %find_lang %{name}6
 
-%post -p /sbin/ldconfig
+%ldconfig_scriptlets
 
-%postun -p /sbin/ldconfig
+%ldconfig_scriptlets -n python2-csound
 
-%post -n python2-csound -p /sbin/ldconfig
-
-%postun -n python2-csound -p /sbin/ldconfig
-
-%post csoundac -p /sbin/ldconfig
-
-%postun csoundac -p /sbin/ldconfig
+%ldconfig_scriptlets csoundac
 
 %check
 # make csdtests
