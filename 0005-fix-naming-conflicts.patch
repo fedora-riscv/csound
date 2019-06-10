@@ -1,17 +1,19 @@
-From 153a2fbf4092b3967cb2c6d746df0eaecc67e505 Mon Sep 17 00:00:00 2001
+From d665d942ec45ea7eab301ee19e7b4f261bd7787c Mon Sep 17 00:00:00 2001
 From: Peter Robinson <pbrobinson@gmail.com>
-Date: Thu, 1 Feb 2018 09:36:26 +0000
-Subject: [PATCH] fix naming conflicts
+Date: Sun, 7 Oct 2018 22:53:52 +0100
+Subject: [PATCH 5/5] fix naming conflicts
 
+Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
 ---
  installer/linux/d32.sh      |  2 +-
  installer/linux/d64.sh      |  2 +-
  installer/linux/f32.sh      |  2 +-
  installer/linux/f64.sh      |  2 +-
  installer/misc/mkpackage.py | 10 +++++-----
- util/CMakeLists.txt         | 12 ++++++------
+ util/CMakeLists.txt         | 18 +++++++++---------
+ util/make_src_conv          |  2 +-
  util1/CMakeLists.txt        |  4 ++--
- 7 files changed, 17 insertions(+), 17 deletions(-)
+ 8 files changed, 21 insertions(+), 21 deletions(-)
 
 diff --git a/installer/linux/d32.sh b/installer/linux/d32.sh
 index 8828e6db9..36b329eeb 100644
@@ -89,7 +91,7 @@ index fe3d86077..4dafa995c 100755
  docFiles = ['COPYING', 'ChangeLog', 'INSTALL', 'readme-csound6.txt']
  
 diff --git a/util/CMakeLists.txt b/util/CMakeLists.txt
-index da2e116a2..553a53f36 100644
+index 193ee6b3b..1108a72f4 100644
 --- a/util/CMakeLists.txt
 +++ b/util/CMakeLists.txt
 @@ -25,15 +25,15 @@ if(BUILD_UTILITIES)
@@ -111,7 +113,7 @@ index da2e116a2..553a53f36 100644
      if(LINUX)
        target_link_libraries(mixer-bin m)
      endif()
-@@ -41,9 +41,9 @@ if(BUILD_UTILITIES)
+@@ -41,21 +41,21 @@ if(BUILD_UTILITIES)
      make_utility(pvlook      pvl_main.c)
      make_utility(pv_export   pvx_main.c)
      make_utility(pv_import   pvi_main.c)
@@ -123,7 +125,31 @@ index da2e116a2..553a53f36 100644
 +    make_utility(cs-srconv      srconv_main.c)
  
  
-     find_library(LIBSNDFILE_LIBRARY sndfile libsndfile-1)
+     #find_library(LIBSNDFILE_LIBRARY sndfile libsndfile-1)
+     find_library(LIBSAMPLERATE_LIBRARY NAMES samplerate libsamplerate-0)
+ 
+     if(LIBSNDFILE_LIBRARY AND LIBSAMPLERATE_LIBRARY)
+-        make_executable(src_conv new_srconv.c "${LIBSNDFILE_LIBRARY};${LIBSAMPLERATE_LIBRARY}")
++        make_executable(cs-src_conv new_srconv.c "${LIBSNDFILE_LIBRARY};${LIBSAMPLERATE_LIBRARY}")
+         if(MSVC)
+-            target_link_libraries(src_conv ${LIBSNDFILE_SUPPORT_LIBS})
++            target_link_libraries(cs-src_conv ${LIBSNDFILE_SUPPORT_LIBS})
+         endif()
+     else()
+-        message(STATUS "Not building src_conv (libsndfile or libsamplerate not found).")
++        message(STATUS "Not building cs-src_conv (libsndfile or libsamplerate not found).")
+     endif()
+ 
+ endif()
+diff --git a/util/make_src_conv b/util/make_src_conv
+index ce5a90b8b..589609153 100755
+--- a/util/make_src_conv
++++ b/util/make_src_conv
+@@ -1,2 +1,2 @@
+ #!/bin/sh
+-gcc -g new_srconv.c -lsndfile -lsamplerate -o src_conv
+\ No newline at end of file
++gcc -g new_srconv.c -lsndfile -lsamplerate -o cs-src_conv
 diff --git a/util1/CMakeLists.txt b/util1/CMakeLists.txt
 index 639ed0ac6..2078c0136 100644
 --- a/util1/CMakeLists.txt
@@ -146,5 +172,5 @@ index 639ed0ac6..2078c0136 100644
  endif()
  
 -- 
-2.14.3
+2.19.0
 

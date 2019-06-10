@@ -2,19 +2,19 @@
 %global luajit_version 2.1
 
 Name:    csound
-Version: 6.10.0
-Release: 4%{?dist}
+Version: 6.12.2
+Release: 1%{?dist}
 Summary: A sound synthesis language and library
 URL:     http://csound.github.io/
 License: LGPLv2+
 
 Source0: https://github.com/csound/csound/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-Source1: https://github.com/csound/manual/archive/%{version}.tar.gz#/manual-%{version}.tar.gz
-Patch1:  csound-6.10.0-turn-off-security.patch
-Patch2:  0001-Add-support-for-using-xdg-open-for-opening-help.patch
-Patch3:  0002-Default-to-PulseAudio.patch
-Patch4:  0003-use-standard-plugins-path.patch
-Patch5:  0004-fix-naming-conflicts.patch
+Source1: https://github.com/csound/manual/archive/Csound6.12.2_manual_html.zip
+
+Patch2:  0002-Add-support-for-using-xdg-open-for-opening-help.patch
+Patch3:  0003-Default-to-PulseAudio.patch
+Patch4:  0004-use-standard-plugins-path.patch
+Patch5:  0005-fix-naming-conflicts.patch
 
 BuildRequires: gcc gcc-c++
 BuildRequires: bison
@@ -204,13 +204,9 @@ Canonical Reference Manual for Csound.
 
 
 %prep
-%setup -q
+%autosetup -p1
+# setup the manual
 %setup -q -T -D -a 1
-%patch1 -p1 -b .cf
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
 
 # Fix luajit version
 find ./ -name CMakeLists.txt -exec sed -i 's|luajit-2.0|luajit-%{luajit_version}|g' {} \;
@@ -221,26 +217,17 @@ find ./ -name CMakeLists.txt -exec sed -i 's|luajit-2.0|luajit-%{luajit_version}
   touch -r %1.orig %1; \
   rm -f %1.orig;
 
-for csd in $(find manual-%{version}/examples -name \*.csd); do
+for csd in $(find html/examples -name \*.csd); do
   %fix_line_encoding $csd
 done
 
-%fix_line_encoding examples/c/pvsbus.csd
-%fix_line_encoding examples/cplusplus/fl_controller.dev
-%fix_line_encoding examples/csoundapi_tilde/csoundapi-osx.pd
-%fix_line_encoding examples/lua/csound_ffi.lua
-%fix_line_encoding examples/opcode_demos/band.csd
-%fix_line_encoding examples/opcode_demos/sdft.csd
-%fix_line_encoding manual-%{version}/examples/128,8-torus
-%fix_line_encoding manual-%{version}/examples/128-spiral-8,16,128,2,1over2
-%fix_line_encoding manual-%{version}/examples/128-stringcircular
-%fix_line_encoding manual-%{version}/examples/string-128.matrix
+%fix_line_encoding html/examples/128,8-torus
+%fix_line_encoding html/examples/128-spiral-8,16,128,2,1over2
+%fix_line_encoding html/examples/128-stringcircular
+%fix_line_encoding html/examples/string-128.matrix
 
 # Fix spurious executable bits
-chmod a-x examples/csoundapi_tilde/csoundapi-osx.pd \
-          examples/csoundapi_tilde/csoundapi.pd \
-          examples/lua/lua_example.lua \
-          manual-%{version}/examples/128*
+chmod a-x html/examples/*
 
 %build
 %if "%{_libdir}" == "%{_prefix}/lib64"
@@ -260,24 +247,19 @@ sed -i 's*//#define PFFFT_SIMD_DISABLE*#define PFFFT_SIMD_DISABLE*' OOps/pffft.c
 %if 0%{?has_luajit}
        -DLUA_MODULE_INSTALL_DIR:STRING="%{libdir}/lua/%{luaver}" \
 %endif
-       -DBUILD_CSOUND_AC_PYTHON_INTERFACE:BOOL=ON \
+       -DBUILD_CSOUND_AC:BOOL=ON -DBUILD_CSOUND_AC_PYTHON_INTERFACE:BOOL=ON \
 %ifarch %{x86}
        -DHAS_SSE2:BOOL=OFF -DHAS_FPMATH_SSE:BOOL=OFF \
 %endif
-%ifarch %{arm}
+%ifarch %{arm} aarch64
        -DHAVE_NEON:BOOL=OFF \
 %endif
        -DBUILD_STK_OPCODES:BOOL=ON -DBUILD_PADSYNTH_OPCODES:BOOL=OFF
 
-#make %{?_smp_mflags} V=1
-make V=1
-
-# Make the manual
-make -C manual-%{version} html-dist \
-  XSL_BASE_PATH=%{_datadir}/sgml/docbook/xsl-stylesheets
+%make_build
 
 %install
-make install DESTDIR=%{buildroot}
+%make_install
 
 # Fix the Java installation
 install -dm 755 %{buildroot}%{_javadir}
@@ -286,6 +268,8 @@ install -dm 755 %{buildroot}%{_javadir}
 # Help the debuginfo generator
 ln -s ../csound_orclex.c Engine/csound_orclex.c
 ln -s ../csound_prelex.c Engine/csound_prelex.c
+
+rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 
 %find_lang %{name}6
 
@@ -300,7 +284,7 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 
 %files -f %{name}6.lang
 %license COPYING
-%doc ChangeLog README.md Release_Notes
+%doc README.md Release_Notes
 %{_bindir}/atsa
 %{_bindir}/cs
 %{_bindir}/csanalyze
@@ -331,11 +315,13 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 %{_bindir}/sdif2ad
 %{_bindir}/cs-sndinfo
 %{_bindir}/cs-srconv
+%{_bindir}/cs-src_conv
 %{_libdir}/lib%{name}64.so.6.0
 %dir %{_libdir}/%{name}/plugins-6.0
-%{_libdir}/%{name}/plugins-6.0/csladspa.so
+#%{_libdir}/%{name}/plugins-6.0/csladspa.so
 %{_libdir}/%{name}/plugins-6.0/libampmidid.so
 %{_libdir}/%{name}/plugins-6.0/libarrayops.so
+%{_libdir}/%{name}/plugins-6.0/libbeosc.so
 %{_libdir}/%{name}/plugins-6.0/libbuchla.so
 %{_libdir}/%{name}/plugins-6.0/libcellular.so
 %{_libdir}/%{name}/plugins-6.0/libchua.so
@@ -352,7 +338,7 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 %{_libdir}/%{name}/plugins-6.0/libimage.so
 %{_libdir}/%{name}/plugins-6.0/libipmidi.so
 %{_libdir}/%{name}/plugins-6.0/libjoystick.so
-%{_libdir}/%{name}/plugins-6.0/liblinear_algebra.so
+#%{_libdir}/%{name}/plugins-6.0/liblinear_algebra.so
 %{_libdir}/%{name}/plugins-6.0/libliveconv.so
 %{_libdir}/%{name}/plugins-6.0/libmixer.so
 %{_libdir}/%{name}/plugins-6.0/libplaterev.so
@@ -383,7 +369,7 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 %{python2_sitearch}/*csound.py*
 
 %files -n python2-csound-devel
-%{_libdir}/libCsoundAC.so
+#%{_libdir}/libCsoundAC.so
 
 %if 0%{?has_luajit}
 %files lua
@@ -397,9 +383,9 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 %{_javadir}/csnd.jar
 
 %files csoundac
-%{python2_sitearch}/CsoundAC.*
-%{python2_sitearch}/_CsoundAC.*
-%{_libdir}/libCsoundAC.so.*
+#%{python2_sitearch}/CsoundAC.*
+#%{python2_sitearch}/_CsoundAC.*
+#%{_libdir}/libCsoundAC.so.*
 
 %files fltk
 %{_libdir}/%{name}/plugins-6.0/libwidgets.so
@@ -431,9 +417,12 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 %{_libdir}/%{name}/plugins-6.0/libwiimote.so
 
 %files manual
-%doc examples manual-%{version}/html
+%doc html/
 
 %changelog
+* Sun Jun  9 2019 Peter Robinson <pbrobinson@fedoraproject.org> 6.12.2-1
+- Update to Csound 6.12.2
+
 * Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 6.10.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
@@ -514,106 +503,3 @@ ln -s ../csound_prelex.c Engine/csound_prelex.c
 - Bring back the manual sources; the manual subpackage has the GFDL license
 - Obsolete the -gui and -tk subpackages (no longer supported upstream)
 - Add -csoundac, -lua, -portaudio, and -stk subpackages
-
-* Tue Jul  8 2014 Peter Robinson <pbrobinson@fedoraproject.org> 5.19.01-7
-- Minor cleanups
-
-* Tue Jul 01 2014 Mat Booth <mat.booth@redhat.com> - 5.19.01-6
-- Drop support for GCJ AOT compilation (GCJ was retired)
-
-* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.19.01-5
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
-
-* Fri May 23 2014 Petr Machata <pmachata@redhat.com> - 5.19.01-4
-- Rebuild for boost 1.55.0
-
-* Wed May 21 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 5.19.01-3
-- Rebuilt for https://fedoraproject.org/wiki/Changes/f21tcl86
-
-* Sat Jan 25 2014 Ville Skyttä <ville.skytta@iki.fi> - 5.19.01-2
-- Use xdg-open as help browser again.
-- Drop no longer applicable docdir adjustment from specfile (#993711).
-
-* Wed Aug  7 2013 Peter Robinson <pbrobinson@fedoraproject.org> 5.19.01-1
-- Update to 5.19.01 (fix FTBFS)
-- Initial rebase of patches
-- Cleanup and modernise spec
-- Drop manual (no longer produced upstream) but still ship HTML manual
-
-* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.13.0-13
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
-
-* Tue Jul 30 2013 Petr Machata <pmachata@redhat.com> - 5.13.0-12
-- Rebuild for boost 1.54.0
-
-* Wed Jul 17 2013 Petr Pisar <ppisar@redhat.com> - 5.13.0-11
-- Perl 5.18 rebuild
-
-* Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.13.0-10
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
-
-* Wed Jul 18 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.13.0-9
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
-
-* Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.13.0-8
-- Rebuilt for c++ ABI breakage
-
-* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.13.0-7
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
-
-* Tue Dec 06 2011 Adam Jackson <ajax@redhat.com> - 5.13.0-6
-- Rebuild for new libpng
-
-* Tue Jun 14 2011 Peter Robinson <pbrobinson@fedoraproject.org> - 5.13.0-5
-- Build the old Parser as the new Parser isn't stable even though it default!
-
-* Wed Jun 01 2011 Ralf Corsépius <corsepiu@fedoraproject.org> - 5.13.0-4
-- Reflect fltk include paths having changed.
-
-* Fri May 27 2011 Peter Robinson <pbrobinson@fedoraproject.org> - 5.13.0-3
-- Bump build for new fltk
-
-* Fri Apr 29 2011 Dan Horák <dan[at]danny.cz> - 5.13.0-2
-- mark s390x as 64-bit arch
-
-* Wed Apr  6 2011 Peter Robinson <pbrobinson@fedoraproject.org> - 5.13.0-1
-- Update to 5.13.0.
-
-* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.12.1-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
-
-* Sun Dec 26 2010 Peter Robinson <pbrobinson@fedoraproject.org> - 5.12.1-1
-- Update to 5.12.1.
-
-* Sat Jul 31 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 5.10.1-21
-- Fix python location
-
-* Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 5.10.1-20
-- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
-
-* Tue Jul 20 2010 Peter Robinson <pbrobinson@fedoraproject.org> - 5.10.1-19
-- bump build
-
-* Mon Jul 12 2010 Peter Robinson <pbrobinson@fedoraproject.org> - 5.10.1-18
-- Add license file to -javadocs
-
-* Sat Jan  9 2010 Peter Robinson <pbrobinson@fedoraproject.org> - 5.10.1-17
-- Some further cleanups
-
-* Sat Jan  9 2010 Peter Robinson <pbrobinson@fedoraproject.org> - 5.10.1-16
-- Some further cleanups
-
-* Sat Jan  9 2010 Peter Robinson <pbrobinson@fedoraproject.org> - 5.10.1-15
-- Updated to the new python sysarch spec file reqs
-
-* Thu Dec  3 2009 Peter Robinson <pbrobinson@fedoraproject.org> - 5.10.1-14
-- Updated python patch thanks to dsd.
-
-* Tue Oct 20 2009 Peter Robinson <pbrobinson@fedoraproject.org> - 5.10.1-13
-- Fix use of multiple midi devices, fix segfault (RHBZ 529293)
-
-* Sat Sep  5 2009 Peter Robinson <pbrobinson@fedoraproject.org> - 5.10.1-12
-- Build fixes, set PulseAudio as default
-
-* Tue Aug 18 2009 Peter Robinson <pbrobinson@fedoraproject.org> - 5.10.1-11
-- Further python build fixes
