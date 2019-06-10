@@ -9,7 +9,7 @@ URL:     http://csound.github.io/
 License: LGPLv2+
 
 Source0: https://github.com/csound/csound/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-Source1: https://github.com/csound/manual/archive/Csound6.12.2_manual_html.zip
+Source1: https://github.com/csound/manual/archive/Csound%{version}_manual_html.zip
 
 Patch2:  0002-Add-support-for-using-xdg-open-for-opening-help.patch
 Patch3:  0003-Default-to-PulseAudio.patch
