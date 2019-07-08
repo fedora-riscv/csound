@@ -48,10 +48,10 @@ BuildRequires: portmidi-devel
 BuildRequires: pulseaudio-libs-devel
 BuildRequires: python2-devel
 BuildRequires: python2-setuptools
+BuildRequires: python2-tkinter
 BuildRequires: python2-pygments
 BuildRequires: stk-devel
 BuildRequires: swig
-BuildRequires: tkinter
 BuildRequires: wiiuse-devel
 
 # These obsoletes can be removed in Fedora 31
