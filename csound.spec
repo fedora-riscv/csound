@@ -2,7 +2,7 @@
 %global luajit_version 2.1
 
 Name:    csound
-Version: 6.12.2
+Version: 6.13.0
 Release: 1%{?dist}
 Summary: A sound synthesis language and library
 URL:     http://csound.github.io/
@@ -11,10 +11,10 @@ License: LGPLv2+
 Source0: https://github.com/csound/csound/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1: https://github.com/csound/manual/archive/Csound%{version}_manual_html.zip
 
-Patch2:  0002-Add-support-for-using-xdg-open-for-opening-help.patch
-Patch3:  0003-Default-to-PulseAudio.patch
-Patch4:  0004-use-standard-plugins-path.patch
-Patch5:  0005-fix-naming-conflicts.patch
+Patch1:  0001-Add-support-for-using-xdg-open-for-opening-help.patch
+Patch2:  0002-Default-to-PulseAudio.patch
+Patch3:  0003-use-standard-plugins-path.patch
+Patch4:  0004-fix-naming-conflicts.patch
 
 BuildRequires: gcc gcc-c++
 BuildRequires: bison
@@ -420,6 +420,9 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %doc html/
 
 %changelog
+* Fri Jul 12 2019 Peter Robinson <pbrobinson@fedoraproject.org> 6.13.0-1
+- Update to Csound 6.13.0
+
 * Sun Jun  9 2019 Peter Robinson <pbrobinson@fedoraproject.org> 6.12.2-1
 - Update to Csound 6.12.2
 

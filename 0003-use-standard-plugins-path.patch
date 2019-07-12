@@ -1,7 +1,7 @@
-From 817a8d35b0571bff4335c02ed3ba8e5a52f121c6 Mon Sep 17 00:00:00 2001
+From d707f174bb67b5b1d8a4ab00b024990a07dc5e37 Mon Sep 17 00:00:00 2001
 From: Peter Robinson <pbrobinson@gmail.com>
 Date: Thu, 1 Feb 2018 09:29:23 +0000
-Subject: [PATCH 4/5] use standard plugins path
+Subject: [PATCH 3/4] use standard plugins path
 
 ---
  CMakeLists.txt              | 8 +-------
@@ -10,10 +10,10 @@ Subject: [PATCH 4/5] use standard plugins path
  3 files changed, 4 insertions(+), 10 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 86e3f11ed..b9dcc0182 100644
+index 2c1db25d5..ee88ca66f 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -185,13 +185,7 @@ else()
+@@ -195,13 +195,7 @@ else()
  endif()
  message(STATUS "LIBRARY INSTALL DIR: ${LIBRARY_INSTALL_DIR}")
  
@@ -29,10 +29,10 @@ index 86e3f11ed..b9dcc0182 100644
  execute_process (
       COMMAND python -c
 diff --git a/Top/csmodule.c b/Top/csmodule.c
-index 564707bd4..cc9ab9f87 100644
+index 21381b9f0..0a16616b1 100644
 --- a/Top/csmodule.c
 +++ b/Top/csmodule.c
-@@ -146,9 +146,9 @@ static  const   char    *plugindir64_envvar = "OPCODE6DIR64";
+@@ -159,9 +159,9 @@ static  const   char    *plugindir64_envvar = "OPCODE6DIR64";
  #  define ENABLE_OPCODEDIR_WARNINGS 0
  #  ifndef CS_DEFAULT_PLUGINDIR
  #    ifndef USE_DOUBLE
@@ -58,5 +58,5 @@ index 801311b18..fe3d86077 100755
  docDir      = instPrefix + '/share/doc/csound'
  # tclcsound.so
 -- 
-2.19.0
+2.21.0
 

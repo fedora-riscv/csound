@@ -1,7 +1,7 @@
-From ffaca058ccf2a79475be91c78ed7a0ff259f494d Mon Sep 17 00:00:00 2001
+From 3c7cd96eb74f976bc566ab6eff649297eaf539d0 Mon Sep 17 00:00:00 2001
 From: Peter Robinson <pbrobinson@gmail.com>
 Date: Wed, 31 Jan 2018 13:33:06 +0000
-Subject: [PATCH 2/5] Add support for using xdg-open for opening help
+Subject: [PATCH 1/4] Add support for using xdg-open for opening help
 
 xdg-open is a desktop agnostic way of opening the user's default application.
 By trying xdg-open first we're more likely to open html files in the user's
@@ -28,5 +28,5 @@ index 888b8fe25..8c6553de8 100755
      elif ( which konqueror | grep -q -G -e "^/opt" ) ; then
          BROWSER_CMD="konqueror" ;
 -- 
-2.19.0
+2.21.0
 

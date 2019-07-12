@@ -1,7 +1,7 @@
-From d665d942ec45ea7eab301ee19e7b4f261bd7787c Mon Sep 17 00:00:00 2001
+From 3a076bf041a7c2a17c457cc9ab10214e2edf0950 Mon Sep 17 00:00:00 2001
 From: Peter Robinson <pbrobinson@gmail.com>
-Date: Sun, 7 Oct 2018 22:53:52 +0100
-Subject: [PATCH 5/5] fix naming conflicts
+Date: Sat, 13 Jul 2019 00:46:42 +0100
+Subject: [PATCH 4/4] fix naming conflicts
 
 Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
 ---
@@ -91,29 +91,26 @@ index fe3d86077..4dafa995c 100755
  docFiles = ['COPYING', 'ChangeLog', 'INSTALL', 'readme-csound6.txt']
  
 diff --git a/util/CMakeLists.txt b/util/CMakeLists.txt
-index 193ee6b3b..1108a72f4 100644
+index 50a786025..732c7816d 100644
 --- a/util/CMakeLists.txt
 +++ b/util/CMakeLists.txt
-@@ -25,15 +25,15 @@ if(BUILD_UTILITIES)
+@@ -17,34 +17,34 @@ if(BUILD_UTILITIES)
      make_utility(csanalyze   csanalyze.c)
      make_utility(cvanal      cvl_main.c)
      make_utility(dnoise      dnoise_main.c)
 -    make_utility(envext      env_main.c)
 -    make_utility(extractor   xtrc_main.c)
-+    make_utility(cs-envext   env_main.c)
-+    make_utility(cs-extractor  xtrc_main.c)
++    make_utility(cs-envext      env_main.c)
++    make_utility(cs-extractor   xtrc_main.c)
      make_utility(het_export  hetx_main.c)
      make_utility(het_import  heti_main.c)
      make_utility(hetro       het_main.c)
      make_utility(lpanal      lpc_main.c)
-     make_utility(lpc_export  lpcx_main.c)
-     make_utility(lpc_import  lpci_main.c)
--    make_executable(mixer-bin   mixer_main.c   "${CSOUNDLIB}" mixer)
-+    make_executable(mixer-bin   mixer_main.c   "${CSOUNDLIB}" cs-mixer)
-     if(LINUX)
-       target_link_libraries(mixer-bin m)
-     endif()
-@@ -41,21 +41,21 @@ if(BUILD_UTILITIES)
+     make_utility(lpc_export  lpcx_main.c ${MATH_LIBRARY})
+     make_utility(lpc_import  lpci_main.c ${MATH_LIBRARY})
+-    make_executable(mixer-bin   mixer_main.c   "${CSOUNDLIB};${MATH_LIBRARY}" mixer)
++    make_executable(mixer-bin   mixer_main.c   "${CSOUNDLIB};${MATH_LIBRARY}" cs-mixer)
+     make_utility(pvanal      pvc_main.c)
      make_utility(pvlook      pvl_main.c)
      make_utility(pv_export   pvx_main.c)
      make_utility(pv_import   pvi_main.c)
@@ -172,5 +169,5 @@ index 639ed0ac6..2078c0136 100644
  endif()
  
 -- 
-2.19.0
+2.21.0
 
