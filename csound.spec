@@ -318,7 +318,6 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %{_bindir}/cs-src_conv
 %{_libdir}/lib%{name}64.so.6.0
 %dir %{_libdir}/%{name}/plugins-6.0
-#%{_libdir}/%{name}/plugins-6.0/csladspa.so
 %{_libdir}/%{name}/plugins-6.0/libampmidid.so
 %{_libdir}/%{name}/plugins-6.0/libarrayops.so
 %{_libdir}/%{name}/plugins-6.0/libbeosc.so
@@ -335,10 +334,10 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %{_libdir}/%{name}/plugins-6.0/libframebuffer.so
 %{_libdir}/%{name}/plugins-6.0/libftsamplebank.so
 %{_libdir}/%{name}/plugins-6.0/libgetftargs.so
+%{_libdir}/%{name}/plugins-6.0/libgtf.so
 %{_libdir}/%{name}/plugins-6.0/libimage.so
 %{_libdir}/%{name}/plugins-6.0/libipmidi.so
 %{_libdir}/%{name}/plugins-6.0/libjoystick.so
-#%{_libdir}/%{name}/plugins-6.0/liblinear_algebra.so
 %{_libdir}/%{name}/plugins-6.0/libliveconv.so
 %{_libdir}/%{name}/plugins-6.0/libmixer.so
 %{_libdir}/%{name}/plugins-6.0/libplaterev.so
