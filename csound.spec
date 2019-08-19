@@ -3,7 +3,7 @@
 
 Name:    csound
 Version: 6.13.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: A sound synthesis language and library
 URL:     http://csound.github.io/
 License: LGPLv2+
@@ -24,7 +24,7 @@ BuildRequires: cmake
 BuildRequires: CUnit-devel
 BuildRequires: docbook-style-xsl
 BuildRequires: dssi-devel
-BuildRequires: eigen3-static
+BuildRequires: eigen3-devel
 BuildRequires: flex
 BuildRequires: fltk-fluid
 BuildRequires: fluidsynth-devel
@@ -46,19 +46,24 @@ BuildRequires: luajit-devel
 BuildRequires: portaudio-devel
 BuildRequires: portmidi-devel
 BuildRequires: pulseaudio-libs-devel
-BuildRequires: python2-devel
-BuildRequires: python2-setuptools
-BuildRequires: python2-tkinter
-BuildRequires: python2-pygments
+BuildRequires: python3-devel
+BuildRequires: python3-setuptools
+BuildRequires: python3-tkinter
+BuildRequires: python3-pygments
 BuildRequires: stk-devel
 BuildRequires: swig
 BuildRequires: wiiuse-devel
 
 # These obsoletes can be removed in Fedora 31
-Obsoletes: %{name}-javadoc  < 6.10.0-1%{?dist}
-Provides:  %{name}-javadoc  = 6.10.0-1%{?dist}
-Obsoletes: %{name}-lua  < 6.10.0-1%{?dist}
-Provides:  %{name}-lua  = 6.10.0-1%{?dist}
+Obsoletes: %{name}-javadoc < 6.10.0-1%{?dist}
+Provides:  %{name}-javadoc = 6.10.0-1%{?dist}
+Obsoletes: %{name}-lua < 6.10.0-1%{?dist}
+Provides:  %{name}-lua = 6.10.0-1%{?dist}
+# These obsoletes can be removed in Fedora 33
+Obsoletes: %{name}-csoundac < 6.13.0-3%{?dist}
+Provides:  %{name}-csoundac = 6.13.0-3%{?dist}
+Obsoletes: python2-csound < 6.13.0-3%{?dist}
+Obsoletes: python2-csound-devel < 6.13.0-3%{?dist}
 
 %global luaver %(lua -v | sed -r 's/Lua ([[:digit:]]+\\.[[:digit:]]+).*/\\1/')
 
@@ -75,28 +80,15 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %description devel
 Contains headers and libraries for developing applications that use Csound.
 
-%package -n python2-csound
-%{?python_provide:%python_provide python2-csound}
-# Remove before F30
-Provides: %{name}-python%{?_isa} = %{version}-%{release}
-Obsoletes: %{name}-python < %{version}-%{release}
+%package -n python3-csound
+%{?python_provide:%python_provide python3-csound}
 Summary: Python Csound development files and libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
-Requires: python2
+Requires: python3
 
-%description -n python2-csound
+%description -n python3-csound
 Contains Python language bindings for developing Python applications that
 use Csound.
-
-%package -n python2-csound-devel
-Summary: Csound python development files and libraries
-# Remove before F30
-Provides: %{name}-python-devel%{?_isa} = %{version}-%{release}
-Obsoletes: %{name}-python-devel < %{version}-%{release}
-Requires: python2-%{name}%{?_isa} = %{version}-%{release}
-
-%description -n python2-csound-devel
-Contains libraries for developing against CSound python bindings.
 
 %package java
 Summary: Java Csound support
@@ -117,14 +109,6 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Contains Lua language bindings for developing and running Lua
 applications that use Csound.
 %endif
-
-%package csoundac
-Summary: An FLTK and python frontend for Csound
-Requires: %{name}-python%{?_isa} = %{version}-%{release}
-Requires: xdg-utils
-
-%description csoundac
-Contains an FLTK and python frontend for Csound
 
 %package fltk
 Summary: FLTK plugins for Csound
@@ -243,7 +227,7 @@ sed -i 's*//#define PFFFT_SIMD_DISABLE*#define PFFFT_SIMD_DISABLE*' OOps/pffft.c
 
 %cmake -DUSE_LIB64:BOOL=%{uselib64} -DBUILD_JAVA_INTERFACE:BOOL=ON \
        -DSWIG_ADD_LIBRARY:BOOL=OFF -DBUILD_JACK_OPCODES:BOOL=ON \
-       -DPYTHON_MODULE_INSTALL_DIR:STRING="%{python2_sitearch}" \
+       -DPYTHON_MODULE_INSTALL_DIR:STRING="%{python3_sitearch}" \
 %if 0%{?has_luajit}
        -DLUA_MODULE_INSTALL_DIR:STRING="%{libdir}/lua/%{luaver}" \
 %endif
@@ -251,7 +235,7 @@ sed -i 's*//#define PFFFT_SIMD_DISABLE*#define PFFFT_SIMD_DISABLE*' OOps/pffft.c
 %ifarch %{x86}
        -DHAS_SSE2:BOOL=OFF -DHAS_FPMATH_SSE:BOOL=OFF \
 %endif
-%ifarch %{arm} aarch64
+%ifarch %{arm}
        -DHAVE_NEON:BOOL=OFF \
 %endif
        -DBUILD_STK_OPCODES:BOOL=ON -DBUILD_PADSYNTH_OPCODES:BOOL=OFF
@@ -275,7 +259,7 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 
 %ldconfig_scriptlets
 
-%ldconfig_scriptlets -n python2-csound
+%ldconfig_scriptlets -n python3-csound
 
 %ldconfig_scriptlets csoundac
 
@@ -360,15 +344,13 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %{_libdir}/lib%{name}64.so
 %{_libdir}/libcsnd6.so
 
-%files -n python2-csound
+%files -n python3-csound
 %{_libdir}/libcsnd6.so.6.0
 %{_libdir}/%{name}/plugins-6.0/libpy.so
-%{python2_sitearch}/_csnd*
-%{python2_sitearch}/csnd*
-%{python2_sitearch}/*csound.py*
-
-%files -n python2-csound-devel
-#%{_libdir}/libCsoundAC.so
+%{python3_sitearch}/_csnd*
+%{python3_sitearch}/csnd*
+%{python3_sitearch}/*csound.py*
+%{python3_sitearch}/__pycache__/
 
 %if 0%{?has_luajit}
 %files lua
@@ -380,11 +362,6 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %{_libdir}/lib_jcsound6.so
 %{_libdir}/csnd6.jar
 %{_javadir}/csnd.jar
-
-%files csoundac
-#%{python2_sitearch}/CsoundAC.*
-#%{python2_sitearch}/_CsoundAC.*
-#%{_libdir}/libCsoundAC.so.*
 
 %files fltk
 %{_libdir}/%{name}/plugins-6.0/libwidgets.so
@@ -419,6 +396,10 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %doc html/
 
 %changelog
+* Mon Aug 19 2019 Peter Robinson <pbrobinson@fedoraproject.org> 6.13.0-3
+- Move to python3, upstream seems to have fixed it with the current release
+- Minor cleanups
+
 * Wed Jul 24 2019 Fedora Release Engineering <releng@fedoraproject.org> - 6.13.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
