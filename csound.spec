@@ -3,7 +3,7 @@
 
 Name:    csound
 Version: 6.13.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: A sound synthesis language and library
 URL:     http://csound.github.io/
 License: LGPLv2+
@@ -396,6 +396,9 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %doc html/
 
 %changelog
+* Mon Aug 19 2019 Miro Hrončok <mhroncok@redhat.com> - 6.13.0-4
+- Rebuilt for Python 3.8
+
 * Mon Aug 19 2019 Peter Robinson <pbrobinson@fedoraproject.org> 6.13.0-3
 - Move to python3, upstream seems to have fixed it with the current release
 - Minor cleanups
