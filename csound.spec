@@ -15,6 +15,7 @@ Patch1:  0001-Add-support-for-using-xdg-open-for-opening-help.patch
 Patch2:  0002-Default-to-PulseAudio.patch
 Patch3:  0003-use-standard-plugins-path.patch
 Patch4:  0004-fix-naming-conflicts.patch
+Patch5:  0005-add-extern-for-multiply-defined.patch
 
 BuildRequires: gcc gcc-c++
 BuildRequires: bison
@@ -398,6 +399,7 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %changelog
 * Mon Feb 17 2020 Orcan Ogetbil <oget[DOT]fedora[AT]gmail[DOT]com> - 6.13.0-7
 - Rebuild against fluidsynth2
+- Fix FTBFS RHBZ#1794443
 
 * Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 6.13.0-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
