@@ -13,21 +13,21 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 2c1db25d5..ee88ca66f 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -195,13 +195,7 @@ else()
+@@ -198,13 +198,7 @@
  endif()
  message(STATUS "LIBRARY INSTALL DIR: ${LIBRARY_INSTALL_DIR}")
  
 -if(USE_DOUBLE)
--   message(STATUS "Building with 64-bit floats")
+-    message(STATUS "Building with 64-bit floats")
 -    set(PLUGIN_INSTALL_DIR "${LIBRARY_INSTALL_DIR}/csound/plugins64-${APIVERSION}")
 -else()
--  message(STATUS "Building with 32-bit floats")
+-    message(STATUS "Building with 32-bit floats")
 -    set(PLUGIN_INSTALL_DIR "${LIBRARY_INSTALL_DIR}/csound/plugins-${APIVERSION}")
 -endif()
 +set(PLUGIN_INSTALL_DIR "${LIBRARY_INSTALL_DIR}/csound/plugins-${APIVERSION}")
  
  execute_process (
-      COMMAND python -c
+     COMMAND python -c
 diff --git a/Top/csmodule.c b/Top/csmodule.c
 index 21381b9f0..0a16616b1 100644
 --- a/Top/csmodule.c

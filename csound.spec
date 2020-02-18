@@ -2,8 +2,8 @@
 %global luajit_version 2.1
 
 Name:    csound
-Version: 6.13.0
-Release: 7%{?dist}
+Version: 6.14.0
+Release: 1%{?dist}
 Summary: A sound synthesis language and library
 URL:     http://csound.github.io/
 License: LGPLv2+
@@ -397,6 +397,9 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %doc html/
 
 %changelog
+* Tue Feb 18 2020 Peter Robinson <pbrobinson@fedoraproject.org> - 6.14.0-1
+- Update to 6.14.0
+
 * Mon Feb 17 2020 Orcan Ogetbil <oget[DOT]fedora[AT]gmail[DOT]com> - 6.13.0-7
 - Rebuild against fluidsynth2
 - Fix FTBFS RHBZ#1794443
