@@ -3,7 +3,7 @@
 
 Name:    csound
 Version: 6.14.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: A sound synthesis language and library
 URL:     http://csound.github.io/
 License: LGPLv2+
@@ -398,6 +398,9 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %doc html/
 
 %changelog
+* Fri Jul 10 2020 Jiri Vanek <jvanek@redhat.com> - 6.14.0-3
+- Rebuilt for JDK-11, see https://fedoraproject.org/wiki/Changes/Java11
+
 * Tue May 26 2020 Miro Hrončok <mhroncok@redhat.com> - 6.14.0-2
 - Rebuilt for Python 3.9
 
