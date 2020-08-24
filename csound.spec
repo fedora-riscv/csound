@@ -1,9 +1,6 @@
-%global has_luajit 0
-%global luajit_version 2.1
-
 Name:    csound
-Version: 6.14.0
-Release: 5%{?dist}
+Version: 6.15.0
+Release: 1%{?dist}
 Summary: A sound synthesis language and library
 URL:     http://csound.github.io/
 License: LGPLv2+
@@ -15,7 +12,6 @@ Patch1:  0001-Add-support-for-using-xdg-open-for-opening-help.patch
 Patch2:  0002-Default-to-PulseAudio.patch
 Patch3:  0003-use-standard-plugins-path.patch
 Patch4:  0004-fix-naming-conflicts.patch
-Patch5:  0005-add-extern-for-multiply-defined.patch
 
 BuildRequires: gcc gcc-c++
 BuildRequires: bison
@@ -41,9 +37,6 @@ BuildRequires: libsamplerate-devel
 BuildRequires: libsndfile-devel
 BuildRequires: libvorbis-devel
 BuildRequires: libxslt
-%if 0%{?has_luajit}
-BuildRequires: luajit-devel
-%endif
 BuildRequires: portaudio-devel
 BuildRequires: portmidi-devel
 BuildRequires: pulseaudio-libs-devel
@@ -65,8 +58,6 @@ Obsoletes: %{name}-csoundac < 6.13.0-3%{?dist}
 Provides:  %{name}-csoundac = 6.13.0-3%{?dist}
 Obsoletes: python2-csound < 6.13.0-3%{?dist}
 Obsoletes: python2-csound-devel < 6.13.0-3%{?dist}
-
-%global luaver %(lua -v | sed -r 's/Lua ([[:digit:]]+\\.[[:digit:]]+).*/\\1/')
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -100,16 +91,6 @@ Requires: jpackage-utils
 %description java
 Contains Java language bindings for developing and running Java
 applications that use Csound.
-
-%if 0%{?has_luajit}
-%package lua
-Summary: Lua Csound support
-Requires: %{name}%{?_isa} = %{version}-%{release}
-
-%description lua
-Contains Lua language bindings for developing and running Lua
-applications that use Csound.
-%endif
 
 %package fltk
 Summary: FLTK plugins for Csound
@@ -193,9 +174,6 @@ Canonical Reference Manual for Csound.
 # setup the manual
 %setup -q -T -D -a 1
 
-# Fix luajit version
-find ./ -name CMakeLists.txt -exec sed -i 's|luajit-2.0|luajit-%{luajit_version}|g' {} \;
-
 # Fix end of line encodings
 %define fix_line_encoding() \
   sed -i.orig 's/\\r\\n/\\n/;s/\\r/\\n/g' %1; \
@@ -229,9 +207,6 @@ sed -i 's*//#define PFFFT_SIMD_DISABLE*#define PFFFT_SIMD_DISABLE*' OOps/pffft.c
 %cmake -DUSE_LIB64:BOOL=%{uselib64} -DBUILD_JAVA_INTERFACE:BOOL=ON \
        -DSWIG_ADD_LIBRARY:BOOL=OFF -DBUILD_JACK_OPCODES:BOOL=ON \
        -DPYTHON_MODULE_INSTALL_DIR:STRING="%{python3_sitearch}" \
-%if 0%{?has_luajit}
-       -DLUA_MODULE_INSTALL_DIR:STRING="%{libdir}/lua/%{luaver}" \
-%endif
        -DBUILD_CSOUND_AC:BOOL=ON -DBUILD_CSOUND_AC_PYTHON_INTERFACE:BOOL=ON \
 %ifarch %{x86}
        -DHAS_SSE2:BOOL=OFF -DHAS_FPMATH_SSE:BOOL=OFF \
@@ -239,13 +214,13 @@ sed -i 's*//#define PFFFT_SIMD_DISABLE*#define PFFFT_SIMD_DISABLE*' OOps/pffft.c
 %ifarch %{arm}
        -DHAVE_NEON:BOOL=OFF \
 %endif
-       -DBUILD_STK_OPCODES:BOOL=ON -DBUILD_PADSYNTH_OPCODES:BOOL=OFF \
+       -DBUILD_STK_OPCODES:BOOL=ON -DBUILD_LINEAR_ALGEBRA_OPCODES:BOOL=OFF \
        -DUSE_PORTMIDI:BOOL=OFF -DNEED_PORTTIME:BOOL=OFF
 
-%make_build
+%cmake_build
 
 %install
-%make_install
+%cmake_install
 
 # Fix the Java installation
 install -dm 755 %{buildroot}%{_javadir}
@@ -256,14 +231,13 @@ ln -s ../csound_orclex.c Engine/csound_orclex.c
 ln -s ../csound_prelex.c Engine/csound_prelex.c
 
 rm -rf %{buildroot}%{_datadir}/cmake/Csound/
+rm -rf %{buildroot}%{_datadir}/samples/
 
 %find_lang %{name}6
 
 %ldconfig_scriptlets
 
 %ldconfig_scriptlets -n python3-csound
-
-%ldconfig_scriptlets csoundac
 
 %check
 # make csdtests
@@ -311,6 +285,7 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %{_libdir}/%{name}/plugins-6.0/libcellular.so
 %{_libdir}/%{name}/plugins-6.0/libchua.so
 %{_libdir}/%{name}/plugins-6.0/libcontrol.so
+%{_libdir}/%{name}/plugins-6.0/libcounter.so
 %{_libdir}/%{name}/plugins-6.0/libcs_date.so
 %{_libdir}/%{name}/plugins-6.0/libdoppler.so
 %{_libdir}/%{name}/plugins-6.0/libemugens.so
@@ -326,6 +301,7 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %{_libdir}/%{name}/plugins-6.0/libjoystick.so
 %{_libdir}/%{name}/plugins-6.0/libliveconv.so
 %{_libdir}/%{name}/plugins-6.0/libmixer.so
+%{_libdir}/%{name}/plugins-6.0/libpadsynth.so
 %{_libdir}/%{name}/plugins-6.0/libplaterev.so
 %{_libdir}/%{name}/plugins-6.0/libpvsops.so
 %{_libdir}/%{name}/plugins-6.0/libquadbezier.so
@@ -338,6 +314,7 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %{_libdir}/%{name}/plugins-6.0/libsignalflowgraph.so
 %{_libdir}/%{name}/plugins-6.0/libstackops.so
 %{_libdir}/%{name}/plugins-6.0/libstdutil.so
+%{_libdir}/%{name}/plugins-6.0/libsterrain.so
 %{_libdir}/%{name}/plugins-6.0/libsystem_call.so
 %{_libdir}/%{name}/plugins-6.0/liburandom.so
 
@@ -353,12 +330,6 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %{python3_sitearch}/csnd*
 %{python3_sitearch}/*csound.py*
 %{python3_sitearch}/__pycache__/
-
-%if 0%{?has_luajit}
-%files lua
-%{_libdir}/%{name}/plugins-6.0/libLuaCsound.so
-%{_libdir}/lua/%{luaver}/*
-%endif
 
 %files java
 %{_libdir}/lib_jcsound6.so
@@ -398,6 +369,9 @@ rm -rf %{buildroot}%{_datadir}/cmake/Csound/
 %doc html/
 
 %changelog
+* Mon Aug 24 2020 Peter Robinson <pbrobinson@fedoraproject.org> - 6.15.0-1
+- Update to 6.15.0
+
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 6.14.0-5
 - Second attempt - Rebuilt for
   https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
