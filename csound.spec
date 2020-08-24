@@ -26,7 +26,6 @@ BuildRequires: flex
 BuildRequires: fltk-fluid
 BuildRequires: fluidsynth-devel
 BuildRequires: gettext-devel
-BuildRequires: gmm-devel
 BuildRequires: jack-audio-connection-kit-devel
 BuildRequires: java-devel
 BuildRequires: jpackage-utils
