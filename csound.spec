@@ -1,6 +1,6 @@
 Name:    csound
 Version: 6.15.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A sound synthesis language and library
 URL:     http://csound.github.io/
 License: LGPLv2+
@@ -368,6 +368,9 @@ rm -rf %{buildroot}%{_datadir}/samples/
 %doc html/
 
 %changelog
+* Fri May 07 2021 Carl George <carl@george.computer> - 6.15.0-2
+- Rebuilt for fluidsynth soname bump rhbz#1958008
+
 * Mon Aug 24 2020 Peter Robinson <pbrobinson@fedoraproject.org> - 6.15.0-1
 - Update to 6.15.0
 
