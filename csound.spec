@@ -1,12 +1,12 @@
 Name:    csound
-Version: 6.15.0
-Release: 5%{?dist}
+Version: 6.16.2
+Release: 1%{?dist}
 Summary: A sound synthesis language and library
 URL:     http://csound.github.io/
 License: LGPLv2+
 
 Source0: https://github.com/csound/csound/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-Source1: https://github.com/csound/manual/archive/Csound%{version}_manual_html.zip
+Source1: https://github.com/csound/manual/archive/Csound6.16.0_manual_html.zip
 
 Patch1:  0001-Add-support-for-using-xdg-open-for-opening-help.patch
 Patch2:  0002-Default-to-PulseAudio.patch
@@ -29,6 +29,7 @@ BuildRequires: gettext-devel
 BuildRequires: jack-audio-connection-kit-devel
 BuildRequires: java-devel
 BuildRequires: jpackage-utils
+BuildRequires: lame-devel
 BuildRequires: libcurl-devel
 BuildRequires: liblo-devel
 BuildRequires: libpng-devel
@@ -46,17 +47,6 @@ BuildRequires: python3-pygments
 BuildRequires: stk-devel
 BuildRequires: swig
 BuildRequires: wiiuse-devel
-
-# These obsoletes can be removed in Fedora 31
-Obsoletes: %{name}-javadoc < 6.10.0-1%{?dist}
-Provides:  %{name}-javadoc = 6.10.0-1%{?dist}
-Obsoletes: %{name}-lua < 6.10.0-1%{?dist}
-Provides:  %{name}-lua = 6.10.0-1%{?dist}
-# These obsoletes can be removed in Fedora 33
-Obsoletes: %{name}-csoundac < 6.13.0-3%{?dist}
-Provides:  %{name}-csoundac = 6.13.0-3%{?dist}
-Obsoletes: python2-csound < 6.13.0-3%{?dist}
-Obsoletes: python2-csound-devel < 6.13.0-3%{?dist}
 
 %description
 Csound is a sound and music synthesis system, providing facilities for
@@ -183,11 +173,6 @@ for csd in $(find html/examples -name \*.csd); do
   %fix_line_encoding $csd
 done
 
-%fix_line_encoding html/examples/128,8-torus
-%fix_line_encoding html/examples/128-spiral-8,16,128,2,1over2
-%fix_line_encoding html/examples/128-stringcircular
-%fix_line_encoding html/examples/string-128.matrix
-
 # Fix spurious executable bits
 chmod a-x html/examples/*
 
@@ -203,10 +188,10 @@ chmod a-x html/examples/*
 sed -i 's*//#define PFFFT_SIMD_DISABLE*#define PFFFT_SIMD_DISABLE*' OOps/pffft.c
 %endif
 
-%cmake -DUSE_LIB64:BOOL=%{uselib64} -DBUILD_JAVA_INTERFACE:BOOL=ON \
-       -DSWIG_ADD_LIBRARY:BOOL=OFF -DBUILD_JACK_OPCODES:BOOL=ON \
+%cmake -DUSE_LIB64:BOOL=%{uselib64} -DFAIL_MISSING:BOOL=ON \
+       -DBUILD=BUILD_PYTHON_INTERFACE:BOOL=ON -DBUILD_JAVA_INTERFACE:BOOL=ON \
+       -DBUILD_LUA_INTERFACE:BOOL=OFF -DSWIG_ADD_LIBRARY:BOOL=OFF \
        -DPYTHON_MODULE_INSTALL_DIR:STRING="%{python3_sitearch}" \
-       -DBUILD_CSOUND_AC:BOOL=ON -DBUILD_CSOUND_AC_PYTHON_INTERFACE:BOOL=ON \
 %ifarch %{x86}
        -DHAS_SSE2:BOOL=OFF -DHAS_FPMATH_SSE:BOOL=OFF \
 %endif
@@ -214,7 +199,9 @@ sed -i 's*//#define PFFFT_SIMD_DISABLE*#define PFFFT_SIMD_DISABLE*' OOps/pffft.c
        -DHAVE_NEON:BOOL=OFF \
 %endif
        -DBUILD_STK_OPCODES:BOOL=ON -DBUILD_LINEAR_ALGEBRA_OPCODES:BOOL=OFF \
-       -DUSE_PORTMIDI:BOOL=OFF -DNEED_PORTTIME:BOOL=OFF
+       -DBUILD_JACK_OPCODES:BOOL=ON \
+       -DUSE_PORTMIDI:BOOL=OFF -DNEED_PORTTIME:BOOL=OFF -DBUILD_P5GLOVE_OPCODES:BOOL=OFF \
+       -DBUILD_WEBSOCKET_OPCODE:BOOL=OFF -DBUILD_TESTS:BOOL=OFF
 
 %cmake_build
 
@@ -279,7 +266,6 @@ rm -rf %{buildroot}%{_datadir}/samples/
 %dir %{_libdir}/%{name}/plugins-6.0
 %{_libdir}/%{name}/plugins-6.0/libampmidid.so
 %{_libdir}/%{name}/plugins-6.0/libarrayops.so
-%{_libdir}/%{name}/plugins-6.0/libbeosc.so
 %{_libdir}/%{name}/plugins-6.0/libbuchla.so
 %{_libdir}/%{name}/plugins-6.0/libcellular.so
 %{_libdir}/%{name}/plugins-6.0/libchua.so
@@ -295,11 +281,12 @@ rm -rf %{buildroot}%{_datadir}/samples/
 %{_libdir}/%{name}/plugins-6.0/libftsamplebank.so
 %{_libdir}/%{name}/plugins-6.0/libgetftargs.so
 %{_libdir}/%{name}/plugins-6.0/libgtf.so
-%{_libdir}/%{name}/plugins-6.0/libimage.so
 %{_libdir}/%{name}/plugins-6.0/libipmidi.so
 %{_libdir}/%{name}/plugins-6.0/libjoystick.so
+%{_libdir}/%{name}/plugins-6.0/liblfsr.so
 %{_libdir}/%{name}/plugins-6.0/libliveconv.so
 %{_libdir}/%{name}/plugins-6.0/libmixer.so
+%{_libdir}/%{name}/plugins-6.0/libmp3out.so
 %{_libdir}/%{name}/plugins-6.0/libpadsynth.so
 %{_libdir}/%{name}/plugins-6.0/libplaterev.so
 %{_libdir}/%{name}/plugins-6.0/libpvsops.so
@@ -315,6 +302,7 @@ rm -rf %{buildroot}%{_datadir}/samples/
 %{_libdir}/%{name}/plugins-6.0/libstdutil.so
 %{_libdir}/%{name}/plugins-6.0/libsterrain.so
 %{_libdir}/%{name}/plugins-6.0/libsystem_call.so
+%{_libdir}/%{name}/plugins-6.0/libtrigenvsegs.so
 %{_libdir}/%{name}/plugins-6.0/liburandom.so
 
 %files devel
@@ -324,14 +312,15 @@ rm -rf %{buildroot}%{_datadir}/samples/
 
 %files -n python3-csound
 %{_libdir}/libcsnd6.so.6.0
-%{_libdir}/%{name}/plugins-6.0/libpy.so
-%{python3_sitearch}/_csnd*
-%{python3_sitearch}/csnd*
+#%{_libdir}/%{name}/plugins-6.0/libpy.so
+#%{python3_sitearch}/_csnd*
+#%{python3_sitearch}/csnd*
 %{python3_sitearch}/*csound.py*
 %{python3_sitearch}/__pycache__/
 
 %files java
 %{_libdir}/lib_jcsound6.so
+%{_libdir}/lib_jcsound.so.1
 %{_libdir}/csnd6.jar
 %{_javadir}/csnd.jar
 
@@ -368,6 +357,9 @@ rm -rf %{buildroot}%{_datadir}/samples/
 %doc html/
 
 %changelog
+* Tue Aug 10 2021 Peter Robinson <pbrobinson@fedoraproject.org> - 6.16.2-1
+- Update to 0.16.2
+
 * Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 6.15.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 

@@ -1,6 +1,6 @@
-From 3a076bf041a7c2a17c457cc9ab10214e2edf0950 Mon Sep 17 00:00:00 2001
+From b3a34311712a4c98af159604b6e5cda74f7a7ca3 Mon Sep 17 00:00:00 2001
 From: Peter Robinson <pbrobinson@gmail.com>
-Date: Sat, 13 Jul 2019 00:46:42 +0100
+Date: Sat, 26 Jun 2021 12:07:21 +0100
 Subject: [PATCH 4/4] fix naming conflicts
 
 Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
@@ -91,10 +91,10 @@ index fe3d86077..4dafa995c 100755
  docFiles = ['COPYING', 'ChangeLog', 'INSTALL', 'readme-csound6.txt']
  
 diff --git a/util/CMakeLists.txt b/util/CMakeLists.txt
-index 50a786025..732c7816d 100644
+index c2ff1914f..d8d0c9686 100644
 --- a/util/CMakeLists.txt
 +++ b/util/CMakeLists.txt
-@@ -17,34 +17,34 @@ if(BUILD_UTILITIES)
+@@ -20,34 +20,34 @@ if(BUILD_UTILITIES)
      make_utility(csanalyze   csanalyze.c)
      make_utility(cvanal      cvl_main.c)
      make_utility(dnoise      dnoise_main.c)
@@ -169,5 +169,5 @@ index 639ed0ac6..2078c0136 100644
  endif()
  
 -- 
-2.21.0
+2.31.1
 

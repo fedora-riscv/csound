@@ -1,4 +1,4 @@
-From 2e9c264489a2bc1176550d9a4cb90f26052dd5fd Mon Sep 17 00:00:00 2001
+From f4b4cbc66453ec0d20aa1e1f657714609c6b10a9 Mon Sep 17 00:00:00 2001
 From: Peter Robinson <pbrobinson@gmail.com>
 Date: Sat, 13 Jul 2019 00:43:52 +0100
 Subject: [PATCH 2/4] Default to PulseAudio
@@ -9,10 +9,10 @@ Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Top/csound.c b/Top/csound.c
-index d1e7fdc74..1663ac876 100644
+index 3f598762d..a915cb50b 100644
 --- a/Top/csound.c
 +++ b/Top/csound.c
-@@ -3452,7 +3452,7 @@ PUBLIC void csoundReset(CSOUND *csound)
+@@ -3538,7 +3538,7 @@ PUBLIC void csoundReset(CSOUND *csound)
        strcpy(s, "PortAudio");
   #endif
  #else
@@ -22,5 +22,5 @@ index d1e7fdc74..1663ac876 100644
      csoundCreateConfigurationVariable(csound, "rtaudio", s, CSOUNDCFG_STRING,
                                        0, NULL, &max_len,
 -- 
-2.21.0
+2.31.1
 
