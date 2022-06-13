@@ -1,6 +1,6 @@
 Name:    csound
 Version: 6.16.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: A sound synthesis language and library
 URL:     http://csound.github.io/
 License: LGPLv2+
@@ -357,6 +357,9 @@ rm -rf %{buildroot}%{_datadir}/samples/
 %doc html/
 
 %changelog
+* Mon Jun 13 2022 Python Maint <python-maint@redhat.com> - 6.16.2-4
+- Rebuilt for Python 3.11
+
 * Sat Feb 05 2022 Jiri Vanek <jvanek@redhat.com> - 6.16.2-3
 - Rebuilt for java-17-openjdk as system jdk
 
