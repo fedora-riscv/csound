@@ -312,9 +312,9 @@ rm -rf %{buildroot}%{_datadir}/samples/
 
 %files -n python3-csound
 %{_libdir}/libcsnd6.so.6.0
-#%{_libdir}/%{name}/plugins-6.0/libpy.so
-#%{python3_sitearch}/_csnd*
-#%{python3_sitearch}/csnd*
+#%%{_libdir}/%%{name}/plugins-6.0/libpy.so
+#%%{python3_sitearch}/_csnd*
+#%%{python3_sitearch}/csnd*
 %{python3_sitearch}/*csound.py*
 %{python3_sitearch}/__pycache__/
 
