@@ -6,7 +6,7 @@
 
 Name:    csound
 Version: 6.16.2
-Release: 10%{?dist}
+Release: 10.rv64%{?dist}
 Summary: A sound synthesis language and library
 URL:     http://csound.github.io/
 License: LGPLv2+
@@ -337,7 +337,11 @@ rm -rf %{buildroot}%{_datadir}/samples/
 %if %{JAVA}
 %files java
 %{_libdir}/lib_jcsound6.so
+%ifnarch riscv64
+# this file is not generated under riscv64
+# I don't know whether it is correct.
 %{_libdir}/lib_jcsound.so.1
+%endif
 %{_libdir}/csnd6.jar
 %{_javadir}/csnd.jar
 %endif
@@ -375,6 +379,9 @@ rm -rf %{buildroot}%{_datadir}/samples/
 %doc html/
 
 %changelog
+* Mon Aug 21 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 6.16.2-8.rv64
+- Fix on riscv64.
+
 * Wed Jul 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 6.16.2-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
 
